@@ -12,12 +12,19 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-border: var(--border);
+  --color-input: var(--input);
   --color-ring: var(--ring);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-body);
+  --font-heading: var(--font-heading);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -26,18 +33,74 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #050505;
-  --foreground: #ffffff;
-  --surface: #0a0a0a;
-  --surface-raised: #111111;
-  --muted: #a1a1aa;
-  --muted-foreground: #71717a;
-  --accent: #c8a45c;
-  --accent-hover: #d4b76a;
-  --border: rgba(255, 255, 255, 0.08);
-  --ring: #c8a45c;
-  --destructive: #ef4444;
-  --success: #22c55e;
+
+  /* === GOLD SCALE === */
+  --gold-primary:   #D4A017;
+  --gold-bright:    #F5C842;
+  --gold-deep:      #B8820A;
+  --gold-muted:     #7A5C00;
+  --gold-glow:      rgba(212, 160, 23, 0.15);
+
+  /* === DARK BACKGROUNDS === */
+  --bg-hero:        #0A0A0A;
+  --bg-section:     #111111;
+  --bg-card:        #1A1A1A;
+  --bg-overlay:     #222222;
+  --bg-input:       #151515;
+
+  /* === TEXT === */
+  --text-heading:   #FFFFFF;
+  --text-body:      #AAAAAA;
+  --text-muted:     #666666;
+  --text-gold:      #D4A017;
+  --text-gold-hover:#F5C842;
+
+  /* === BORDERS === */
+  --border-default: #2A2A2A;
+  --border-gold:    #B8820A;
+  --border-focus:   #D4A017;
+
+  /* === STATES === */
+  --state-success:  #2ECC71;
+  --state-error:    #E74C3C;
+  --state-warning:  #F39C12;
+  --state-info:     #3498DB;
+
+  /* === FONTS === */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  /* === TYPE SCALE === */
+  --text-xs:   0.75rem;    /* 12px — labels, tags */
+  --text-sm:   0.875rem;   /* 14px — captions, meta */
+  --text-base: 1rem;       /* 16px — body text */
+  --text-lg:   1.125rem;   /* 18px — lead paragraphs */
+  --text-xl:   1.25rem;    /* 20px — card headings */
+  --text-2xl:  1.5rem;     /* 24px — section subheadings */
+  --text-3xl:  1.875rem;   /* 30px — section headings */
+  --text-4xl:  2.25rem;    /* 36px — page headings */
+  --text-5xl:  3rem;       /* 48px — hero headings */
+  --text-6xl:  3.75rem;    /* 60px — hero display */
+
+  /* === THEME MAPPINGS === */
+  --background: var(--bg-hero);
+  --foreground: var(--text-heading);
+  --surface: var(--bg-hero);
+  --surface-raised: var(--bg-section);
+  --muted: var(--text-body);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--gold-primary);
+  --accent-hover: var(--gold-bright);
+  --accent-foreground: var(--bg-hero);
+  --primary: var(--gold-primary);
+  --primary-foreground: var(--bg-hero);
+  --secondary: var(--bg-section);
+  --secondary-foreground: var(--text-heading);
+  --border: var(--border-default);
+  --input: var(--border-default);
+  --ring: var(--gold-primary);
+  --destructive: var(--state-error);
+  --success: var(--state-success);
 }
 
 html {
@@ -47,13 +110,18 @@ html {
 body {
   background-color: var(--background);
   color: var(--foreground);
+  font-family: var(--font-body);
   font-feature-settings: "rlig" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
 ::selection {
-  background-color: rgba(200, 164, 92, 0.3);
+  background-color: rgba(212, 160, 23, 0.3);
   color: #ffffff;
 }
 
@@ -134,7 +202,7 @@ body {
 
 /* Gradient text utility */
 .gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, #c8a45c 100%);
+  background: linear-gradient(135deg, #ffffff 0%, var(--gold-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
