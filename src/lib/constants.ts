@@ -5,7 +5,7 @@ export const siteConfig = {
     "Glovax Technologies is a world-class software house and digital agency delivering AI-powered web development, mobile apps, cloud solutions, and digital marketing that drives real business growth.",
   url: "https://glovaxtechnologies.com",
   ogImage: "https://glovaxtechnologies.com/og.jpg",
-  email: "hello@glovaxtechnologies.com",
+  email: "glovaxtechnologies@gmail.com",
   phone: "+1 (555) 000-0000",
   address: "123 Innovation Street, Tech Valley, CA 94043",
   social: {
@@ -61,8 +61,8 @@ export const clientLogos = [
 ];
 
 export const stats = [
-  { value: 500, suffix: "+", label: "Projects Delivered" },
-  { value: 98, suffix: "%", label: "Client Satisfaction" },
+  { value: 100, suffix: "+", label: "Projects Delivered" },
+  { value: 99, suffix: "%", label: "Client Satisfaction" },
   { value: 30, suffix: "+", label: "Countries Served" },
-  { value: 50, suffix: "+", label: "Team Members" },
+  { value: 35, suffix: "+", label: "Team Members" },
 ];

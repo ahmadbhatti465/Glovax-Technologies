@@ -30,7 +30,7 @@ const values = [
     icon: Users,
     title: "True Partners",
     description:
-      "We're not vendors — we're an extension of your team, invested in your long-term success.",
+      "We're not vendors we're an extension of your team, invested in your long-term success.",
   },
   {
     icon: Globe,
@@ -52,7 +52,7 @@ const timeline = [
   { year: "2020", event: "Expanded to mobile development" },
   { year: "2021", event: "AI & ML practice launched" },
   { year: "2022", event: "100+ projects delivered" },
-  { year: "2023", event: "Global expansion — 30+ countries" },
+  { year: "2023", event: "Global expansion 30+ countries" },
   { year: "2024", event: "50+ team members" },
   { year: "2025", event: "Industry recognition & awards" },
 ];
@@ -88,10 +88,10 @@ export default function AboutPage() {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 border-y border-border mb-20">
             {[
-              { value: 500, suffix: "+", label: "Projects" },
-              { value: 98, suffix: "%", label: "Satisfaction" },
+              { value: 100, suffix: "+", label: "Projects" },
+              { value: 99, suffix: "%", label: "Satisfaction" },
               { value: 30, suffix: "+", label: "Countries" },
-              { value: 50, suffix: "+", label: "Team" },
+              { value: 35, suffix: "+", label: "Team" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold gradient-text">

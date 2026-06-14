@@ -54,7 +54,7 @@ export function HeroSection() {
             transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-muted max-w-2xl leading-relaxed"
           >
-            Glovax Technologies is a world-class software house delivering AI-powered web
+            Glovax Technologies is a world class software house delivering AI-powered web
             development, mobile apps, cloud solutions, and digital marketing that
             drives real business growth.
           </motion.p>

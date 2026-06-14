@@ -85,7 +85,7 @@ export default function ContactPage() {
                     <input
                       {...register("name")}
                       type="text"
-                      placeholder="John Doe"
+                      placeholder="Enter Your Name"
                       className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
                     />
                     {errors.name && (
@@ -101,7 +101,7 @@ export default function ContactPage() {
                     <input
                       {...register("email")}
                       type="email"
-                      placeholder="john@company.com"
+                      placeholder="Enter Your Email"
                       className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
                     />
                     {errors.email && (
@@ -119,7 +119,7 @@ export default function ContactPage() {
                   <input
                     {...register("company")}
                     type="text"
-                    placeholder="Acme Inc."
+                    placeholder="Enter Your Company Name"
                     className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
                   />
                 </div>
