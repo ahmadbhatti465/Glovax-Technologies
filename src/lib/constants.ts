@@ -12,7 +12,7 @@ export const siteConfig = {
     twitter: "https://twitter.com/glovaxtech",
     linkedin: "https://linkedin.com/company/glovaxtechnologies",
     github: "https://github.com/glovaxtechnologies",
-    instagram: "https://instagram.com/glovaxtech",
+    instagram: "https://www.instagram.com/glovaxtechnologies/",
   },
 };
 
