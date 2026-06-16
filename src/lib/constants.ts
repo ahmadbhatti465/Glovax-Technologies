@@ -5,9 +5,9 @@ export const siteConfig = {
     "Glovax Technologies is a world-class software house and digital agency delivering AI-powered web development, mobile apps, cloud solutions, and digital marketing that drives real business growth.",
   url: "https://glovaxtechnologies.com",
   ogImage: "https://glovaxtechnologies.com/og.jpg",
-  email: "hello@glovaxtechnologies.com",
-  phone: "+1 (555) 000-0000",
-  address: "123 Innovation Street, Tech Valley, CA 94043",
+  email: "glovaxtechnologies@gmail.com",
+  phone: "+923254255480",
+  address: "31 K, DHA Phase 5",
   social: {
     twitter: "https://twitter.com/glovaxtech",
     linkedin: "https://linkedin.com/company/glovaxtechnologies",
@@ -20,7 +20,6 @@ export const navLinks = [
   { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
-  { label: "Team", href: "/team" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/career" },
   { label: "Contact", href: "/contact" },
@@ -29,7 +28,6 @@ export const navLinks = [
 export const footerLinks = {
   company: [
     { label: "About Us", href: "/about" },
-    { label: "Our Team", href: "/team" },
     { label: "Careers", href: "/career" },
     { label: "Blog", href: "/blog" },
   ],
