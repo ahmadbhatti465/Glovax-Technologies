@@ -3,7 +3,7 @@ export const siteConfig = {
   tagline: "Software House & Digital Agency",
   description:
     "Glovax Technologies is a world-class software house and digital agency delivering AI-powered web development, mobile apps, cloud solutions, and digital marketing that drives real business growth.",
-  url: "https://glovaxtechnologies.com",
+  url: "https://www.glovaxtechnologies.com",
   ogImage: "/images/glovax_technologies_logo.jpeg",
   email: "glovaxtechnologies@gmail.com",
   phone: "+923254255480",
