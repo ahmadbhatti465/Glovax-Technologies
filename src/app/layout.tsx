@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/constants";
 import { Toaster } from "sonner";
+import { StructuredData } from "@/components/shared/StructuredData";
 
 const playfair = Playfair_Display({
   variable: "--font-heading",
@@ -73,9 +74,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code",
-  },
 };
 
 export default function RootLayout({
@@ -88,6 +86,7 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${inter.variable} antialiased bg-background text-foreground min-h-screen`}
       >
+        <StructuredData />
         {children}
         <Toaster
           position="bottom-right"
