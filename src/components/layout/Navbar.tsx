@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { navLinks, siteConfig } from "@/lib/constants";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
@@ -10,6 +11,7 @@ import Image from "next/image";
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,47 +37,74 @@ export function Navbar() {
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           isScrolled
-            ? "bg-background/80 backdrop-blur-xl border-b border-border"
+            ? "bg-background/70 backdrop-blur-2xl border-b border-white/[0.06]"
             : "bg-transparent"
         }`}
       >
+        {/* Subtle gold glow line on scroll */}
+        <div
+          className={`absolute bottom-0 left-0 right-0 h-px transition-opacity duration-700 ${
+            isScrolled ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(212,160,23,0.3) 50%, transparent 100%)",
+          }}
+        />
+
         <nav className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center group">
               <Image
                 src="/images/glovax-logo.svg"
                 alt="Glovax Technologies"
                 width={140}
                 height={49}
-                className="h-8 w-auto md:h-10"
+                className="h-8 w-auto md:h-10 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(212,160,23,0.5)]"
                 priority
               />
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-surface-raised"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-full ${
+                      isActive
+                        ? "text-accent"
+                        : "text-muted-foreground hover:text-foreground"
+                    } hover:bg-white/[0.03]`}
+                  >
+                    {link.label}
+                    {isActive && (
+                      <motion.span
+                        layoutId="navbar-indicator"
+                        className="absolute inset-0 rounded-full border border-accent/20 bg-accent/5"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </Link>
+                );
+              })}
             </div>
 
             {/* CTA Button */}
             <div className="hidden lg:block">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold bg-accent text-background rounded-full hover:bg-accent-hover transition-colors"
+                className="relative inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-full overflow-hidden group"
               >
-                Get in Touch
+                <span className="absolute inset-0 bg-gradient-to-r from-[#D4A017] to-[#F5C842] transition-all duration-500 group-hover:brightness-110" />
+                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
+                <span className="relative z-10 text-[#0A0A0A]">Get in Touch</span>
               </Link>
             </div>
 
@@ -104,7 +133,7 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-background/90 backdrop-blur-xl z-40 lg:hidden"
+              className="fixed inset-0 bg-background/90 backdrop-blur-2xl z-40 lg:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <motion.div
@@ -112,8 +141,17 @@ export function Navbar() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-surface border-l border-border z-50 lg:hidden flex flex-col"
+              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-[#0E0E0E] border-l border-white/[0.06] z-50 lg:hidden flex flex-col"
             >
+              {/* Gold top accent */}
+              <div
+                className="absolute top-0 left-0 right-0 h-px"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent 0%, rgba(212,160,23,0.4) 50%, transparent 100%)",
+                }}
+              />
+
               <div className="flex items-center justify-end h-20 px-6">
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -149,7 +187,7 @@ export function Navbar() {
                 <Link
                   href="/contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full text-center px-6 py-4 text-base font-semibold bg-accent text-background rounded-full hover:bg-accent-hover transition-colors"
+                  className="block w-full text-center px-6 py-4 text-base font-semibold rounded-full bg-gradient-to-r from-[#D4A017] to-[#F5C842] text-[#0A0A0A] hover:brightness-110 transition-all"
                 >
                   Get in Touch
                 </Link>

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Search, PenTool, Code, Rocket } from "lucide-react";
 
@@ -35,9 +36,28 @@ const steps = [
   },
 ];
 
-export function ProcessSteps() {
+function ConnectorLine({ isVisible, delay }: { isVisible: boolean; delay: number }) {
   return (
-    <section className="py-24 md:py-32 lg:py-40">
+    <div className="hidden lg:block absolute top-10 left-[calc(50%+2rem)] w-[calc(100%-4rem)] h-px overflow-hidden">
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={isVisible ? { scaleX: 1 } : { scaleX: 0 }}
+        transition={{ duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full h-full origin-left"
+        style={{
+          background: "linear-gradient(90deg, rgba(212,160,23,0.4), rgba(212,160,23,0.1))",
+        }}
+      />
+    </div>
+  );
+}
+
+export function ProcessSteps() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <section className="py-24 md:py-32 lg:py-40 relative">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="Our Process"
@@ -46,40 +66,43 @@ export function ProcessSteps() {
           subtitle="A battle-tested methodology refined over 500+ projects. We combine agility with rigor to deliver exceptional results on time and on budget."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {steps.map((step, index) => (
             <motion.div
               key={step.number}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{
-                duration: 0.6,
+                duration: 0.7,
                 delay: index * 0.15,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="relative"
+              className="relative group"
             >
               {/* Connector line */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-8 left-full w-full h-px">
-                  <div className="w-full h-full bg-border" />
-                </div>
+                <ConnectorLine isVisible={isInView} delay={index * 0.15 + 0.5} />
               )}
 
               <div className="relative">
-                <span className="text-6xl md:text-7xl font-bold text-white/[0.03] absolute -top-4 -left-2">
+                <span className="text-7xl md:text-8xl font-bold absolute -top-5 -left-3 select-none"
+                  style={{
+                    color: "transparent",
+                    WebkitTextStroke: "1px rgba(212,160,23,0.08)",
+                  }}
+                >
                   {step.number}
                 </span>
 
                 <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-surface-raised border border-border flex items-center justify-center mb-6">
+                  <div className="w-16 h-16 rounded-2xl bg-[#1A1A1A] border border-white/[0.06] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(212,160,23,0.05)] group-hover:shadow-[0_0_30px_rgba(212,160,23,0.15)] group-hover:border-[#D4A017]/20 transition-all duration-500">
                     <step.icon className="w-6 h-6 text-accent" />
                   </div>
 
-                  <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
+                  <h3 className="text-xl md:text-2xl font-semibold mb-3 tracking-tight">{step.title}</h3>
 
-                  <p className="text-sm text-muted leading-relaxed">
+                  <p className="text-sm md:text-base text-muted leading-relaxed">
                     {step.description}
                   </p>
                 </div>

@@ -34,9 +34,9 @@ export function MagneticButton({
 
   const variantClasses = {
     primary:
-      "bg-accent text-background hover:bg-accent-hover font-semibold",
+      "bg-gradient-to-r from-[#D4A017] to-[#F5C842] text-[#0A0A0A] font-semibold shadow-[0_0_25px_rgba(212,160,23,0.15)] hover:shadow-[0_0_35px_rgba(212,160,23,0.25)] hover:brightness-110",
     outline:
-      "border border-border text-foreground hover:border-accent hover:text-accent bg-transparent",
+      "border border-white/[0.12] text-foreground hover:border-[#D4A017]/30 hover:text-accent bg-transparent hover:shadow-[0_0_20px_rgba(212,160,23,0.08)]",
     ghost: "text-foreground hover:text-accent bg-transparent",
   };
 
@@ -60,7 +60,7 @@ export function MagneticButton({
 
   const classes = `
     relative inline-flex items-center justify-center gap-2
-    rounded-full transition-colors duration-300
+    rounded-full transition-all duration-300
     ${sizeClasses[size]}
     ${variantClasses[variant]}
     ${className}
