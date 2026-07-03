@@ -4,6 +4,45 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Search, PenTool, Code, Rocket } from "lucide-react";
+import { useSiteContent } from "@/hooks/useSiteContent";
+
+const fallbackSteps = [
+  {
+    number: "01",
+    title: "Discover",
+    description:
+      "We dive deep into your business, users, and goals through research and stakeholder interviews to build a solid foundation.",
+    icon: "Search",
+  },
+  {
+    number: "02",
+    title: "Design",
+    description:
+      "We craft intuitive, beautiful interfaces and system architectures that solve real problems and delight users.",
+    icon: "PenTool",
+  },
+  {
+    number: "03",
+    title: "Develop",
+    description:
+      "We build with clean, scalable code using modern frameworks and best practices for performance and maintainability.",
+    icon: "Code",
+  },
+  {
+    number: "04",
+    title: "Deliver",
+    description:
+      "We deploy, monitor, and optimize your product with CI/CD pipelines, ensuring long-term success and growth.",
+    icon: "Rocket",
+  },
+];
+
+const iconMap: Record<string, React.ReactNode> = {
+  Search: <Search className="w-6 h-6 text-accent" />,
+  PenTool: <PenTool className="w-6 h-6 text-accent" />,
+  Code: <Code className="w-6 h-6 text-accent" />,
+  Rocket: <Rocket className="w-6 h-6 text-accent" />,
+};
 
 const steps = [
   {
@@ -55,6 +94,9 @@ function ConnectorLine({ isVisible, delay }: { isVisible: boolean; delay: number
 export function ProcessSteps() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { data: steps } = useSiteContent<{ number: string; title: string; description: string; icon: string }[]>("process_steps", fallbackSteps);
+
+  if (!steps) return null;
 
   return (
     <section className="py-24 md:py-32 lg:py-40 relative">
@@ -97,7 +139,7 @@ export function ProcessSteps() {
 
                 <div className="relative z-10">
                   <div className="w-16 h-16 rounded-2xl bg-[#1A1A1A] border border-white/[0.06] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(212,160,23,0.05)] group-hover:shadow-[0_0_30px_rgba(212,160,23,0.15)] group-hover:border-[#D4A017]/20 transition-all duration-500">
-                    <step.icon className="w-6 h-6 text-accent" />
+                    {iconMap[step.icon] || <Search className="w-6 h-6 text-accent" />}
                   </div>
 
                   <h3 className="text-xl md:text-2xl font-semibold mb-3 tracking-tight">{step.title}</h3>

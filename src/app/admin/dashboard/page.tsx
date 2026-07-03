@@ -11,6 +11,7 @@ import {
   Rocket,
   LogOut,
   LayoutDashboard,
+  Settings,
 } from "lucide-react";
 
 const cards = [
@@ -20,6 +21,7 @@ const cards = [
   { label: "Team", href: "/admin/dashboard/team", icon: Users, color: "#C8A45E" },
   { label: "Blog", href: "/admin/dashboard/blog", icon: Newspaper, color: "#C8A45E" },
   { label: "Careers", href: "/admin/dashboard/careers", icon: Briefcase, color: "#C8A45E" },
+  { label: "Settings", href: "/admin/dashboard/settings", icon: Settings, color: "#C8A45E" },
 ];
 
 export default function AdminDashboard() {

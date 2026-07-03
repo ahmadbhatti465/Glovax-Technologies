@@ -1,10 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { clientLogos } from "@/lib/constants";
+import { clientLogos as fallbackClientLogos } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 export function ClientMarquee() {
-  const doubledLogos = [...clientLogos, ...clientLogos];
+  const { data: clientLogos } = useSiteContent<string[]>("client_logos", fallbackClientLogos);
+  const doubledLogos = [...(clientLogos || []), ...(clientLogos || [])];
 
   return (
     <section className="py-16 md:py-20 border-y border-white/[0.06] overflow-hidden relative">

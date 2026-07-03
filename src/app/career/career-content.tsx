@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { MapPin, Clock, Briefcase, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { JobPosition } from "@/types";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const fallbackPositions: JobPosition[] = [
   {
@@ -78,7 +79,7 @@ const fallbackPositions: JobPosition[] = [
   },
 ];
 
-const benefits = [
+const fallbackBenefits = [
   "Competitive salary & equity",
   "Remote-first culture",
   "Health, dental & vision",
@@ -91,6 +92,8 @@ const benefits = [
 
 export default function CareerContent() {
   const [positions, setPositions] = useState<JobPosition[]>(fallbackPositions);
+  const { data: benefitsData } = useSiteContent<string[]>("career_benefits", fallbackBenefits);
+  const benefits = benefitsData ?? fallbackBenefits;
 
   useEffect(() => {
     fetch("/api/public/careers")

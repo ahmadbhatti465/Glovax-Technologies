@@ -71,3 +71,10 @@ export const jobPositions = sqliteTable("job_positions", {
   requirements: text("requirements", { mode: "json" }).$type<string[]>().notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+export const siteContent = sqliteTable("site_content", {
+  id: text("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  value: text("value", { mode: "json" }).$type<unknown>().notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});

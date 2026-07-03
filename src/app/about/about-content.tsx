@@ -6,47 +6,51 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 import { motion } from "framer-motion";
 import { Target, Shield, Zap, Users, Globe, Heart } from "lucide-react";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
-const values = [
+const iconMap: Record<string, React.ReactNode> = {
+  Target: <Target className="w-5 h-5" />,
+  Shield: <Shield className="w-5 h-5" />,
+  Zap: <Zap className="w-5 h-5" />,
+  Users: <Users className="w-5 h-5" />,
+  Globe: <Globe className="w-5 h-5" />,
+  Heart: <Heart className="w-5 h-5" />,
+};
+
+const fallbackValues = [
   {
-    icon: Target,
+    icon: "Target",
     title: "Results First",
-    description:
-      "We measure success by the tangible business outcomes we deliver, not just lines of code shipped.",
+    description: "We measure success by the tangible business outcomes we deliver, not just lines of code shipped.",
   },
   {
-    icon: Shield,
+    icon: "Shield",
     title: "Quality Obsessed",
-    description:
-      "Every pixel, every interaction, every line of code is crafted with precision and pride.",
+    description: "Every pixel, every interaction, every line of code is crafted with precision and pride.",
   },
   {
-    icon: Zap,
+    icon: "Zap",
     title: "Move Fast",
-    description:
-      "We combine agility with rigor to ship faster without sacrificing quality or security.",
+    description: "We combine agility with rigor to ship faster without sacrificing quality or security.",
   },
   {
-    icon: Users,
+    icon: "Users",
     title: "True Partners",
-    description:
-      "We're not vendors we're an extension of your team, invested in your long-term success.",
+    description: "We're not vendors we're an extension of your team, invested in your long-term success.",
   },
   {
-    icon: Globe,
+    icon: "Globe",
     title: "Global Mindset",
-    description:
-      "We build products that work everywhere, for everyone, respecting diverse users and markets.",
+    description: "We build products that work everywhere, for everyone, respecting diverse users and markets.",
   },
   {
-    icon: Heart,
+    icon: "Heart",
     title: "Craft with Care",
-    description:
-      "We love what we do, and it shows in the attention and thoughtfulness we bring to every project.",
+    description: "We love what we do, and it shows in the attention and thoughtfulness we bring to every project.",
   },
 ];
 
-const timeline = [
+const fallbackTimeline = [
   { year: "2018", event: "Founded in San Francisco" },
   { year: "2019", event: "First 50 clients" },
   { year: "2020", event: "Expanded to mobile development" },
@@ -58,6 +62,34 @@ const timeline = [
 ];
 
 export default function AboutContent() {
+  const { data: about } = useSiteContent<{
+    heroEyebrow: string;
+    heroTitle: string;
+    heroTitleHighlight: string;
+    heroSubtitle: string;
+    stats: { value: number; suffix: string; label: string }[];
+    values: { icon: string; title: string; description: string }[];
+    timeline: { year: string; event: string }[];
+  }>("about", {
+    heroEyebrow: "About Us",
+    heroTitle: "Building the future,",
+    heroTitleHighlight: "one product at a time.",
+    heroSubtitle: "Glovax Technologies was founded with a simple mission: to help businesses leverage technology to create meaningful impact. Today, we're a global team of engineers, designers, and strategists who believe that great software can change the world.",
+    stats: [
+      { value: 100, suffix: "+", label: "Projects" },
+      { value: 99, suffix: "%", label: "Satisfaction" },
+      { value: 30, suffix: "+", label: "Countries" },
+      { value: 35, suffix: "+", label: "Team" },
+    ],
+    values: fallbackValues,
+    timeline: fallbackTimeline,
+  });
+
+  if (!about) return null;
+
+  const values = about.values ?? fallbackValues;
+  const timeline = about.timeline ?? fallbackTimeline;
+
   return (
     <>
       <Navbar />
@@ -71,28 +103,20 @@ export default function AboutContent() {
             className="max-w-4xl mb-20"
           >
             <span className="text-accent text-xs md:text-sm font-medium tracking-[0.2em] uppercase mb-4 block">
-              About Us
+              {about.heroEyebrow}
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
-              Building the future,
-              <span className="gradient-text"> one product at a time.</span>
+              {about.heroTitle}
+              <span className="gradient-text"> {about.heroTitleHighlight}</span>
             </h1>
             <p className="text-muted text-lg leading-relaxed">
-              Glovax Technologies was founded with a simple mission: to help businesses
-              leverage technology to create meaningful impact. Today, we're a
-              global team of engineers, designers, and strategists who believe
-              that great software can change the world.
+              {about.heroSubtitle}
             </p>
           </motion.div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 border-y border-border mb-20">
-            {[
-              { value: 100, suffix: "+", label: "Projects" },
-              { value: 99, suffix: "%", label: "Satisfaction" },
-              { value: 30, suffix: "+", label: "Countries" },
-              { value: 35, suffix: "+", label: "Team" },
-            ].map((stat) => (
+            {(about.stats ?? []).map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold gradient-text">
                   <AnimatedCounter
@@ -127,7 +151,7 @@ export default function AboutContent() {
                 className="p-6 rounded-2xl bg-surface border border-border"
               >
                 <div className="w-10 h-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-4">
-                  <value.icon className="w-5 h-5" />
+                  {iconMap[value.icon] || <Target className="w-5 h-5" />}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{value.title}</h3>
                 <p className="text-sm text-muted leading-relaxed">

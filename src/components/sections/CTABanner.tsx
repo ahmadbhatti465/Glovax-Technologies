@@ -3,8 +3,29 @@
 import { motion } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { siteConfig } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 export function CTABanner() {
+  const { data: cta } = useSiteContent<{
+    eyebrow: string;
+    title: string;
+    titleHighlight: string;
+    subtitle: string;
+    buttons: { label: string; href: string; variant: "primary" | "outline" | "ghost" }[];
+  }>("cta_banner", {
+    eyebrow: "Let's Collaborate",
+    title: "Ready to build",
+    titleHighlight: "something great?",
+    subtitle: "Let's discuss your project and explore how Glovax Technologies can help you achieve your business goals with cutting-edge technology.",
+    buttons: [
+      { label: "Start a Project", href: "/contact", variant: "primary" },
+      { label: "Book a Call", href: siteConfig.calendarUrl, variant: "outline" },
+      { label: "Explore Services", href: "/services", variant: "ghost" },
+    ],
+  });
+
+  if (!cta) return null;
+
   return (
     <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
@@ -48,30 +69,25 @@ export function CTABanner() {
           <div className="relative z-10 px-8 py-20 md:px-16 md:py-28 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs md:text-sm font-medium text-muted tracking-wide mb-8">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              Let's Collaborate
+              {cta.eyebrow}
             </div>
 
             <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-              Ready to build
+              {cta.title}
               <br />
-              <span className="gold-shimmer">something great?</span>
+              <span className="gold-shimmer">{cta.titleHighlight}</span>
             </h2>
 
             <p className="text-muted text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              Let's discuss your project and explore how Glovax Technologies can help you
-              achieve your business goals with cutting-edge technology.
+              {cta.subtitle}
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <MagneticButton href="/contact" variant="primary" size="lg">
-                Start a Project
-              </MagneticButton>
-              <MagneticButton href={siteConfig.calendarUrl} variant="outline" size="lg">
-                Book a Call
-              </MagneticButton>
-              <MagneticButton href="/services" variant="ghost" size="lg">
-                Explore Services
-              </MagneticButton>
+              {cta.buttons?.map((btn) => (
+                <MagneticButton key={btn.label} href={btn.href} variant={btn.variant} size="lg">
+                  {btn.label}
+                </MagneticButton>
+              ))}
             </div>
           </div>
         </motion.div>
