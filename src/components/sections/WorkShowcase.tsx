@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { portfolioItems as fallbackPortfolio } from "@/data/portfolio";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import Image from "next/image";
@@ -10,13 +9,13 @@ import { useEffect, useState } from "react";
 import { PortfolioItem } from "@/types";
 
 export function WorkShowcase() {
-  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>(fallbackPortfolio);
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
 
   useEffect(() => {
     fetch("/api/public/portfolio")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setPortfolioItems(data);
+        if (Array.isArray(data)) setPortfolioItems(data);
       })
       .catch(() => {});
   }, []);

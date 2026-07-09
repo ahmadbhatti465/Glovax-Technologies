@@ -4,7 +4,6 @@ import Link from "next/link";
 import { db } from "@/db";
 import { blogPosts as blogPostsTable } from "@/db/schema";
 import { siteConfig } from "@/lib/constants";
-import { blogPosts as staticPosts } from "@/data/blog";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MagneticButton } from "@/components/shared/MagneticButton";
@@ -20,21 +19,18 @@ async function getPost(slug: string): Promise<BlogPost | null> {
     const found = rows.find((p) => p.slug === slug);
     if (found) return found as BlogPost;
   } catch {
-    // DB unavailable — fall through to static posts
+    // DB unavailable
   }
-  return staticPosts.find((p) => p.slug === slug) ?? null;
+  return null;
 }
 
 export async function generateStaticParams() {
   try {
     const rows = await db.select().from(blogPostsTable);
-    if (rows.length > 0) {
-      return rows.map((p) => ({ slug: p.slug }));
-    }
+    return rows.map((p) => ({ slug: p.slug }));
   } catch {
-    // ignore
+    return [];
   }
-  return staticPosts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({

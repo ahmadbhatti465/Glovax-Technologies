@@ -20,6 +20,7 @@ async function seed() {
   await db.delete(schema.portfolioItems);
   await db.delete(schema.testimonials);
   await db.delete(schema.services);
+  await db.delete(schema.blogPosts);
 
   await db.insert(schema.services).values([
     {

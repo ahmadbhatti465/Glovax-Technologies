@@ -8,16 +8,15 @@ import { Clock, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BlogPost } from "@/types";
-import { blogPosts as staticPosts } from "@/data/blog";
 
 export default function BlogContent() {
-  const [posts, setPosts] = useState<BlogPost[]>(staticPosts);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
     fetch("/api/public/blog")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setPosts(data);
+        if (Array.isArray(data)) setPosts(data);
       })
       .catch(() => {});
   }, []);

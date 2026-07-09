@@ -2,7 +2,6 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/constants";
 import { db } from "@/db";
 import { blogPosts } from "@/db/schema";
-import { blogPosts as staticPosts } from "@/data/blog";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = [
@@ -23,14 +22,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route.priority,
   }));
 
-  let postSlugs = staticPosts.map((p) => p.slug);
+  let postSlugs: string[] = [];
   try {
     const rows = await db.select().from(blogPosts);
-    if (rows.length > 0) {
-      postSlugs = rows.map((p) => p.slug);
-    }
+    postSlugs = rows.map((p) => p.slug);
   } catch {
-    // DB unavailable — use static post slugs
+    // DB unavailable
   }
 
   const blogEntries: MetadataRoute.Sitemap = postSlugs.map((slug) => ({
