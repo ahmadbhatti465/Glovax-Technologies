@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { siteConfig } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { ClientMarquee } from "@/components/sections/ClientMarquee";
-import { ServicesGrid } from "@/components/sections/ServicesGrid";
-import { WorkShowcase } from "@/components/sections/WorkShowcase";
-import { ProcessSteps } from "@/components/sections/ProcessSteps";
-import { StatsCounter } from "@/components/sections/StatsCounter";
-import { Testimonials } from "@/components/sections/Testimonials";
-import { CTABanner } from "@/components/sections/CTABanner";
 import {
   getServices,
   getFeaturedPortfolioItems,
@@ -18,6 +12,37 @@ import {
   getSiteContentUpdatedAt,
 } from "@/lib/data";
 import { clientLogos as fallbackClientLogos } from "@/lib/constants";
+
+// Dynamically import below-the-fold sections to code-split framer-motion
+// and reduce initial JS payload by ~124 KiB
+const ClientMarquee = dynamic(
+  () => import("@/components/sections/ClientMarquee").then((mod) => ({ default: mod.ClientMarquee })),
+  { ssr: true }
+);
+const ServicesGrid = dynamic(
+  () => import("@/components/sections/ServicesGrid").then((mod) => ({ default: mod.ServicesGrid })),
+  { ssr: true }
+);
+const WorkShowcase = dynamic(
+  () => import("@/components/sections/WorkShowcase").then((mod) => ({ default: mod.WorkShowcase })),
+  { ssr: true }
+);
+const ProcessSteps = dynamic(
+  () => import("@/components/sections/ProcessSteps").then((mod) => ({ default: mod.ProcessSteps })),
+  { ssr: true }
+);
+const StatsCounter = dynamic(
+  () => import("@/components/sections/StatsCounter").then((mod) => ({ default: mod.StatsCounter })),
+  { ssr: true }
+);
+const Testimonials = dynamic(
+  () => import("@/components/sections/Testimonials").then((mod) => ({ default: mod.Testimonials })),
+  { ssr: true }
+);
+const CTABanner = dynamic(
+  () => import("@/components/sections/CTABanner").then((mod) => ({ default: mod.CTABanner })),
+  { ssr: true }
+);
 
 export const revalidate = 60;
 

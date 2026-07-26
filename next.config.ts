@@ -29,6 +29,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true, // Enable CSS optimization
     scrollRestoration: true, // Better scroll position restoration
+    optimizePackageImports: ['lucide-react', 'framer-motion'], // Tree-shake unused exports
   },
 };
 

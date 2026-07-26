@@ -72,7 +72,7 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
             >
-              <h4 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Company</h4>
+              <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Company</h3>
               <ul className="space-y-3.5">
                 {footerLinks.company.map((link) => (
                   <li key={link.label}>
@@ -96,7 +96,7 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.2 }}
             >
-              <h4 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Services</h4>
+              <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Services</h3>
               <ul className="space-y-3.5">
                 {footerLinks.services.map((link) => (
                   <li key={link.label}>
@@ -120,7 +120,7 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.3 }}
             >
-              <h4 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Resources</h4>
+              <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Resources</h3>
               <ul className="space-y-3.5">
                 {footerLinks.resources.map((link) => (
                   <li key={link.label}>
@@ -145,7 +145,7 @@ export function Footer() {
             transition={{ duration: 0.7, delay: 0.4 }}
             className="lg:col-span-2"
           >
-            <h4 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Contact</h4>
+            <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Contact</h3>
             <div className="space-y-3.5 text-sm">
               <a
                 href={`mailto:${siteConfig.email}`}
