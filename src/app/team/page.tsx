@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/constants";
-import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
+import { BreadcrumbJsonLd, TeamJsonLd } from "@/components/shared/StructuredData";
 import TeamContent from "./team-content";
+import { getTeamMembers, getLatestUpdatedAt } from "@/lib/data";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Team",
+  title: "Meet the Glovax Technologies Team",
   description:
     "Meet the leadership and experts at Glovax Technologies — engineers, AI researchers, designers, and strategists building digital products worldwide.",
   keywords: [
@@ -26,7 +29,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TeamPage() {
+export default async function TeamPage() {
+  const team = await getTeamMembers();
+  const lastUpdated = await getLatestUpdatedAt(["teamMembers"]);
+
   return (
     <>
       <BreadcrumbJsonLd
@@ -35,7 +41,8 @@ export default function TeamPage() {
           { name: "Team", url: `${siteConfig.url}/team` },
         ]}
       />
-      <TeamContent />
+      <TeamJsonLd members={team} />
+      <TeamContent team={team} lastUpdated={lastUpdated} />
     </>
   );
 }

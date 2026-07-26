@@ -3,13 +3,17 @@ import { siteConfig } from "@/lib/constants";
 import {
   BreadcrumbJsonLd,
   FAQJsonLD,
+  ServiceJsonLd,
 } from "@/components/shared/StructuredData";
 import ServicesContent from "./services-content";
+import { getServices, getLatestUpdatedAt } from "@/lib/data";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: "Software Development Services | Glovax Technologies",
   description:
-    "End-to-end digital services by Glovax Technologies: AI-powered web development, mobile apps, cloud & DevOps, UI/UX design, and digital marketing that drives growth.",
+    "End-to-end digital services: AI-powered web development, mobile apps, cloud & DevOps, UI/UX design, and digital marketing that drives real business growth.",
   keywords: [
     "web development services",
     "mobile app development",
@@ -27,7 +31,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: `${siteConfig.url}/services`,
-    title: `Our Services | ${siteConfig.name}`,
+    title: `Software Development Services | ${siteConfig.name}`,
     description:
       "Explore our end-to-end digital services: AI-powered web and mobile development, cloud infrastructure, and growth marketing.",
     type: "website",
@@ -62,7 +66,10 @@ const faqs = [
   },
 ];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getServices();
+  const lastUpdated = await getLatestUpdatedAt(["services"]);
+
   return (
     <>
       <BreadcrumbJsonLd
@@ -72,7 +79,8 @@ export default function ServicesPage() {
         ]}
       />
       <FAQJsonLD items={faqs} />
-      <ServicesContent />
+      <ServiceJsonLd services={services} />
+      <ServicesContent services={services} faqs={faqs} lastUpdated={lastUpdated} />
     </>
   );
 }

@@ -7,39 +7,87 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { PortfolioItem } from "@/types";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
-export default function WorkContent() {
-  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+interface FAQItem {
+  question: string;
+  answer: string;
+}
 
-  useEffect(() => {
-    fetch("/api/public/portfolio")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (Array.isArray(data)) setPortfolioItems(data);
-      })
-      .catch(() => {});
-  }, []);
+interface WorkContentProps {
+  projects?: PortfolioItem[];
+  faqs?: FAQItem[];
+  lastUpdated?: Date | null;
+}
 
+export default function WorkContent({
+  projects = [],
+  faqs = [],
+  lastUpdated,
+}: WorkContentProps) {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <Breadcrumbs items={[{ label: "Portfolio", href: "/work" }]} />
           <SectionHeader
+            as="h1"
             eyebrow="Portfolio"
             title="Selected"
             titleHighlight="Projects"
-            subtitle="A curated collection of our finest work across web, mobile, AI, and cloud infrastructure."
+            subtitle="Glovax Technologies builds web apps, mobile platforms, AI solutions, and cloud infrastructure for clients worldwide. Below is a curated selection of projects by category."
             align="left"
           />
 
+          {lastUpdated && (
+            <p className="text-xs text-muted-foreground mb-8 -mt-8">
+              Last updated:{" "}
+              {new Date(lastUpdated).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {portfolioItems.map((project, index) => (
+            {projects.map((project, index) => (
               <WorkCard key={project.id} project={project} index={index} />
             ))}
           </div>
+
+          {faqs.length > 0 && (
+            <section aria-labelledby="work-faq" className="mt-24">
+              <SectionHeader
+                eyebrow="FAQ"
+                title="Common questions about our"
+                titleHighlight="work"
+                subtitle="Everything you need to know before exploring our portfolio and starting a similar project."
+                align="left"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {faqs.map((faq, index) => (
+                  <motion.div
+                    key={faq.question}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="p-6 rounded-2xl bg-surface border border-border"
+                  >
+                    <h3 className="text-lg font-semibold mb-3">{faq.question}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{faq.answer}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </main>
       <Footer />
@@ -57,21 +105,10 @@ function WorkCard({
   const hasLink = Boolean(project.link);
 
   const cardBody = (
-    <motion.article
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      id={project.id}
-      className="group"
-    >
+    <>
       <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-surface-raised border border-border mb-5">
         <Image
-          src={project.image || "/images/placeholder.jpg"}
+          src={project.image || "/images/placeholder.svg"}
           alt={project.title}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -140,21 +177,44 @@ function WorkCard({
           <ExternalLink className="w-3.5 h-3.5" />
         </a>
       )}
-    </motion.article>
+    </>
   );
 
   if (hasLink) {
     return (
-      <a
+      <motion.a
         href={project.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="block cursor-pointer"
+        className="block cursor-pointer group"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{
+          duration: 0.6,
+          delay: index * 0.1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
       >
         {cardBody}
-      </a>
+      </motion.a>
     );
   }
 
-  return cardBody;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      <Link href={`/work#${project.id}`} className="block group">
+        {cardBody}
+      </Link>
+    </motion.div>
+  );
 }

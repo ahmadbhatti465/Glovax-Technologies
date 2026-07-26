@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { db } from "@/db";
 import { siteContent } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -26,6 +27,9 @@ export async function POST(request: Request) {
       target: siteContent.key,
       set: { value: body.value, updatedAt: new Date() },
     });
+    revalidatePath("/");
+    if (body.key) revalidateTag(`content:${body.key}`, "max");
+    revalidateTag("public-data", "max");
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to save content";

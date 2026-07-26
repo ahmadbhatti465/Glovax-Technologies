@@ -57,6 +57,7 @@ export const blogPosts = sqliteTable("blog_posts", {
   readTime: integer("read_time").notNull().default(5),
   featured: integer("featured", { mode: "boolean" }).notNull().default(false),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
 export const jobPositions = sqliteTable("job_positions", {

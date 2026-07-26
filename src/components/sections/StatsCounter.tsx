@@ -2,13 +2,14 @@
 
 import { motion } from "framer-motion";
 import { stats as fallbackStats } from "@/lib/constants";
-import { useSiteContent } from "@/hooks/useSiteContent";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 
-export function StatsCounter() {
-  const { data: stats } = useSiteContent<{ value: number; suffix: string; label: string }[]>("stats", fallbackStats);
+interface StatsCounterProps {
+  stats?: { value: number; suffix: string; label: string }[];
+}
 
-  if (!stats) return null;
+export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
+  const stats = serverStats?.length ? serverStats : fallbackStats;
 
   return (
     <section className="py-20 md:py-28 border-y border-white/[0.06] bg-[#0D0D0D] relative overflow-hidden">

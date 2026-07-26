@@ -6,7 +6,7 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 import { motion } from "framer-motion";
 import { Target, Shield, Zap, Users, Globe, Heart } from "lucide-react";
-import { useSiteContent } from "@/hooks/useSiteContent";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 const iconMap: Record<string, React.ReactNode> = {
   Target: <Target className="w-5 h-5" />,
@@ -36,7 +36,7 @@ const fallbackValues = [
   {
     icon: "Users",
     title: "True Partners",
-    description: "We're not vendors we're an extension of your team, invested in your long-term success.",
+    description: "We're not vendors — we're an extension of your team, invested in your long-term success.",
   },
   {
     icon: "Globe",
@@ -51,18 +51,18 @@ const fallbackValues = [
 ];
 
 const fallbackTimeline = [
-  { year: "2018", event: "Founded in San Francisco" },
-  { year: "2019", event: "First 50 clients" },
+  { year: "2018", event: "Founded in Lahore, Pakistan" },
+  { year: "2019", event: "First 25 clients across Pakistan" },
   { year: "2020", event: "Expanded to mobile development" },
   { year: "2021", event: "AI & ML practice launched" },
   { year: "2022", event: "100+ projects delivered" },
-  { year: "2023", event: "Global expansion 30+ countries" },
-  { year: "2024", event: "50+ team members" },
-  { year: "2025", event: "Industry recognition & awards" },
+  { year: "2023", event: "Global expansion: 30+ countries" },
+  { year: "2024", event: "35+ team members worldwide" },
+  { year: "2025", event: "Recognized software house in APAC" },
 ];
 
-export default function AboutContent() {
-  const { data: about } = useSiteContent<{
+interface AboutContentProps {
+  about?: {
     heroEyebrow: string;
     heroTitle: string;
     heroTitleHighlight: string;
@@ -70,31 +70,68 @@ export default function AboutContent() {
     stats: { value: number; suffix: string; label: string }[];
     values: { icon: string; title: string; description: string }[];
     timeline: { year: string; event: string }[];
-  }>("about", {
-    heroEyebrow: "About Us",
-    heroTitle: "Building the future,",
-    heroTitleHighlight: "one product at a time.",
-    heroSubtitle: "Glovax Technologies was founded with a simple mission: to help businesses leverage technology to create meaningful impact. Today, we're a global team of engineers, designers, and strategists who believe that great software can change the world.",
-    stats: [
-      { value: 100, suffix: "+", label: "Projects" },
-      { value: 99, suffix: "%", label: "Satisfaction" },
-      { value: 30, suffix: "+", label: "Countries" },
-      { value: 35, suffix: "+", label: "Team" },
-    ],
-    values: fallbackValues,
-    timeline: fallbackTimeline,
-  });
+  } | null;
+  lastUpdated?: Date | null;
+}
 
-  if (!about) return null;
+export default function AboutContent({ about, lastUpdated }: AboutContentProps) {
+  if (!about) {
+    return (
+      <AboutContentInner
+        values={fallbackValues}
+        timeline={fallbackTimeline}
+        lastUpdated={lastUpdated}
+      />
+    );
+  }
 
-  const values = about.values ?? fallbackValues;
-  const timeline = about.timeline ?? fallbackTimeline;
+  return (
+    <AboutContentInner
+      heroEyebrow={about.heroEyebrow}
+      heroTitle={about.heroTitle}
+      heroTitleHighlight={about.heroTitleHighlight}
+      heroSubtitle={about.heroSubtitle}
+      stats={about.stats}
+      values={about.values ?? fallbackValues}
+      timeline={about.timeline ?? fallbackTimeline}
+      lastUpdated={lastUpdated}
+    />
+  );
+}
 
+interface AboutContentInnerProps {
+  heroEyebrow?: string;
+  heroTitle?: string;
+  heroTitleHighlight?: string;
+  heroSubtitle?: string;
+  stats?: { value: number; suffix: string; label: string }[];
+  values: { icon: string; title: string; description: string }[];
+  timeline: { year: string; event: string }[];
+  lastUpdated?: Date | null;
+}
+
+function AboutContentInner({
+  heroEyebrow = "About Us",
+  heroTitle = "Building the future,",
+  heroTitleHighlight = "one product at a time.",
+  heroSubtitle = "Glovax Technologies is a Lahore-based software house and digital agency that helps businesses worldwide leverage AI, cloud, and modern web technologies to create meaningful impact.",
+  stats = [
+    { value: 100, suffix: "+", label: "Projects" },
+    { value: 99, suffix: "%", label: "Satisfaction" },
+    { value: 30, suffix: "+", label: "Countries" },
+    { value: 35, suffix: "+", label: "Team" },
+  ],
+  values,
+  timeline,
+  lastUpdated,
+}: AboutContentInnerProps) {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <Breadcrumbs items={[{ label: "About Us", href: "/about" }]} />
+
           {/* Hero */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -103,20 +140,30 @@ export default function AboutContent() {
             className="max-w-4xl mb-20"
           >
             <span className="text-accent text-xs md:text-sm font-medium tracking-[0.2em] uppercase mb-4 block">
-              {about.heroEyebrow}
+              {heroEyebrow}
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
-              {about.heroTitle}
-              <span className="gradient-text"> {about.heroTitleHighlight}</span>
+              {heroTitle}
+              <span className="gradient-text"> {heroTitleHighlight}</span>
             </h1>
             <p className="text-muted text-lg leading-relaxed">
-              {about.heroSubtitle}
+              {heroSubtitle}
             </p>
+            {lastUpdated && (
+              <p className="text-xs text-muted-foreground mt-4">
+                Last updated:{" "}
+                {new Date(lastUpdated).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+            )}
           </motion.div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 border-y border-border mb-20">
-            {(about.stats ?? []).map((stat) => (
+            {(stats ?? []).map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold gradient-text">
                   <AnimatedCounter

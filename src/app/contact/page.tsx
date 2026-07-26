@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/constants";
-import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
+import { BreadcrumbJsonLd, ContactPageJsonLd } from "@/components/shared/StructuredData";
 import ContactContent from "./contact-content";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact Glovax Technologies — Get a Quote",
   description:
     "Get in touch with Glovax Technologies. Request a quote, discuss your project, or learn how our software house can help grow your business.",
   keywords: [
@@ -37,6 +37,7 @@ export default function ContactPage() {
           { name: "Contact", url: `${siteConfig.url}/contact` },
         ]}
       />
+      <ContactPageJsonLd />
       <ContactContent />
     </>
   );

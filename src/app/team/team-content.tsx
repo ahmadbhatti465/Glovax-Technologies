@@ -4,8 +4,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import { TeamMember } from "@/types";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 const fallbackTeam: TeamMember[] = [
   {
@@ -21,7 +21,7 @@ const fallbackTeam: TeamMember[] = [
     name: "Iqra Kiran",
     role: "Chief Technology Officer",
     department: "Engineering",
-    bio: "Former Google lead architect specializing in scalable AI systems and cloud infrastructure.",
+    bio: "Experienced architect specializing in scalable AI systems and cloud infrastructure.",
     expertise: [],
   },
   {
@@ -45,7 +45,7 @@ const fallbackTeam: TeamMember[] = [
     name: "Hammad Shafqat",
     role: "Head of Marketing",
     department: "Marketing",
-    bio: "Growth hacker with a track record of scaling startups from 0 to $10M+ revenue.",
+    bio: "Growth strategist with a track record of scaling startups through data-driven marketing.",
     expertise: [],
   },
   {
@@ -58,29 +58,38 @@ const fallbackTeam: TeamMember[] = [
   },
 ];
 
-export default function TeamContent() {
-  const [team, setTeam] = useState<TeamMember[]>(fallbackTeam);
+interface TeamContentProps {
+  team?: TeamMember[];
+  lastUpdated?: Date | null;
+}
 
-  useEffect(() => {
-    fetch("/api/public/team")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setTeam(data);
-      })
-      .catch(() => {});
-  }, []);
+export default function TeamContent({ team: serverTeam, lastUpdated }: TeamContentProps) {
+  const team = serverTeam?.length ? serverTeam : fallbackTeam;
 
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <Breadcrumbs items={[{ label: "Team", href: "/team" }]} />
           <SectionHeader
+            as="h1"
             eyebrow="Our Team"
             title="Meet the minds behind"
             titleHighlight="Glovax Technologies"
             subtitle="A diverse team of innovators, engineers, and problem-solvers dedicated to transforming businesses through technology."
           />
+
+          {lastUpdated && (
+            <p className="text-xs text-muted-foreground mb-8 -mt-8 text-center">
+              Last updated:{" "}
+              {new Date(lastUpdated).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {team.map((member, index) => (

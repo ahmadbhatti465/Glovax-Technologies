@@ -6,32 +6,45 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { motion } from "framer-motion";
 import { Clock, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { BlogPost } from "@/types";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
-export default function BlogContent() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+interface BlogContentProps {
+  posts?: BlogPost[];
+  lastUpdated?: Date | null;
+}
 
-  useEffect(() => {
-    fetch("/api/public/blog")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (Array.isArray(data)) setPosts(data);
-      })
-      .catch(() => {});
-  }, []);
-
+export default function BlogContent({ posts = [], lastUpdated }: BlogContentProps) {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <Breadcrumbs items={[{ label: "Blog", href: "/blog" }]} />
           <SectionHeader
+            as="h1"
             eyebrow="Blog"
             title="Insights &"
             titleHighlight="Perspectives"
             subtitle="Thoughts on technology, design, and building products that matter."
           />
+
+          {lastUpdated && (
+            <p className="text-xs text-muted-foreground mb-8 -mt-8 text-center">
+              Last updated:{" "}
+              {new Date(lastUpdated).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
+
+          {posts.length === 0 && (
+            <p className="text-center text-muted">
+              No articles published yet. Check back soon for insights on AI, web development, and cloud engineering.
+            </p>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post, index) => (

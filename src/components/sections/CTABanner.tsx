@@ -3,28 +3,32 @@
 import { motion } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { siteConfig } from "@/lib/constants";
-import { useSiteContent } from "@/hooks/useSiteContent";
 
-export function CTABanner() {
-  const { data: cta } = useSiteContent<{
+interface CTABannerProps {
+  cta?: {
     eyebrow: string;
     title: string;
     titleHighlight: string;
     subtitle: string;
     buttons: { label: string; href: string; variant: "primary" | "outline" | "ghost" }[];
-  }>("cta_banner", {
-    eyebrow: "Let's Collaborate",
-    title: "Ready to build",
-    titleHighlight: "something great?",
-    subtitle: "Let's discuss your project and explore how Glovax Technologies can help you achieve your business goals with cutting-edge technology.",
-    buttons: [
-      { label: "Start a Project", href: "/contact", variant: "primary" },
-      { label: "Book a Call", href: siteConfig.calendarUrl, variant: "outline" },
-      { label: "Explore Services", href: "/services", variant: "ghost" },
-    ],
-  });
+  };
+  lastUpdated?: Date | null;
+}
 
-  if (!cta) return null;
+const fallbackCTA = {
+  eyebrow: "Let's Collaborate",
+  title: "Ready to build",
+  titleHighlight: "something great?",
+  subtitle: "Let's discuss your project and explore how Glovax Technologies can help you achieve your business goals with cutting-edge technology.",
+  buttons: [
+    { label: "Start a Project", href: "/contact", variant: "primary" as const },
+    { label: "Book a Call", href: siteConfig.calendarUrl, variant: "outline" as const },
+    { label: "Explore Services", href: "/services", variant: "ghost" as const },
+  ],
+};
+
+export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
+  const data = cta || fallbackCTA;
 
   return (
     <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
@@ -69,26 +73,32 @@ export function CTABanner() {
           <div className="relative z-10 px-8 py-20 md:px-16 md:py-28 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs md:text-sm font-medium text-muted tracking-wide mb-8">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              {cta.eyebrow}
+              {data.eyebrow}
             </div>
 
             <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-              {cta.title}
+              {data.title}
               <br />
-              <span className="gold-shimmer">{cta.titleHighlight}</span>
+              <span className="gold-shimmer">{data.titleHighlight}</span>
             </h2>
 
             <p className="text-muted text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              {cta.subtitle}
+              {data.subtitle}
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-              {cta.buttons?.map((btn) => (
+              {data.buttons?.map((btn) => (
                 <MagneticButton key={btn.label} href={btn.href} variant={btn.variant} size="lg">
                   {btn.label}
                 </MagneticButton>
               ))}
             </div>
+
+            {lastUpdated && (
+              <p className="mt-6 text-xs text-muted-foreground">
+                Last updated {new Date(lastUpdated).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+              </p>
+            )}
           </div>
         </motion.div>
       </div>

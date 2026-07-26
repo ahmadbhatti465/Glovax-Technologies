@@ -15,8 +15,8 @@ import {
   Palette,
   ArrowUpRight,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Service } from "@/types";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 const iconMap: Record<string, React.ReactNode> = {
   Code2: <Code2 className="w-8 h-8" />,
@@ -27,30 +27,49 @@ const iconMap: Record<string, React.ReactNode> = {
   Palette: <Palette className="w-8 h-8" />,
 };
 
-export default function ServicesContent() {
-  const [services, setServices] = useState<Service[]>(fallbackServices);
+interface FAQItem {
+  question: string;
+  answer: string;
+}
 
-  useEffect(() => {
-    fetch("/api/public/services")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setServices(data);
-      })
-      .catch(() => {});
-  }, []);
+interface ServicesContentProps {
+  services?: Service[];
+  faqs?: FAQItem[];
+  lastUpdated?: Date | null;
+}
+
+export default function ServicesContent({
+  services: serverServices,
+  faqs = [],
+  lastUpdated,
+}: ServicesContentProps) {
+  const services = serverServices?.length ? serverServices : fallbackServices;
 
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <Breadcrumbs items={[{ label: "Services", href: "/services" }]} />
           <SectionHeader
+            as="h1"
             eyebrow="Services"
             title="Solutions for every"
             titleHighlight="challenge"
             subtitle="We offer end-to-end digital services designed to accelerate your growth, reduce costs, and future-proof your business."
             align="left"
           />
+
+          {lastUpdated && (
+            <p className="text-xs text-muted-foreground mb-8 -mt-8">
+              Last updated: {" "}
+              {new Date(lastUpdated).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
 
           <div className="space-y-8">
             {services.map((service, index) => (
@@ -113,6 +132,37 @@ export default function ServicesContent() {
               </motion.div>
             ))}
           </div>
+
+          {faqs.length > 0 && (
+            <section aria-labelledby="services-faq" className="mt-24">
+              <SectionHeader
+                eyebrow="FAQ"
+                title="Common questions about our"
+                titleHighlight="services"
+                subtitle="Quick answers to the questions we hear most often from teams planning their next digital product."
+                align="left"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {faqs.map((faq, index) => (
+                  <motion.div
+                    key={faq.question}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="p-6 rounded-2xl bg-surface border border-border"
+                  >
+                    <h3 className="text-lg font-semibold mb-3">{faq.question}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{faq.answer}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </main>
       <Footer />

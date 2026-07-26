@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Pencil, Trash2, Plus, X, ChevronLeft, ImageIcon, Upload } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export type FieldType = "text" | "textarea" | "number" | "boolean" | "json" | "image";
 
@@ -161,8 +162,8 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
       const src = getImageSrc(val);
       if (src) {
         return (
-          <div className="w-10 h-10 rounded-lg overflow-hidden border border-[#C8A45E]/20">
-            <img src={src} alt="" className="w-full h-full object-cover" />
+          <div className="w-10 h-10 rounded-lg overflow-hidden border border-[#C8A45E]/20 relative">
+            <Image src={src} alt="" fill sizes="40px" className="object-cover" />
           </div>
         );
       }
@@ -293,11 +294,13 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                         placeholder="Or paste image URL / path (e.g. /images/portfolio/x.jpg)"
                       />
                       {Boolean(form[f.key]) && getImageSrc(form[f.key]) && (
-                        <div className="rounded-lg overflow-hidden border border-[#C8A45E]/20 w-full max-w-[200px]">
-                          <img
+                        <div className="rounded-lg overflow-hidden border border-[#C8A45E]/20 w-full max-w-[200px] relative aspect-[5/4]">
+                          <Image
                             src={getImageSrc(form[f.key])}
                             alt="Preview"
-                            className="w-full h-auto max-h-40 object-cover"
+                            fill
+                            sizes="200px"
+                            className="object-cover"
                           />
                         </div>
                       )}

@@ -6,16 +6,27 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { motion } from "framer-motion";
 import { MapPin, Clock, Briefcase, ArrowUpRight } from "lucide-react";
-import { useEffect, useState } from "react";
 import { JobPosition } from "@/types";
-import { useSiteContent } from "@/hooks/useSiteContent";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface CareerContentProps {
+  positions?: JobPosition[];
+  benefits?: string[];
+  faqs?: FAQItem[];
+  lastUpdated?: Date | null;
+}
 
 const fallbackPositions: JobPosition[] = [
   {
     id: "1",
     title: "Senior AI/ML Engineer",
     department: "Engineering",
-    location: "Remote / SF",
+    location: "Remote",
     type: "Full-time",
     experience: "5+ years",
     description: "",
@@ -37,7 +48,7 @@ const fallbackPositions: JobPosition[] = [
     id: "3",
     title: "Product Manager",
     department: "Product",
-    location: "San Francisco",
+    location: "Remote",
     type: "Full-time",
     experience: "4+ years",
     description: "",
@@ -48,7 +59,7 @@ const fallbackPositions: JobPosition[] = [
     id: "4",
     title: "UX/UI Designer",
     department: "Design",
-    location: "Remote / SF",
+    location: "Remote",
     type: "Full-time",
     experience: "3+ years",
     description: "",
@@ -70,7 +81,7 @@ const fallbackPositions: JobPosition[] = [
     id: "6",
     title: "AI Research Intern",
     department: "AI/ML",
-    location: "San Francisco",
+    location: "Remote",
     type: "Internship",
     experience: "0-1 years",
     description: "",
@@ -90,31 +101,39 @@ const fallbackBenefits = [
   "Parental leave",
 ];
 
-export default function CareerContent() {
-  const [positions, setPositions] = useState<JobPosition[]>(fallbackPositions);
-  const { data: benefitsData } = useSiteContent<string[]>("career_benefits", fallbackBenefits);
-  const benefits = benefitsData ?? fallbackBenefits;
-
-  useEffect(() => {
-    fetch("/api/public/careers")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setPositions(data);
-      })
-      .catch(() => {});
-  }, []);
+export default function CareerContent({
+  positions: serverPositions,
+  benefits: serverBenefits,
+  faqs = [],
+  lastUpdated,
+}: CareerContentProps) {
+  const positions = serverPositions?.length ? serverPositions : fallbackPositions;
+  const benefits = serverBenefits?.length ? serverBenefits : fallbackBenefits;
 
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <Breadcrumbs items={[{ label: "Careers", href: "/career" }]} />
           <SectionHeader
+            as="h1"
             eyebrow="Careers"
             title="Join our"
             titleHighlight="team"
             subtitle="We're always looking for exceptional people who are passionate about building great products."
           />
+
+          {lastUpdated && (
+            <p className="text-xs text-muted-foreground mb-8 -mt-8 text-center">
+              Last updated:{" "}
+              {new Date(lastUpdated).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
 
           <div className="mb-20">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
@@ -195,6 +214,37 @@ export default function CareerContent() {
               </motion.div>
             ))}
           </div>
+
+          {faqs.length > 0 && (
+            <section aria-labelledby="career-faq" className="mt-24">
+              <SectionHeader
+                eyebrow="FAQ"
+                title="Working at"
+                titleHighlight="Glovax Technologies"
+                subtitle="Quick answers about our culture, hiring process, and remote work environment."
+                align="left"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {faqs.map((faq, index) => (
+                  <motion.div
+                    key={faq.question}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="p-6 rounded-2xl bg-surface border border-border"
+                  >
+                    <h3 className="text-lg font-semibold mb-3">{faq.question}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{faq.answer}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </main>
       <Footer />

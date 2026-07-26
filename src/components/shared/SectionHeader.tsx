@@ -9,6 +9,7 @@ interface SectionHeaderProps {
   subtitle?: string;
   align?: "left" | "center" | "right";
   className?: string;
+  as?: "h1" | "h2";
 }
 
 export function SectionHeader({
@@ -18,6 +19,7 @@ export function SectionHeader({
   subtitle,
   align = "center",
   className = "",
+  as: Tag = "h2",
 }: SectionHeaderProps) {
   const alignClasses = {
     left: "text-left items-start",
@@ -40,12 +42,12 @@ export function SectionHeader({
           <span className="w-8 h-px bg-accent/30 hidden md:inline-block" />
         </span>
       )}
-      <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
+      <Tag className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
         {title}
         {titleHighlight && (
           <span className="gold-shimmer"> {titleHighlight}</span>
         )}
-      </h2>
+      </Tag>
       {subtitle && (
         <p className="mt-5 md:mt-6 text-muted text-base md:text-lg leading-relaxed max-w-2xl">
           {subtitle}

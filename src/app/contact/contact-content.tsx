@@ -12,6 +12,7 @@ import { useState } from "react";
 import { siteConfig } from "@/lib/constants";
 import { Mail, Phone, MapPin, Calendar, ArrowUpRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -62,13 +63,15 @@ export default function ContactContent() {
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <Breadcrumbs items={[{ label: "Contact", href: "/contact" }]} />
           <SectionHeader
+            as="h1"
             eyebrow="Contact"
             title="Let's work"
             titleHighlight="together"
-            subtitle="Have a project in mind? Fill out the form below and we'll get back to you within 24 hours."
+            subtitle="You can reach Glovax Technologies by email, phone, or the form below. We reply within 24 hours on business days and are happy to answer questions about quotes, timelines, and services."
             align="left"
           />
 

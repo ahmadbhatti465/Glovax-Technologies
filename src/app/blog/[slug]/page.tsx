@@ -1,28 +1,19 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { db } from "@/db";
+import { getBlogPostBySlug } from "@/lib/data";
 import { blogPosts as blogPostsTable } from "@/db/schema";
+import { db } from "@/db";
 import { siteConfig } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { FAQJsonLD, BreadcrumbJsonLd } from "@/components/shared/StructuredData";
-import { ArrowLeft, Clock, Calendar } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, RefreshCw } from "lucide-react";
 import { BlogPost } from "@/types";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 export const dynamic = "force-static";
-
-async function getPost(slug: string): Promise<BlogPost | null> {
-  try {
-    const rows = await db.select().from(blogPostsTable);
-    const found = rows.find((p) => p.slug === slug);
-    if (found) return found as BlogPost;
-  } catch {
-    // DB unavailable
-  }
-  return null;
-}
 
 export async function generateStaticParams() {
   try {
@@ -39,7 +30,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) {
     return {
       title: "Article Not Found",
@@ -48,18 +39,20 @@ export async function generateMetadata({
   }
 
   const url = `${siteConfig.url}/blog/${post.slug}`;
+  const description = post.excerpt.slice(0, 160);
 
   return {
     title: post.title,
-    description: post.excerpt,
+    description,
     keywords: post.tags,
     alternates: { canonical: url },
     openGraph: {
       type: "article",
       url,
       title: post.title,
-      description: post.excerpt,
+      description,
       publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt?.toISOString() || post.publishedAt,
       authors: [post.author],
       tags: post.tags,
       images: [
@@ -74,7 +67,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
+      description,
       images: [siteConfig.ogImage],
       creator: "@glovaxtech",
     },
@@ -210,11 +203,10 @@ function renderMarkdown(content: string) {
 
 function renderInline(text: string): React.ReactNode {
   const parts: React.ReactNode[] = [];
-  let remaining = text;
+  let lastIndex = 0;
   let key = 0;
 
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-  let lastIndex = 0;
   let match: RegExpExecArray | null;
 
   while ((match = linkRegex.exec(text)) !== null) {
@@ -281,7 +273,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) notFound();
 
   const url = `${siteConfig.url}/blog/${post.slug}`;
@@ -293,7 +285,7 @@ export default async function BlogPostPage({
     headline: post.title,
     description: post.excerpt,
     datePublished: post.publishedAt,
-    dateModified: post.publishedAt,
+    dateModified: post.updatedAt?.toISOString() || post.publishedAt,
     author: {
       "@type": "Organization",
       name: post.author,
@@ -312,15 +304,24 @@ export default async function BlogPostPage({
       "@id": url,
     },
     keywords: post.tags.join(", "),
+    image: [`${siteConfig.url}${siteConfig.ogImage}`],
   };
 
   const articleContentWithoutFaq = post.content;
+  const publishedDate = new Date(post.publishedAt);
+  const modifiedDate = post.updatedAt || publishedDate;
 
   return (
     <>
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main className="pt-28 pb-24">
         <div className="max-w-3xl mx-auto px-6 md:px-8">
+          <Breadcrumbs
+            items={[
+              { label: "Blog", href: "/blog" },
+              { label: post.title },
+            ]}
+          />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
@@ -348,7 +349,7 @@ export default async function BlogPostPage({
             </span>
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Calendar className="w-3 h-3" />
-              {new Date(post.publishedAt).toLocaleDateString("en-US", {
+              {publishedDate.toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -386,6 +387,18 @@ export default async function BlogPostPage({
               ))}
             </div>
           )}
+
+          <div className="mt-8 flex items-center gap-2 text-xs text-muted-foreground">
+            <RefreshCw className="w-3 h-3" />
+            <span>
+              Last updated:{" "}
+              {modifiedDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          </div>
 
           <div className="mt-16 p-8 rounded-2xl bg-surface border border-border text-center">
             <h3 className="text-2xl font-semibold mb-3">

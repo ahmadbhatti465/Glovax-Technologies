@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/lib/constants";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
 import BlogContent from "./blog-content";
+import { getBlogPosts, getLatestUpdatedAt } from "@/lib/data";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Tech Blog: AI, Web & Cloud | Glovax Technologies",
   description:
     "Read insights on AI, web development, mobile apps, cloud computing, and digital marketing from the Glovax Technologies team.",
   keywords: [
@@ -21,14 +24,17 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: `${siteConfig.url}/blog`,
-    title: `Blog | ${siteConfig.name}`,
+    title: `Tech Blog | ${siteConfig.name}`,
     description:
       "Thoughts on technology, design, and building products that matter.",
     type: "website",
   },
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getBlogPosts();
+  const lastUpdated = await getLatestUpdatedAt(["blogPosts"]);
+
   return (
     <>
       <BreadcrumbJsonLd
@@ -37,7 +43,7 @@ export default function BlogPage() {
           { name: "Blog", url: `${siteConfig.url}/blog` },
         ]}
       />
-      <BlogContent />
+      <BlogContent posts={posts} lastUpdated={lastUpdated} />
     </>
   );
 }

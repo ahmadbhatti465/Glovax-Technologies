@@ -15,7 +15,7 @@ export interface PortfolioItem {
   link?: string;
   results: string[];
   technologies: string[];
-  image: string;
+  image?: string;
   featured: boolean;
 }
 
@@ -50,6 +50,7 @@ export interface BlogPost {
   publishedAt: string;
   readTime: number;
   featured: boolean;
+  updatedAt?: Date;
 }
 
 export interface JobPosition {

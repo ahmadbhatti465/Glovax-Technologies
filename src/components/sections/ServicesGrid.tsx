@@ -12,7 +12,7 @@ import {
   Palette,
   ArrowUpRight,
 } from "lucide-react";
-import { useEffect, useState, useRef, MouseEvent } from "react";
+import { useRef, MouseEvent } from "react";
 import { Service } from "@/types";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -97,17 +97,12 @@ function ServiceCard({
   );
 }
 
-export function ServicesGrid() {
-  const [services, setServices] = useState<Service[]>(fallbackServices);
+interface ServicesGridProps {
+  services?: Service[];
+}
 
-  useEffect(() => {
-    fetch("/api/public/services")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setServices(data);
-      })
-      .catch(() => {});
-  }, []);
+export function ServicesGrid({ services: serverServices }: ServicesGridProps) {
+  const services = serverServices?.length ? serverServices : fallbackServices;
 
   return (
     <section className="py-24 md:py-32 lg:py-40 relative">

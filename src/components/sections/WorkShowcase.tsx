@@ -5,22 +5,14 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { PortfolioItem } from "@/types";
 
-export function WorkShowcase() {
-  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+interface WorkShowcaseProps {
+  projects?: PortfolioItem[];
+}
 
-  useEffect(() => {
-    fetch("/api/public/portfolio")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (Array.isArray(data)) setPortfolioItems(data);
-      })
-      .catch(() => {});
-  }, []);
-
-  const featured = portfolioItems.filter((item) => item.featured);
+export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
+  const featured = projects.filter((item) => item.featured);
 
   return (
     <section className="py-24 md:py-32 lg:py-40 bg-[#0D0D0D] relative overflow-hidden">
@@ -68,7 +60,7 @@ export function WorkShowcase() {
             <Link href="/work" className="group block">
               <div className="relative aspect-[16/6] md:aspect-[21/9] rounded-3xl overflow-hidden border border-white/[0.06]">
                 <Image
-                  src="/images/portfolio/cta-bg.jpg"
+                  src="/images/placeholder.svg"
                   alt="Portfolio background"
                   fill
                   sizes="100vw"
@@ -85,7 +77,7 @@ export function WorkShowcase() {
                         className="relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-[#0A0A0A] shadow-[0_0_20px_rgba(212,160,23,0.15)]"
                       >
                         <Image
-                          src={project.image || "/images/placeholder.jpg"}
+                          src={project.image || "/images/placeholder.svg"}
                           alt={project.title}
                           fill
                           sizes="56px"
@@ -95,7 +87,7 @@ export function WorkShowcase() {
                     ))}
                   </div>
                   <p className="text-sm text-muted-foreground mb-3 tracking-wide">
-                    View all {portfolioItems.length} projects
+                    View all {projects.length} projects
                   </p>
                   <div className="inline-flex items-center gap-2 text-xl md:text-2xl font-semibold group-hover:text-accent transition-colors duration-300">
                     See Full Portfolio
@@ -118,7 +110,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
     <>
       <div className="relative aspect-[16/10] rounded-3xl overflow-hidden bg-[#1A1A1A] border border-white/[0.06] mb-6 group">
         <Image
-          src={project.image || "/images/placeholder.jpg"}
+          src={project.image || "/images/placeholder.svg"}
           alt={project.title}
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"

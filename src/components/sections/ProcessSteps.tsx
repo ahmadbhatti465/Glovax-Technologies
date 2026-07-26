@@ -4,7 +4,6 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Search, PenTool, Code, Rocket } from "lucide-react";
-import { useSiteContent } from "@/hooks/useSiteContent";
 
 const fallbackSteps = [
   {
@@ -91,12 +90,14 @@ function ConnectorLine({ isVisible, delay }: { isVisible: boolean; delay: number
   );
 }
 
-export function ProcessSteps() {
+interface ProcessStepsProps {
+  steps?: { number: string; title: string; description: string; icon: string }[];
+}
+
+export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const { data: steps } = useSiteContent<{ number: string; title: string; description: string; icon: string }[]>("process_steps", fallbackSteps);
-
-  if (!steps) return null;
+  const steps = serverSteps?.length ? serverSteps : fallbackSteps;
 
   return (
     <section className="py-24 md:py-32 lg:py-40 relative">
@@ -105,7 +106,7 @@ export function ProcessSteps() {
           eyebrow="Our Process"
           title="How we"
           titleHighlight="work"
-          subtitle="A battle-tested methodology refined over 500+ projects. We combine agility with rigor to deliver exceptional results on time and on budget."
+          subtitle="A battle-tested methodology refined over 100+ projects. We combine agility with rigor to deliver exceptional results on time and on budget."
         />
 
         <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">

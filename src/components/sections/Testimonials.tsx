@@ -4,20 +4,14 @@ import { motion } from "framer-motion";
 import { testimonials as fallbackTestimonials } from "@/data/testimonials";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Star, Quote } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Testimonial } from "@/types";
 
-export function Testimonials() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(fallbackTestimonials);
+interface TestimonialsProps {
+  testimonials?: Testimonial[];
+}
 
-  useEffect(() => {
-    fetch("/api/public/testimonials")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setTestimonials(data);
-      })
-      .catch(() => {});
-  }, []);
+export function Testimonials({ testimonials: serverTestimonials }: TestimonialsProps) {
+  const testimonials = serverTestimonials?.length ? serverTestimonials : fallbackTestimonials;
 
   return (
     <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">

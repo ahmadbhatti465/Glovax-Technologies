@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { db } from "@/db";
 import { services } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -23,6 +24,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     await db.insert(services).values(body);
+    revalidatePath("/");
+    revalidatePath("/services");
+    revalidateTag("public-data", "max");
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to create service";
