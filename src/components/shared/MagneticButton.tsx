@@ -34,9 +34,9 @@ export function MagneticButton({
 
   const variantClasses = {
     primary:
-      "bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] font-semibold shadow-[0_0_25px_rgba(212,175,55,0.15)] hover:shadow-[0_0_35px_rgba(212,175,55,0.25)] hover:brightness-110",
+      "bg-gradient-to-r from-teal-deep to-teal text-accent-foreground font-semibold shadow-[0_0_25px_var(--teal-glow)] hover:shadow-[0_0_35px_var(--teal-glow)] hover:brightness-110",
     outline:
-      "border border-white/[0.12] text-foreground hover:border-[#D4AF37]/30 hover:text-accent bg-transparent hover:shadow-[0_0_20px_rgba(212,175,55,0.08)]",
+      "border border-teal-muted text-foreground hover:border-teal/50 hover:text-accent bg-transparent hover:shadow-[0_0_20px_var(--teal-glow)]",
     ghost: "text-foreground hover:text-accent bg-transparent",
   };
 

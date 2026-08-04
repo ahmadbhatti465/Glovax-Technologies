@@ -1,15 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/constants";
 import { Toaster } from "sonner";
 import { StructuredData } from "@/components/shared/StructuredData";
 
-const playfair = Playfair_Display({
+const jakarta = Plus_Jakarta_Sans({
   variable: "--font-heading",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const inter = Inter({
@@ -24,8 +24,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
-    { media: "(prefers-color-scheme: light)", color: "#0A0A0A" },
+    { media: "(prefers-color-scheme: dark)", color: "#060C0B" },
+    { media: "(prefers-color-scheme: light)", color: "#060C0B" },
   ],
   colorScheme: "dark",
 };
@@ -111,7 +111,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${playfair.variable} ${inter.variable} antialiased bg-background text-foreground min-h-screen`}
+        className={`${jakarta.variable} ${inter.variable} antialiased bg-background text-foreground min-h-screen`}
       >
         <StructuredData />
         {children}
@@ -120,7 +120,7 @@ export default function RootLayout({
           toastOptions={{
             style: {
               background: "var(--surface-raised)",
-              color: "var(--text-heading)",
+              color: "var(--foreground)",
               border: "1px solid var(--border-default)",
             },
           }}

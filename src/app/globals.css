@@ -3,6 +3,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================
+   GLOVAX BRAND — DEEP TEAL + CREAM (techietribe-inspired)
+   ------------------------------------------------------------
+   Single source of truth. Components must reference these tokens
+   (via Tailwind utilities) — never hardcode hex values inline.
+
+   USAGE RULES
+   • Teal   — primary CTAs (deep→bright gradient), highlights,
+              hover states, key stats/numbers, links, active states.
+              Never a large background fill; CTAs carry dark text.
+   • Cream  — headlines & body text on deep-green backgrounds.
+   • Mint   — AI/ML service accent + success indicators.
+   • Amber  — Digital Marketing service accent + warnings.
+   • Teal is never used at full saturation over large fills —
+              separate with deep-green space or reduced opacity.
+   ============================================================ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -10,11 +26,14 @@
   --color-surface-raised: var(--surface-raised);
   --color-card: var(--bg-card);
   --color-card-hover: var(--bg-card-hover);
-  --color-section-alt: var(--bg-section-alt);
-  --color-gold: var(--gold-primary);
-  --color-gold-bright: var(--gold-bright);
-  --color-gold-deep: var(--gold-deep);
-  --color-gold-muted: var(--gold-muted);
+  --color-section-alt: var(--section-alt);
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-bg-raise: var(--brand-bg-raise);
+  --color-teal: var(--teal);
+  --color-teal-bright: var(--teal-bright);
+  --color-teal-deep: var(--teal-deep);
+  --color-teal-muted: var(--teal-muted);
+  --color-teal-glow: var(--teal-glow);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
@@ -29,6 +48,12 @@
   --color-ring: var(--ring);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--destructive);
+  --color-text-on-teal: var(--text-on-teal);
+  --color-surface-light: var(--neutral-light);
+  --color-neutral-border: var(--neutral-border);
+  --color-whatsapp: var(--brand-whatsapp);
   --font-sans: var(--font-body);
   --font-mono: var(--font-body);
   --font-heading: var(--font-heading);
@@ -41,42 +66,92 @@
 :root {
   --radius: 0.625rem;
 
-  /* === GOLD SCALE === */
-  --gold-primary:   #D4AF37;
-  --gold-bright:    #EACB64;
-  --gold-deep:      #A88A2F;
-  --gold-muted:     #6E5A1E;
-  --gold-glow:      rgba(212, 175, 55, 0.15);
+  /* ==================== RAW TOKENS ==================== */
 
-  /* === DARK BACKGROUNDS === */
-  --bg-hero:        #0A0A0A;
-  --bg-section:     #111111;
-  --bg-section-alt: #0D0D0D;
-  --bg-card:        #1A1A1A;
-  --bg-card-hover:  #161616;
-  --bg-overlay:     #222222;
-  --bg-input:       #151515;
+  /* Backgrounds — near-black teal-tinted scale (techietribe-inspired) */
+  --brand-bg:        #060C0B;
+  --brand-bg-raise:  #0B1412;
+  --brand-bg-hi:     #101B19;
 
-  /* === TEXT === */
-  --text-heading:   #FFFFFF;
-  --text-body:      #AAAAAA;
-  --text-muted:     #8A8A8A;
-  --text-gold:      #D4AF37;
-  --text-gold-hover:#EACB64;
+  /* Accent — Teal (CTAs, highlights) */
+  --teal:            #378C92;
+  --teal-bright:     #47AAB6;
+  --teal-deep:       #2D7A85;
+  --teal-muted:      rgba(55, 140, 146, 0.18); /* subtle borders/dividers ONLY */
+  --teal-glow:       rgba(71, 170, 182, 0.10); /* hover glows / radial accents */
 
-  /* === BORDERS === */
-  --border-default: #2A2A2A;
-  --border-gold:    #A88A2F;
-  --border-focus:   #D4AF37;
+  /* Text */
+  --text-primary:    #F2F3EB;   /* cream — headlines, body copy */
+  --text-muted:      #93AAA3;   /* sage-gray secondary text */
+  --text-on-teal:    #041E18;   /* text on teal buttons/backgrounds */
 
-  /* === STATES === */
-  --state-success:  #2ECC71;
-  --state-error:    #E74C3C;
-  --state-warning:  #F39C12;
-  --state-info:     #3498DB;
+  /* Neutrals */
+  --neutral-light:   #F7F8F3;   /* light cream surface — sparingly on dark site */
+  --neutral-border:  #1A2E2A;   /* card/border neutral on deep green */
+
+  /* Status */
+  --status-success:  #10B981;
+  --status-warning:  #F59E0B;
+  --status-error:    #EF4444;
+
+  /* Brand (recognizability overrides — WhatsApp green) */
+  --brand-whatsapp:  #25D366;
+
+  /* Brand gradient — near-black → teal (hero, banners) */
+  --gradient-brand:  linear-gradient(135deg, #060C0B 0%, #378C92 100%);
+
+  /* ==================== SEMANTIC MAPPINGS ==================== */
+
+  /* Backgrounds */
+  --background:       var(--brand-bg);
+  --foreground:       var(--text-primary);
+  --surface:          var(--brand-bg);
+  --surface-raised:   var(--brand-bg-raise);
+  --section-alt:      var(--brand-bg-raise);
+  --bg-card:          var(--brand-bg-raise);
+  --bg-card-hover:    var(--brand-bg-hi);
+  --bg-overlay:       var(--brand-bg-hi);
+  --bg-input:         var(--brand-bg-hi);
+
+  /* Accent — Teal */
+  --accent:             var(--teal);
+  --accent-hover:       var(--teal-bright);
+  --accent-foreground:  var(--text-on-teal);
+
+  /* Primary (CTA) */
+  --primary:            var(--teal);
+  --primary-foreground: var(--text-on-teal);
+
+  /* Secondary (muted surface) */
+  --secondary:            var(--brand-bg-raise);
+  --secondary-foreground: var(--text-primary);
+
+  /* Text aliases */
+  --text-teal:        var(--teal);
+  --text-teal-hover:  var(--teal-bright);
+
+  /* Borders */
+  --border-default:   var(--neutral-border);
+  --border-teal:      var(--teal-deep);
+  --border-focus:     var(--teal);
+
+  /* States */
+  --state-success:    var(--status-success);
+  --state-warning:    var(--status-warning);
+  --state-error:      var(--status-error);
+
+  /* ==================== THEME MAPPINGS ==================== */
+  --muted:                var(--text-muted);
+  --muted-foreground:     var(--text-muted);
+  --border:               var(--border-default);
+  --input:                var(--border-default);
+  --ring:                 var(--teal);
+  --destructive:          var(--status-error);
+  --success:              var(--status-success);
+  --warning:              var(--status-warning);
 
   /* === FONTS === */
-  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body:    'Inter', system-ui, sans-serif;
 
   /* === TYPE SCALE === */
@@ -90,26 +165,6 @@
   --text-4xl:  2.25rem;    /* 36px — page headings */
   --text-5xl:  3rem;       /* 48px — hero headings */
   --text-6xl:  3.75rem;    /* 60px — hero display */
-
-  /* === THEME MAPPINGS === */
-  --background: var(--bg-hero);
-  --foreground: var(--text-heading);
-  --surface: var(--bg-hero);
-  --surface-raised: var(--bg-section);
-  --muted: var(--text-body);
-  --muted-foreground: var(--text-muted);
-  --accent: var(--gold-primary);
-  --accent-hover: var(--gold-bright);
-  --accent-foreground: var(--bg-hero);
-  --primary: var(--gold-primary);
-  --primary-foreground: var(--bg-hero);
-  --secondary: var(--bg-section);
-  --secondary-foreground: var(--text-heading);
-  --border: var(--border-default);
-  --input: var(--border-default);
-  --ring: var(--gold-primary);
-  --destructive: var(--state-error);
-  --success: var(--state-success);
 }
 
 html {
@@ -130,11 +185,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background-color: rgba(212, 175, 55, 0.3);
+  background-color: color-mix(in srgb, var(--teal) 30%, transparent);
   color: #ffffff;
 }
 
-/* ========== LUXURY SCROLLBAR ========== */
+/* ========== BRAND SCROLLBAR ========== */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -144,12 +199,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--gold-muted), var(--gold-deep));
+  background: linear-gradient(180deg, var(--teal-muted), var(--teal-deep));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--gold-primary), var(--gold-bright));
+  background: linear-gradient(180deg, var(--teal), var(--teal-bright));
 }
 
 /* ========== MARQUEE ========== */
@@ -195,28 +250,33 @@ h1, h2, h3, h4, h5, h6 {
   transform-origin: left;
 }
 
+/* ========== BRAND GRADIENT (deep green → teal) ========== */
+.gradient-brand {
+  background-image: var(--gradient-brand);
+}
+
 /* ========== GRADIENT TEXT ========== */
 .gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, var(--gold-primary) 50%, var(--gold-bright) 100%);
+  background: linear-gradient(135deg, #ffffff 0%, var(--teal-bright) 50%, var(--teal-deep) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ========== GOLD SHIMMER TEXT ========== */
+/* ========== TEAL SHIMMER TEXT ========== */
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-.gold-shimmer {
+.teal-shimmer {
   background: linear-gradient(
     90deg,
-    var(--gold-primary) 0%,
-    var(--gold-bright) 25%,
+    var(--teal) 0%,
+    var(--teal-bright) 25%,
     #ffffff 50%,
-    var(--gold-bright) 75%,
-    var(--gold-primary) 100%
+    var(--teal-bright) 75%,
+    var(--teal) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -239,17 +299,17 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ========== GLASS MORPHISM ========== */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(55, 140, 146, 0.05);
   backdrop-filter: blur(20px) saturate(1.2);
   -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(55, 140, 146, 0.12);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(55, 140, 146, 0.08);
   backdrop-filter: blur(40px) saturate(1.5);
   -webkit-backdrop-filter: blur(40px) saturate(1.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(55, 140, 146, 0.18);
 }
 
 /* ========== SPOTLIGHT HOVER CARD ========== */
@@ -264,7 +324,7 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0;
   background: radial-gradient(
     600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(212, 175, 55, 0.08),
+    var(--teal-glow),
     transparent 40%
   );
   opacity: 0;
@@ -277,22 +337,22 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
-/* ========== GOLD BORDER GLOW ========== */
+/* ========== TEAL BORDER GLOW ========== */
 @keyframes border-glow {
-  0%, 100% { border-color: rgba(212, 175, 55, 0.2); box-shadow: 0 0 20px rgba(212, 175, 55, 0.05); }
-  50% { border-color: rgba(212, 175, 55, 0.4); box-shadow: 0 0 30px rgba(212, 175, 55, 0.1); }
+  0%, 100% { border-color: var(--teal-muted); box-shadow: 0 0 20px var(--teal-glow); }
+  50% { border-color: color-mix(in srgb, var(--teal) 40%, transparent); box-shadow: 0 0 30px color-mix(in srgb, var(--teal) 12%, transparent); }
 }
 
-.gold-border-glow {
-  border: 1px solid rgba(212, 175, 55, 0.2);
+.teal-border-glow {
+  border: 1px solid var(--teal-muted);
   animation: border-glow 3s ease-in-out infinite;
 }
 
 /* ========== SUBTLE GRID PATTERN ========== */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    linear-gradient(rgba(55,140,146,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(55,140,146,0.035) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
@@ -306,8 +366,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ========== PULSE GLOW ========== */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
-  50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.25); }
+  0%, 100% { box-shadow: 0 0 20px var(--teal-glow); }
+  50% { box-shadow: 0 0 40px color-mix(in srgb, var(--teal) 25%, transparent); }
 }
 
 .pulse-glow {
@@ -340,7 +400,7 @@ h1, h2, h3, h4, h5, h6 {
   .animate-marquee { animation: none; }
   .mesh-blob { animation: none; }
   .ambient-orb { animation: none; }
-  .gold-shimmer { animation: none; }
-  .gold-border-glow { animation: none; }
+  .teal-shimmer { animation: none; }
+  .teal-border-glow { animation: none; }
   .pulse-glow { animation: none; }
 }

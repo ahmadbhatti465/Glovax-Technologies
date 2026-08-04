@@ -14,15 +14,15 @@ export function StickyMobileCTA() {
       transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="fixed bottom-0 inset-x-0 z-30 lg:hidden"
     >
-      {/* Gold hairline */}
+      {/* Teal hairline */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{
-          background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent)",
+          background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--teal) 40%, transparent), transparent)",
         }}
       />
       <div
-        className="bg-background/80 backdrop-blur-2xl border-t border-white/[0.06]"
+        className="bg-background/80 backdrop-blur-2xl border-t border-neutral-border"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="flex items-center gap-3 px-4 pt-3 pb-3">
@@ -30,7 +30,7 @@ export function StickyMobileCTA() {
             href={siteConfig.calendarUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center h-12 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] text-sm font-semibold hover:brightness-110 transition-all"
+            className="flex-1 inline-flex items-center justify-center h-12 rounded-full bg-gradient-to-r from-teal-deep to-teal text-accent-foreground text-sm font-semibold hover:brightness-110 transition-all"
           >
             Book a Free Call
           </a>
@@ -39,7 +39,7 @@ export function StickyMobileCTA() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat with us on WhatsApp"
-            className="flex-shrink-0 w-12 h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:brightness-110 transition-all"
+            className="flex-shrink-0 w-12 h-12 rounded-full bg-whatsapp text-white flex items-center justify-center shadow-lg hover:brightness-110 transition-all"
           >
             <WhatsAppIcon className="w-6 h-6" />
           </a>

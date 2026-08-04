@@ -107,7 +107,7 @@ export function ChatWidget() {
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 1.2, type: "spring", stiffness: 260, damping: 20 }}
-        className="fixed bottom-24 lg:bottom-6 left-6 z-40 w-14 h-14 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.2)] hover:brightness-110 transition-all"
+        className="fixed bottom-24 lg:bottom-6 left-6 z-40 w-14 h-14 rounded-full bg-gradient-to-r from-teal-deep to-teal text-accent-foreground flex items-center justify-center shadow-[0_0_25px_var(--teal-muted)] hover:brightness-110 transition-all"
         aria-label={open ? "Close chat" : "Open chat with the Glovax concierge"}
       >
         {open ? <X className="w-6 h-6" /> : <Bot className="w-6 h-6" />}
@@ -121,17 +121,17 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.98 }}
             transition={{ duration: 0.25 }}
-            className="fixed bottom-36 lg:bottom-24 left-6 z-40 w-[360px] max-w-[calc(100vw-3rem)] h-[480px] max-h-[70vh] rounded-2xl bg-surface-raised border border-white/[0.08] shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-36 lg:bottom-24 left-6 z-40 w-[360px] max-w-[calc(100vw-3rem)] h-[480px] max-h-[70vh] rounded-2xl bg-surface-raised border border-neutral-border shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-5 py-4 border-b border-white/[0.06] bg-[#111111]">
-              <div className="w-9 h-9 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center text-accent">
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-neutral-border bg-card">
+              <div className="w-9 h-9 rounded-full bg-teal/15 border border-teal/30 flex items-center justify-center text-teal">
                 <Bot className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-sm font-semibold leading-tight">Glovax Concierge</p>
                 <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Online · replies instantly
+                  <span className="w-1.5 h-1.5 rounded-full bg-success" /> Online · replies instantly
                 </p>
               </div>
             </div>
@@ -143,8 +143,8 @@ export function ChatWidget() {
                   <div
                     className={
                       m.role === "user"
-                        ? "max-w-[80%] px-4 py-2.5 rounded-2xl rounded-br-md bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] text-sm leading-relaxed"
-                        : "max-w-[85%] px-4 py-2.5 rounded-2xl rounded-bl-md bg-card border border-white/[0.06] text-foreground/90 text-sm leading-relaxed"
+                        ? "max-w-[80%] px-4 py-2.5 rounded-2xl rounded-br-md bg-gradient-to-r from-teal-deep to-teal text-accent-foreground text-sm leading-relaxed"
+                        : "max-w-[85%] px-4 py-2.5 rounded-2xl rounded-bl-md bg-card border border-neutral-border text-foreground/90 text-sm leading-relaxed"
                     }
                   >
                     {m.content}
@@ -153,7 +153,7 @@ export function ChatWidget() {
               ))}
               {typing && (
                 <div className="flex justify-start">
-                  <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-card border border-white/[0.06] flex items-center gap-1.5">
+                  <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-card border border-neutral-border flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce" />
                     <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:120ms]" />
                     <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:240ms]" />
@@ -169,7 +169,7 @@ export function ChatWidget() {
                   <button
                     key={qr.label}
                     onClick={() => send(qr.message)}
-                    className="px-3 py-1.5 rounded-full text-xs bg-card border border-white/[0.08] text-muted-foreground hover:text-accent hover:border-gold/40 transition-colors"
+                    className="px-3 py-1.5 rounded-full text-xs bg-card border border-neutral-border text-muted-foreground hover:text-teal hover:border-teal/40 transition-colors"
                   >
                     {qr.label}
                   </button>
@@ -183,18 +183,18 @@ export function ChatWidget() {
                 e.preventDefault();
                 send(input);
               }}
-              className="px-4 py-3 border-t border-white/[0.06] flex gap-2"
+              className="px-4 py-3 border-t border-neutral-border flex gap-2"
             >
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about pricing, services, NDAs…"
-                className="flex-1 px-4 py-2.5 rounded-full bg-card border border-white/[0.08] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-gold/40 transition-colors"
+                className="flex-1 px-4 py-2.5 rounded-full bg-card border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-teal/40 transition-colors"
               />
               <button
                 type="submit"
                 disabled={typing || !input.trim()}
-                className="w-10 h-10 flex-shrink-0 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] flex items-center justify-center disabled:opacity-40 transition-all"
+                className="w-10 h-10 flex-shrink-0 rounded-full bg-gradient-to-r from-teal-deep to-teal text-accent-foreground flex items-center justify-center disabled:opacity-40 transition-all"
                 aria-label="Send message"
               >
                 <Send className="w-4 h-4" />

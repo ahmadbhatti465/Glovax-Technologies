@@ -33,7 +33,7 @@ const item = {
 
 export function TrustBar() {
   return (
-    <section className="py-14 md:py-16 border-b border-white/[0.06] bg-background relative overflow-hidden">
+    <section className="py-14 md:py-16 border-b border-neutral-border bg-background relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <motion.div
           initial={{ opacity: 0 }}
@@ -43,10 +43,10 @@ export function TrustBar() {
           className="text-center"
         >
           {/* Upwork rating badge */}
-          <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-surface-raised border border-white/[0.06] mb-8">
+          <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-surface-raised border border-neutral-border mb-8">
             <span className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-accent text-accent drop-shadow-[0_0_4px_rgba(212,175,55,0.4)]" />
+                <Star key={i} className="w-3.5 h-3.5 fill-accent text-accent drop-shadow-[0_0_4px_var(--teal-glow)]" />
               ))}
             </span>
             <span className="text-sm font-semibold">Top Rated</span>
@@ -68,7 +68,7 @@ export function TrustBar() {
               <motion.span
                 key={tech}
                 variants={item}
-                className="px-4 py-2 rounded-full bg-surface-raised border border-white/[0.06] text-sm font-medium text-muted-foreground hover:text-accent hover:border-gold/30 transition-colors duration-300"
+                className="px-4 py-2 rounded-full bg-surface-raised border border-neutral-border text-sm font-medium text-muted-foreground hover:text-teal hover:border-teal/40 transition-colors duration-300"
               >
                 {tech}
               </motion.span>

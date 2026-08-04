@@ -76,12 +76,12 @@ export function Pricing() {
               }}
               className={`relative flex flex-col p-8 md:p-10 rounded-3xl transition-all duration-500 ${
                 tier.highlighted
-                  ? "bg-surface-raised border border-gold/40 shadow-[0_0_40px_rgba(212,175,55,0.08)] lg:-translate-y-3"
-                  : "bg-surface-raised border border-white/[0.06] hover:border-gold/25"
+                  ? "bg-surface-raised border border-teal/40 shadow-[0_0_40px_var(--teal-glow)] lg:-translate-y-3"
+                  : "bg-surface-raised border border-neutral-border hover:border-teal/25"
               }`}
             >
               {tier.highlighted && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gold text-[#0A0A0A] text-xs font-semibold tracking-wide">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-teal text-accent-foreground text-xs font-semibold tracking-wide">
                   <Sparkles className="w-3.5 h-3.5" /> Most Popular
                 </div>
               )}
@@ -121,7 +121,7 @@ export function Pricing() {
             href={siteConfig.calendarUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-accent hover:text-gold-bright transition-colors"
+            className="text-accent hover:text-teal-bright transition-colors"
           >
             Book a 30-minute call
           </a>{" "}

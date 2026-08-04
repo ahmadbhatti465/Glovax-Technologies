@@ -12,19 +12,19 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
   const stats = serverStats?.length ? serverStats : fallbackStats;
 
   return (
-    <section className="py-20 md:py-28 border-y border-white/[0.06] bg-section-alt relative overflow-hidden">
+    <section className="py-20 md:py-28 border-y border-neutral-border bg-section-alt relative overflow-hidden">
       {/* Ambient glow */}
       <div
         className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%)",
+          background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 70%)",
           filter: "blur(60px)",
         }}
       />
       <div
         className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-15 pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(236,203,100,0.04) 0%, transparent 70%)",
+          background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 70%)",
           filter: "blur(50px)",
         }}
       />
@@ -48,7 +48,7 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
               {index < stats.length - 1 && (
                 <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-16"
                   style={{
-                    background: "linear-gradient(180deg, transparent, rgba(212,175,55,0.15), transparent)",
+                    background: "linear-gradient(180deg, transparent, var(--teal-muted), transparent)",
                   }}
                 />
               )}
@@ -57,7 +57,7 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}
-                  className="gold-shimmer"
+                  className="teal-shimmer"
                 />
               </div>
               <div className="mt-3 flex items-center justify-center gap-2">

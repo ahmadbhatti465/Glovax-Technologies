@@ -45,7 +45,7 @@ export function SectionHeader({
       <Tag className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
         {title}
         {titleHighlight && (
-          <span className="gold-shimmer"> {titleHighlight}</span>
+          <span className="teal-shimmer"> {titleHighlight}</span>
         )}
       </Tag>
       {subtitle && (
@@ -54,7 +54,7 @@ export function SectionHeader({
         </p>
       )}
 
-      {/* Gold accent line */}
+      {/* Teal accent line */}
       <motion.div
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
@@ -62,7 +62,7 @@ export function SectionHeader({
         transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className={`mt-6 w-16 h-px origin-${align === "center" ? "center" : align}`}
         style={{
-          background: `linear-gradient(${align === "right" ? "270deg" : "90deg"}, var(--gold-primary), transparent)`,
+          background: `linear-gradient(${align === "right" ? "270deg" : "90deg"}, var(--teal), transparent)`,
         }}
       />
     </motion.div>

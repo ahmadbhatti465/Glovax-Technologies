@@ -83,7 +83,7 @@ function ConnectorLine({ isVisible, delay }: { isVisible: boolean; delay: number
         transition={{ duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] }}
         className="w-full h-full origin-left"
         style={{
-          background: "linear-gradient(90deg, rgba(212,175,55,0.4), rgba(212,175,55,0.1))",
+          background: "linear-gradient(90deg, color-mix(in srgb, var(--teal) 40%, transparent), color-mix(in srgb, var(--teal) 10%, transparent))",
         }}
       />
     </div>
@@ -133,14 +133,14 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
                 <span className="text-7xl md:text-8xl font-bold absolute -top-5 -left-3 select-none"
                   style={{
                     color: "transparent",
-                    WebkitTextStroke: "1px rgba(212,175,55,0.08)",
+                    WebkitTextStroke: "1px var(--teal-glow)",
                   }}
                 >
                   {step.number}
                 </span>
 
                 <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-card border border-white/[0.06] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(212,175,55,0.05)] group-hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] group-hover:border-[#D4AF37]/20 transition-all duration-500">
+                  <div className="w-16 h-16 rounded-2xl bg-card border border-neutral-border flex items-center justify-center mb-6 shadow-[0_0_20px_var(--teal-glow)] group-hover:shadow-[0_0_30px_var(--teal-glow)] group-hover:border-teal/20 transition-all duration-500">
                     {iconMap[step.icon] || <Search className="w-6 h-6 text-accent" />}
                   </div>
 

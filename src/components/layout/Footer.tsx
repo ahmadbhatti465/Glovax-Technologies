@@ -34,7 +34,7 @@ function NewsletterBand() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, delay: 0.2 }}
-      className="py-12 md:py-14 border-t border-white/[0.06]"
+      className="py-12 md:py-14 border-t border-neutral-border"
     >
       <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
         <div className="text-center lg:text-left">
@@ -51,11 +51,11 @@ function NewsletterBand() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
             aria-label="Email address"
-            className="w-full lg:w-72 px-4 py-3 rounded-full bg-card border border-white/[0.06] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-gold/40 transition-colors"
+            className="w-full lg:w-72 px-4 py-3 rounded-full bg-card border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-teal/40 transition-colors"
           />
           <button
             type="submit"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] text-sm font-semibold hover:brightness-110 transition-all flex-shrink-0"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-teal-deep to-teal text-accent-foreground text-sm font-semibold hover:brightness-110 transition-all flex-shrink-0"
           >
             Subscribe <Send className="w-4 h-4" />
           </button>
@@ -67,13 +67,13 @@ function NewsletterBand() {
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/[0.06]">
-      {/* Gold gradient top line */}
+    <footer className="relative border-t border-neutral-border">
+      {/* Teal gradient top line */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{
           background:
-            "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.4) 30%, rgba(236,203,100,0.5) 50%, rgba(212,175,55,0.4) 70%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--teal) 40%, transparent) 30%, color-mix(in srgb, var(--teal-bright) 50%, transparent) 50%, color-mix(in srgb, var(--teal) 40%, transparent) 70%, transparent 100%)",
         }}
       />
 
@@ -94,7 +94,7 @@ export function Footer() {
                 alt="Glovax Technologies"
                 width={160}
                 height={56}
-                className="h-10 w-auto transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]"
+                className="h-10 w-auto transition-all duration-500 group-hover:drop-shadow-[0_0_8px_var(--teal-glow)]"
               />
             </Link>
             <p className="mt-5 text-muted text-sm leading-relaxed max-w-xs">
@@ -107,7 +107,7 @@ export function Footer() {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-card border border-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-accent hover:border-[#D4AF37]/20 hover:shadow-[0_0_15px_rgba(212,175,55,0.1)] transition-all duration-300"
+                  className="w-10 h-10 rounded-full bg-card border border-neutral-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-teal/20 hover:shadow-[0_0_15px_var(--teal-glow)] transition-all duration-300"
                   aria-label={`Follow us on ${key}`}
                 >
                   {socialIcons[key.toLowerCase()] || key}
@@ -220,7 +220,7 @@ export function Footer() {
         <NewsletterBand />
 
         {/* Bottom Bar */}
-        <div className="py-6 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="py-6 border-t border-neutral-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>

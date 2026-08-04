@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const services = sqliteTable("services", {
   id: text("id").primaryKey(),
@@ -78,4 +78,26 @@ export const siteContent = sqliteTable("site_content", {
   key: text("key").notNull().unique(),
   value: text("value", { mode: "json" }).$type<unknown>().notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const businesses = sqliteTable("businesses", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  category: text("category").notNull(),
+  city: text("city").notNull(),
+  country: text("country").notNull(),
+  shortDescription: text("short_description").notNull(),
+  description: text("description").notNull(),
+  rating: real("rating").notNull().default(4.5),
+  reviewCount: integer("review_count").notNull().default(0),
+  address: text("address"),
+  phone: text("phone"),
+  website: text("website"),
+  hours: text("hours", { mode: "json" }).$type<{ day: string; hours: string }[]>().notNull(),
+  tags: text("tags", { mode: "json" }).$type<string[]>().notNull(),
+  image: text("image"),
+  featured: integer("featured", { mode: "boolean" }).notNull().default(false),
+  isRemote: integer("is_remote", { mode: "boolean" }).notNull().default(false),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });

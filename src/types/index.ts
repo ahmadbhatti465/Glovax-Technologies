@@ -64,3 +64,24 @@ export interface JobPosition {
   responsibilities: string[];
   requirements: string[];
 }
+
+export interface Business {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  city: string;
+  country: string;
+  shortDescription: string;
+  description: string;
+  rating: number;
+  reviewCount: number;
+  address?: string;
+  phone?: string;
+  website?: string;
+  hours: { day: string; hours: string }[];
+  tags: string[];
+  image?: string;
+  featured: boolean;
+  isRemote: boolean;
+}

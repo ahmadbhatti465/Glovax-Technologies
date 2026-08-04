@@ -132,10 +132,10 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-background text-white">
-      <nav className="border-b border-[#D4AF37]/20 bg-surface-raised">
+      <nav className="border-b border-[#378C92]/20 bg-surface-raised">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <LayoutDashboard className="w-5 h-5 text-[#D4AF37]" />
+            <LayoutDashboard className="w-5 h-5 text-[#378C92]" />
             <span className="font-semibold">Glovax Admin</span>
           </div>
           <div className="flex items-center gap-4">
@@ -169,7 +169,7 @@ export default function SettingsPage() {
                 onClick={() => setActiveKey(item.key)}
                 className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                   activeKey === item.key
-                    ? "bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20"
+                    ? "bg-[#378C92]/10 text-[#378C92] border border-[#378C92]/20"
                     : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -181,7 +181,7 @@ export default function SettingsPage() {
           {/* Editor */}
           <div className="lg:col-span-3">
             {activeItem && (
-              <div className="bg-surface-raised border border-[#D4AF37]/10 rounded-xl p-6">
+              <div className="bg-surface-raised border border-[#378C92]/10 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-semibold">
                     {activeItem.key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
@@ -199,7 +199,7 @@ export default function SettingsPage() {
                     <button
                       onClick={saveActive}
                       disabled={saving}
-                      className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-black text-sm font-medium rounded-lg hover:bg-[#B8944E] transition-colors disabled:opacity-50"
+                      className="flex items-center gap-2 px-4 py-2 bg-[#378C92] text-black text-sm font-medium rounded-lg hover:bg-[#47AAB6] transition-colors disabled:opacity-50"
                     >
                       <Save className="w-4 h-4" />
                       {saving ? "Saving..." : "Save"}
@@ -227,7 +227,7 @@ function ContentEditor({ value, onChange }: { value: unknown; onChange: (v: unkn
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-background border border-white/10 rounded-lg p-3 text-sm text-white focus:border-[#D4AF37]/50 focus:outline-none"
+        className="w-full bg-background border border-white/10 rounded-lg p-3 text-sm text-white focus:border-[#378C92]/50 focus:outline-none"
         rows={6}
       />
     );
@@ -247,7 +247,7 @@ function ContentEditor({ value, onChange }: { value: unknown; onChange: (v: unkn
                   arr[index] = e.target.value;
                   onChange(arr);
                 }}
-                className="flex-1 bg-background border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-[#D4AF37]/50 focus:outline-none"
+                className="flex-1 bg-background border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-[#378C92]/50 focus:outline-none"
               />
               <button
                 onClick={() => {
@@ -263,7 +263,7 @@ function ContentEditor({ value, onChange }: { value: unknown; onChange: (v: unkn
           ))}
           <button
             onClick={() => onChange([...(value as string[]), ""])}
-            className="flex items-center gap-2 text-sm text-[#D4AF37] hover:text-[#B8944E] mt-2"
+            className="flex items-center gap-2 text-sm text-[#378C92] hover:text-[#47AAB6] mt-2"
           >
             <Plus className="w-4 h-4" />
             Add item
@@ -302,7 +302,7 @@ function ContentEditor({ value, onChange }: { value: unknown; onChange: (v: unkn
             Object.keys(sample).forEach((k) => (sample[k] = ""));
             onChange([...(value as Record<string, unknown>[]), sample]);
           }}
-          className="flex items-center gap-2 text-sm text-[#D4AF37] hover:text-[#B8944E] mt-2"
+          className="flex items-center gap-2 text-sm text-[#378C92] hover:text-[#47AAB6] mt-2"
         >
           <Plus className="w-4 h-4" />
           Add item
@@ -340,7 +340,7 @@ function ObjectEditor({
               type="text"
               value={val}
               onChange={(e) => onChange({ ...value, [key]: e.target.value })}
-              className="w-full bg-background border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-[#D4AF37]/50 focus:outline-none"
+              className="w-full bg-background border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-[#378C92]/50 focus:outline-none"
             />
           )}
           {typeof val === "number" && (
@@ -348,7 +348,7 @@ function ObjectEditor({
               type="number"
               value={val}
               onChange={(e) => onChange({ ...value, [key]: Number(e.target.value) })}
-              className="w-full bg-background border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-[#D4AF37]/50 focus:outline-none"
+              className="w-full bg-background border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-[#378C92]/50 focus:outline-none"
             />
           )}
           {typeof val === "boolean" && (
@@ -356,7 +356,7 @@ function ObjectEditor({
               type="checkbox"
               checked={val}
               onChange={(e) => onChange({ ...value, [key]: e.target.checked })}
-              className="w-5 h-5 accent-[#D4AF37]"
+              className="w-5 h-5 accent-[#378C92]"
             />
           )}
           {Array.isArray(val) && (

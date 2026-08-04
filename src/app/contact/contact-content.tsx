@@ -187,12 +187,12 @@ export default function ContactContent() {
             <div className="lg:col-span-2">
               <div className="space-y-8">
                 {/* Book a Call */}
-                <div className="relative rounded-2xl overflow-hidden border border-[#D4AF37]/20 p-6 bg-surface-raised">
+                <div className="relative rounded-2xl overflow-hidden border border-[#378C92]/20 p-6 bg-surface-raised">
                   <div
                     className="absolute inset-0 pointer-events-none opacity-60"
                     style={{
                       background:
-                        "radial-gradient(circle at top right, rgba(212,175,55,0.12), transparent 60%)",
+                        "radial-gradient(circle at top right, rgba(71,170,182,0.12), transparent 60%)",
                     }}
                   />
                   <div className="relative z-10">
@@ -211,7 +211,7 @@ export default function ContactContent() {
                       href={siteConfig.calendarUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 w-full justify-center px-5 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] font-semibold text-sm shadow-[0_0_25px_rgba(212,175,55,0.15)] hover:shadow-[0_0_35px_rgba(212,175,55,0.25)] hover:brightness-110 transition-all"
+                      className="inline-flex items-center gap-2 w-full justify-center px-5 py-3 rounded-full bg-gradient-to-r from-[#2D7A85] to-[#378C92] text-[#041E18] font-semibold text-sm shadow-[0_0_25px_rgba(71,170,182,0.15)] hover:shadow-[0_0_35px_rgba(71,170,182,0.25)] hover:brightness-110 transition-all"
                     >
                       Schedule Now
                       <ArrowUpRight className="w-4 h-4" />
@@ -268,13 +268,13 @@ export default function ContactContent() {
           <div className="mt-16 md:mt-24">
             <div className="max-w-4xl">
               <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
-                Prefer to book a slot <span className="gold-shimmer">right away?</span>
+                Prefer to book a slot <span className="teal-shimmer">right away?</span>
               </h2>
               <p className="text-muted text-base mb-8">
                 Skip the form — grab a 30-minute slot on our calendar directly. We reply within{" "}
                 {siteConfig.responseTime} on every inquiry.
               </p>
-              <div className="rounded-2xl border border-white/[0.06] bg-surface-raised overflow-hidden">
+              <div className="rounded-2xl border border-neutral-border bg-surface-raised overflow-hidden">
                 <iframe
                   src={`https://calendly.com/${siteConfig.calendarUrl.replace("https://calendly.com/", "")}?theme=dark&hide_gdpr_banner=1&primary_color=D4AF37`}
                   title="Schedule a call with Glovax Technologies"

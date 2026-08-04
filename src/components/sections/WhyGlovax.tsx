@@ -49,7 +49,7 @@ export function WhyGlovax() {
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-20 pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%)",
+          background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 70%)",
           filter: "blur(80px)",
         }}
       />
@@ -75,10 +75,10 @@ export function WhyGlovax() {
                 delay: index * 0.1,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="group relative p-8 rounded-3xl bg-surface-raised border border-white/[0.06] hover:border-gold/30 transition-all duration-500 overflow-hidden"
+              className="group relative p-8 rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/30 transition-all duration-500 overflow-hidden"
             >
               <div className="relative z-10">
-                <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-card border border-gold/20 text-accent shadow-[0_0_20px_rgba(212,175,55,0.08)] group-hover:shadow-[0_0_30px_rgba(212,175,55,0.18)] transition-shadow duration-500">
+                <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-card border border-teal/20 text-accent shadow-[0_0_20px_var(--teal-glow)] group-hover:shadow-[0_0_30px_var(--teal-glow)] transition-shadow duration-500">
                   <d.icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 tracking-tight">{d.title}</h3>

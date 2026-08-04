@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/constants";
 import { db } from "@/db";
-import { blogPosts, portfolioItems, services, teamMembers, jobPositions, siteContent } from "@/db/schema";
+import { blogPosts, portfolioItems, services, teamMembers, jobPositions, siteContent, businesses } from "@/db/schema";
 
 function toSitemapDate(date: Date | string | number | null | undefined): Date | undefined {
   if (!date) return undefined;
@@ -56,6 +56,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getSiteContentTimestamp("about"),
   ]);
 
+  let directoryUpdated: Date | null = null;
+  try {
+    const bizRows = await db
+      .select({ createdAt: businesses.createdAt })
+      .from(businesses);
+    const timestamps = bizRows.map((r) => r.createdAt).filter(Boolean) as Date[];
+    if (timestamps.length > 0) {
+      directoryUpdated = new Date(Math.max(...timestamps.map((d) => d.getTime())));
+    }
+  } catch {
+    // DB unavailable
+  }
+
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: siteConfig.url,
@@ -105,11 +118,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly",
       priority: 0.7,
     },
+    {
+      url: `${siteConfig.url}/directory`,
+      lastModified: toSitemapDate(directoryUpdated) ?? now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
   ];
 
   let posts: { slug: string; publishedAt: string }[] = [];
+  let directorySlugs: { slug: string }[] = [];
   try {
     posts = await db.select({ slug: blogPosts.slug, publishedAt: blogPosts.publishedAt }).from(blogPosts);
+    const bizRows = await db.select({ slug: businesses.slug }).from(businesses);
+    directorySlugs = bizRows;
   } catch {
     // DB unavailable
   }
@@ -121,5 +143,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...blogEntries];
+  const directoryEntries: MetadataRoute.Sitemap = directorySlugs.map((b) => ({
+    url: `${siteConfig.url}/directory/${b.slug}`,
+    lastModified: toSitemapDate(directoryUpdated) ?? now,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...blogEntries, ...directoryEntries];
 }

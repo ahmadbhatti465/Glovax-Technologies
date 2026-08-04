@@ -20,7 +20,7 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-20 pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%)",
+          background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 70%)",
           filter: "blur(80px)",
         }}
       />
@@ -59,7 +59,7 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
             className="lg:col-span-2"
           >
             <Link href="/work" className="group block">
-              <div className="relative aspect-[16/6] md:aspect-[21/9] rounded-3xl overflow-hidden border border-white/[0.06]">
+              <div className="relative aspect-[16/6] md:aspect-[21/9] rounded-3xl overflow-hidden border border-neutral-border">
                 <Image
                   src="/images/placeholder.svg"
                   alt="Portfolio background"
@@ -68,14 +68,14 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/90 via-[#0A0A0A]/60 to-[#0A0A0A]/40 group-hover:from-[#0A0A0A]/80 group-hover:via-[#0A0A0A]/50 transition-all duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/60 to-background/40 group-hover:from-background/80 group-hover:via-background/50 transition-all duration-700" />
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <div className="flex -space-x-4 mb-6">
                     {featured.slice(0, 3).map((project) => (
                       <div
                         key={project.id}
-                        className="relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-[#0A0A0A] shadow-[0_0_20px_rgba(212,175,55,0.15)]"
+                        className="relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-background shadow-[0_0_20px_var(--teal-glow)]"
                       >
                         <Image
                           src={project.image || "/images/placeholder.svg"}
@@ -109,7 +109,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
 
   const cardContent = (
     <>
-      <div className="relative aspect-[16/10] rounded-3xl overflow-hidden bg-card border border-white/[0.06] mb-6 group">
+      <div className="relative aspect-[16/10] rounded-3xl overflow-hidden bg-card border border-neutral-border mb-6 group">
         <Image
           src={project.image || "/images/placeholder.svg"}
           alt={project.title}
@@ -118,7 +118,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
 
         <div className="absolute top-5 left-5">
           <span className="px-4 py-1.5 text-xs font-medium glass rounded-full">
@@ -126,7 +126,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
           </span>
         </div>
 
-        <div className="absolute bottom-5 right-5 w-12 h-12 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
+        <div className="absolute bottom-5 right-5 w-12 h-12 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 shadow-[0_0_20px_var(--teal-glow)]">
           {hasLink ? (
             <ExternalLink className="w-5 h-5 text-accent" />
           ) : (
@@ -157,7 +157,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
                 key={result}
                 className="flex items-start gap-2.5 text-sm text-muted leading-relaxed"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_rgba(212,175,55,0.5)] flex-shrink-0 mt-1.5" />
+                <span className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_var(--teal-glow)] flex-shrink-0 mt-1.5" />
                 {result}
               </li>
             ))}
@@ -169,7 +169,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
         {(project.technologies || []).slice(0, 5).map((tech) => (
           <span
             key={tech}
-            className="px-3 py-1 text-xs font-medium bg-card border border-white/[0.06] rounded-full text-muted-foreground"
+            className="px-3 py-1 text-xs font-medium bg-card border border-teal/20 rounded-full text-muted-foreground"
           >
             {tech}
           </span>

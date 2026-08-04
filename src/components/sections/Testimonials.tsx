@@ -19,7 +19,7 @@ export function Testimonials({ testimonials: serverTestimonials }: TestimonialsP
       <div
         className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-20 pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%)",
+          background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 70%)",
           filter: "blur(80px)",
         }}
       />
@@ -45,12 +45,12 @@ export function Testimonials({ testimonials: serverTestimonials }: TestimonialsP
                 delay: index * 0.12,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="relative p-8 md:p-10 rounded-3xl bg-surface-raised border border-white/[0.06] hover:border-gold/30 transition-all duration-500 group"
+              className="relative p-8 md:p-10 rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/30 transition-all duration-500 group"
             >
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
                 style={{
-                  background: "radial-gradient(400px circle at 20% 20%, rgba(212,175,55,0.05), transparent 60%)",
+                  background: "radial-gradient(400px circle at 20% 20%, var(--teal-glow), transparent 60%)",
                 }}
               />
 
@@ -61,7 +61,7 @@ export function Testimonials({ testimonials: serverTestimonials }: TestimonialsP
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star
                         key={i}
-                        className="w-4 h-4 fill-accent text-accent drop-shadow-[0_0_4px_rgba(212,175,55,0.4)]"
+                        className="w-4 h-4 fill-accent text-accent drop-shadow-[0_0_4px_var(--teal-glow)]"
                       />
                     ))}
                   </div>
@@ -78,7 +78,7 @@ export function Testimonials({ testimonials: serverTestimonials }: TestimonialsP
                 )}
 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4AF37]/20 to-[#A88A2F]/20 flex items-center justify-center border border-[#D4AF37]/20 shadow-[0_0_15px_rgba(212,175,55,0.08)]">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal/20 to-teal-deep/20 flex items-center justify-center border border-teal/20 shadow-[0_0_15px_var(--teal-glow)]">
                     <span className="text-base font-semibold text-accent">
                       {testimonial.author.charAt(0)}
                     </span>

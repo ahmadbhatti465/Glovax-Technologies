@@ -30,7 +30,7 @@ export function FAQ() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: index * 0.06 }}
                 className={`rounded-2xl border transition-colors duration-300 ${
-                  isOpen ? "border-gold/30 bg-surface-raised" : "border-white/[0.06] bg-surface-raised hover:border-gold/20"
+                  isOpen ? "border-teal/30 bg-surface-raised" : "border-neutral-border bg-surface-raised hover:border-teal/20"
                 }`}
               >
                 <button
@@ -41,7 +41,7 @@ export function FAQ() {
                   <span className="text-base md:text-lg font-semibold tracking-tight">{faq.question}</span>
                   <span
                     className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
-                      isOpen ? "bg-gold text-[#0A0A0A] rotate-45" : "bg-card text-accent"
+                      isOpen ? "bg-teal text-accent-foreground rotate-45" : "bg-card text-accent"
                     }`}
                   >
                     <Plus className="w-4 h-4" />

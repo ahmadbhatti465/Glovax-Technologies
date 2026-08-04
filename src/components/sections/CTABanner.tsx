@@ -41,13 +41,16 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
           className="relative rounded-[2rem] overflow-hidden"
         >
           {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-surface-raised via-[#0E0E0E] to-surface-raised border border-white/[0.06] rounded-[2rem]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-surface-raised via-background to-surface-raised border border-neutral-border rounded-[2rem]" />
+
+          {/* Brand gradient (deep green → teal) */}
+          <div className="absolute inset-0 gradient-brand opacity-30 rounded-[2rem]" />
 
           {/* Radial glow */}
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
             style={{
-              background: "radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 60%)",
+              background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 60%)",
               filter: "blur(60px)",
             }}
           />
@@ -57,14 +60,14 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
             <div
               className="absolute top-0 left-1/4 w-96 h-96 rounded-full"
               style={{
-                background: "radial-gradient(circle, rgba(212,175,55,0.08), transparent 70%)",
+                background: "radial-gradient(circle, var(--teal-glow), transparent 70%)",
                 filter: "blur(80px)",
               }}
             />
             <div
               className="absolute bottom-0 right-1/4 w-72 h-72 rounded-full"
               style={{
-                background: "radial-gradient(circle, rgba(236,203,100,0.05), transparent 70%)",
+                background: "radial-gradient(circle, var(--teal-muted), transparent 70%)",
                 filter: "blur(80px)",
               }}
             />
@@ -79,7 +82,7 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
             <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
               {data.title}
               <br />
-              <span className="gold-shimmer">{data.titleHighlight}</span>
+              <span className="teal-shimmer">{data.titleHighlight}</span>
             </h2>
 
             <p className="text-muted text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed">

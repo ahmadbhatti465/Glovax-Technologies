@@ -1,6 +1,7 @@
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./src/db/schema";
+import { businesses as seedBusinesses } from "./src/data/businesses";
 
 const url = process.env.DATABASE_URL || "file:./sqlite.db";
 const isTurso = url.startsWith("libsql://") || url.startsWith("https://");
@@ -24,6 +25,7 @@ async function seed() {
   await db.delete(schema.testimonials);
   await db.delete(schema.services);
   await db.delete(schema.blogPosts);
+  await db.delete(schema.businesses);
 
   await db.insert(schema.services).values([
     {
@@ -170,6 +172,10 @@ async function seed() {
     { id: "2", content: "[REPLACE WITH REAL QUOTE] Add a genuine client review here.", author: "[Client name]", role: "[Role]", company: "[Company]", rating: 5 },
     { id: "3", content: "[REPLACE WITH REAL QUOTE] Add a genuine client review here.", author: "[Client name]", role: "[Role]", company: "[Company]", rating: 5 },
   ]);
+
+  // Business directory listings — single source of truth lives in
+  // src/data/businesses.ts (fallback + seed stay in sync).
+  await db.insert(schema.businesses).values(seedBusinesses);
 
   console.log("Seed completed!");
   process.exit(0);

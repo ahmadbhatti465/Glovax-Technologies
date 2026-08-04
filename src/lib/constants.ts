@@ -23,6 +23,7 @@ export const siteConfig = {
 export const navLinks = [
   { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
+  { label: "Directory", href: "/directory" },
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/career" },
@@ -43,6 +44,7 @@ export const footerLinks = {
   ],
   resources: [
     { label: "Case Studies", href: "/work" },
+    { label: "Business Directory", href: "/directory" },
     { label: "Documentation", href: "/blog" },
     { label: "Privacy Policy", href: "#" },
     { label: "Terms of Service", href: "#" },

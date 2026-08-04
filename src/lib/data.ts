@@ -8,6 +8,7 @@ import type {
   TeamMember,
   BlogPost,
   JobPosition,
+  Business,
 } from "@/types";
 
 function serializeDates<T extends { createdAt?: Date | null; updatedAt?: Date | null }>(
@@ -162,3 +163,33 @@ export async function getSiteContentUpdatedAt(key: string): Promise<Date | null>
     return null;
   }
 }
+
+export const getBusinesses = cache(async (): Promise<Business[]> => {
+  try {
+    const rows = await db.select().from(schema.businesses);
+    return rows.map((row) => ({
+      ...serializeDates(row),
+      hours: row.hours ?? [],
+      tags: row.tags ?? [],
+      featured: Boolean(row.featured),
+      isRemote: Boolean(row.isRemote),
+      address: row.address ?? undefined,
+      phone: row.phone ?? undefined,
+      website: row.website ?? undefined,
+      image: row.image ?? undefined,
+    }));
+  } catch {
+    return [];
+  }
+});
+
+export const getBusinessBySlug = cache(
+  async (slug: string): Promise<Business | null> => {
+    try {
+      const items = await getBusinesses();
+      return items.find((b) => b.slug === slug) ?? null;
+    } catch {
+      return null;
+    }
+  }
+);

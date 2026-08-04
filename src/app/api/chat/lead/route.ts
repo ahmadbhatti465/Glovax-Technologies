@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       subject: `Chat lead: ${body.email}`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 20px; color: #111827;">
-          <h1 style="font-size: 20px; font-weight: 700; color: #D4AF37; margin: 0 0 16px 0;">New chat lead</h1>
+          <h1 style="font-size: 20px; font-weight: 700; color: #378C92; margin: 0 0 16px 0;">New chat lead</h1>
           <p style="font-size: 14px; color: #6b7280; margin: 0 0 16px 0;">A visitor captured by the AI concierge left their details:</p>
           <table style="width: 100%; font-size: 14px; background: #f9fafb; border-radius: 12px; padding: 16px;">
             <tr><td style="padding: 6px 0; color: #6b7280;">Email</td><td style="padding: 6px 0; font-weight: 500;">${body.email}</td></tr>
