@@ -7,7 +7,7 @@ import { getSiteContent, getSiteContentUpdatedAt } from "@/lib/data";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "About Glovax Technologies — Global Software House",
+  title: "About Us — Global Software House",
   description:
     "Learn about Glovax Technologies – our story, values, and the global team behind world-class software engineering, AI solutions, and digital products.",
   keywords: [

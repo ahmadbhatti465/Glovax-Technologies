@@ -115,7 +115,7 @@ export default function TeamContent({ team: serverTeam, lastUpdated }: TeamConte
                       .toUpperCase()}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold">{member.name}</h3>
+                    <h2 className="text-lg font-semibold">{member.name}</h2>
                     <p className="text-sm text-accent mb-2">{member.role}</p>
                     <p className="text-sm text-muted leading-relaxed">
                       {member.bio}

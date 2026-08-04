@@ -200,9 +200,9 @@ export default function ContactContent() {
                       <Calendar className="w-4 h-4" />
                       Prefer to talk?
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground mb-1.5">
+                    <h2 className="text-lg font-semibold text-foreground mb-1.5">
                       Book a Call
-                    </h3>
+                    </h2>
                     <p className="text-sm text-muted mb-5 leading-relaxed">
                       Skip the back-and-forth. Grab a 30-minute slot on our
                       calendar and let&apos;s discuss your project live.
@@ -220,9 +220,9 @@ export default function ContactContent() {
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                     Contact Info
-                  </h4>
+                  </h3>
                   <div className="space-y-4">
                     <a
                       href={`mailto:${siteConfig.email}`}
@@ -252,9 +252,9 @@ export default function ContactContent() {
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                     Response Time
-                  </h4>
+                  </h3>
                   <p className="text-sm text-muted">
                     We typically respond to all inquiries within {siteConfig.responseTime} during
                     business days.

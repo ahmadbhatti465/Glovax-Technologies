@@ -11,7 +11,7 @@ import { getServices, getLatestUpdatedAt } from "@/lib/data";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Software Development Services | Glovax Technologies",
+  title: "Software Development Services",
   description:
     "End-to-end digital services: AI-powered web development, mobile apps, cloud & DevOps, UI/UX design, and digital marketing that drives real business growth.",
   keywords: [

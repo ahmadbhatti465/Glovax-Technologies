@@ -1,0 +1,45 @@
+# Glovax Technologies
+
+> Glovax Technologies is a software house and AI/ML development agency based in Lahore, Pakistan, serving clients in the UK and US. We build AI-powered web and mobile products, custom LLM/RAG systems, and SaaS platforms that drive real revenue.
+
+## Company
+
+- **Name:** Glovax Technologies
+- **Expertise:** Full-stack development, AI/LLM engineering, RAG systems, and SaaS (5+ years, founder-led)
+- **Location:** 31 K, DHA Phase 5, Lahore, Pakistan (remote-first; 6+ hours UK/US timezone overlap)
+- **Website:** https://www.glovaxtechnologies.com
+- **Email:** glovaxtechnologies@gmail.com
+- **Phone:** +923254255480
+- **Book a call:** https://calendly.com/glovaxtechnologies/30min
+- **Upwork:** https://www.upwork.com/freelancers/ahmadbhatti465
+- **LinkedIn:** https://www.linkedin.com/company/glovaxtechnologies
+- **GitHub:** https://github.com/glovaxtechnologies
+
+## Services
+
+- **Web Development:** High-performance Next.js/React sites and SaaS with e-commerce, payments, and SEO-ready architecture.
+- **AI & Machine Learning:** LLM-powered chatbots and assistants, RAG systems on your own documents, predictive analytics, and custom models (OpenAI, Mistral, LangChain).
+- **Mobile Apps:** Cross-platform iOS & Android apps built with React Native.
+- **Cloud & DevOps:** AWS architecture, CI/CD pipelines, Docker & Kubernetes, infrastructure as code.
+- **UI/UX Design:** Research-driven interfaces, design systems, and WCAG accessibility.
+- **Digital Marketing:** SEO, PPC, content strategy, and conversion-rate optimization.
+
+## Key Pages
+
+- [Home](https://www.glovaxtechnologies.com/): Services overview, process, pricing, case studies, and FAQ.
+- [Work](https://www.glovaxtechnologies.com/work): Portfolio — Khan Herbals e-commerce, PurestStem skincare store, Musa Travel Hajj & Umrah booking platform, Multi-Agent AI Research System.
+- [Services](https://www.glovaxtechnologies.com/services): Full service breakdown and engagement details.
+- [About](https://www.glovaxtechnologies.com/about): Company story and values.
+- [Team](https://www.glovaxtechnologies.com/team): Leadership and engineering team.
+- [Blog](https://www.glovaxtechnologies.com/blog): Articles on AI, SaaS, and web development.
+- [Careers](https://www.glovaxtechnologies.com/career): Open positions.
+- [Contact](https://www.glovaxtechnologies.com/contact): Contact form, WhatsApp, and 30-minute booking link.
+
+## Client & Security FAQs
+
+- **Do you work with UK/US clients?** Yes — most clients are in the UK and US. We keep 6+ hours of overlap with London and Eastern US working hours.
+- **How do payments work, and is it secure?** Fixed milestones with 30–50% upfront; invoices on every milestone; Upwork escrow available for extra protection.
+- **Will you sign an NDA?** Yes, on request before we discuss your idea in detail. Your source code and IP always remain yours.
+- **How do we communicate during a project?** Slack or WhatsApp for updates, Zoom for calls and demos, weekly live demos of progress.
+- **What is your response time?** Within 24 hours on business days.
+- **What happens after launch?** Every project includes a post-launch support window, plus optional extended support plans.

@@ -4,7 +4,7 @@ import { BreadcrumbJsonLd, ContactPageJsonLd } from "@/components/shared/Structu
 import ContactContent from "./contact-content";
 
 export const metadata: Metadata = {
-  title: "Contact Glovax Technologies — Get a Quote",
+  title: "Contact Us — Get a Quote",
   description:
     "Get in touch with Glovax Technologies. Request a quote, discuss your project, or learn how our software house can help grow your business.",
   keywords: [

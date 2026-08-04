@@ -7,7 +7,7 @@ import { getJobPositions, getSiteContent, getLatestUpdatedAt } from "@/lib/data"
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Remote Tech Careers | Glovax Technologies",
+  title: "Remote Tech Careers",
   description:
     "Join Glovax Technologies. We're hiring engineers, designers, product managers, and AI researchers. Remote-first culture with competitive benefits.",
   keywords: [

@@ -136,9 +136,9 @@ export default function CareerContent({
           )}
 
           <div className="mb-20">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
               Why work here
-            </h3>
+            </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {benefits.map((benefit, index) => (
                 <motion.div
@@ -159,9 +159,9 @@ export default function CareerContent({
             </div>
           </div>
 
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
             Open Positions ({positions.length})
-          </h3>
+          </h2>
 
           <div className="space-y-4">
             {positions.map((position, index) => (
@@ -180,7 +180,7 @@ export default function CareerContent({
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <h4 className="text-lg font-semibold">{position.title}</h4>
+                      <h3 className="text-lg font-semibold">{position.title}</h3>
                       <span className="px-2.5 py-0.5 text-xs font-medium bg-accent/10 text-accent rounded-full">
                         {position.type}
                       </span>

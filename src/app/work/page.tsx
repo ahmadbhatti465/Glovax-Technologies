@@ -7,7 +7,7 @@ import { getPortfolioItems, getLatestUpdatedAt } from "@/lib/data";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Web & Mobile Portfolio | Glovax Technologies",
+  title: "Web & Mobile Portfolio",
   description:
     "See our best work: web apps, mobile platforms, AI solutions, and cloud infrastructure projects delivered for clients worldwide by Glovax Technologies.",
   keywords: [

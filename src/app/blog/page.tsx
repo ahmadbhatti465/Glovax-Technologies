@@ -7,7 +7,7 @@ import { getBlogPosts, getLatestUpdatedAt } from "@/lib/data";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Tech Blog: AI, Web & Cloud | Glovax Technologies",
+  title: "Tech Blog: AI, Web & Cloud",
   description:
     "Read insights on AI, web development, mobile apps, cloud computing, and digital marketing from the Glovax Technologies team.",
   keywords: [

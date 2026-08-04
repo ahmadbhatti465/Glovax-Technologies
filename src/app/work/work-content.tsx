@@ -132,16 +132,16 @@ function WorkCard({
         </div>
       </div>
 
-      <h3 className="text-xl md:text-2xl font-semibold mb-2">{project.title}</h3>
+      <h2 className="text-xl md:text-2xl font-semibold mb-2">{project.title}</h2>
       <p className="text-sm text-muted-foreground mb-4">{project.client}</p>
       <p className="text-sm text-muted leading-relaxed mb-4">
         {project.description}
       </p>
 
       <div className="mb-4">
-        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
           Results
-        </h4>
+        </h3>
         <ul className="space-y-1">
           {project.results.map((result) => (
             <li

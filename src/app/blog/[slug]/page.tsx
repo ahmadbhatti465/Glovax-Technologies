@@ -34,6 +34,7 @@ export async function generateMetadata({
   if (!post) {
     return {
       title: "Article Not Found",
+      description: "The article you're looking for doesn't exist or has been moved. Explore AI, web, and SaaS insights on the Glovax Technologies blog.",
       robots: { index: false, follow: false },
     };
   }

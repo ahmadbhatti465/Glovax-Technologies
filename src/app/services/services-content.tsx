@@ -95,9 +95,9 @@ export default function ServicesContent({
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="text-2xl md:text-3xl font-semibold mb-2">
+                        <h2 className="text-2xl md:text-3xl font-semibold mb-2">
                           {service.title}
-                        </h3>
+                        </h2>
                         <p className="text-muted leading-relaxed">
                           {service.description}
                         </p>

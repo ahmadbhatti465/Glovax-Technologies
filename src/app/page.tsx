@@ -4,6 +4,8 @@ import { siteConfig } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { FAQJsonLD } from "@/components/shared/StructuredData";
+import { homeFaqs } from "@/data/faqs";
 import {
   getServices,
   getFeaturedPortfolioItems,
@@ -61,7 +63,6 @@ const CTABanner = dynamic(
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name} — ${siteConfig.tagline}`,
   description:
     "Glovax Technologies is a world-class software house and digital agency delivering AI-powered web development, mobile apps, cloud solutions, and digital marketing.",
   alternates: {
@@ -93,6 +94,7 @@ export default async function Home() {
   return (
     <>
       <Navbar />
+      <FAQJsonLD items={homeFaqs} />
       <main>
         <HeroSection />
         <TrustBar />

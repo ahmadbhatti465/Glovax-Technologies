@@ -7,7 +7,7 @@ import { getTeamMembers, getLatestUpdatedAt } from "@/lib/data";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Meet the Glovax Technologies Team",
+  title: "Meet the Team",
   description:
     "Meet the leadership and experts at Glovax Technologies — engineers, AI researchers, designers, and strategists building digital products worldwide.",
   keywords: [
