@@ -369,7 +369,7 @@ export default async function BlogPostPage({
             {post.excerpt}
           </p>
 
-          <div className="w-24 h-px bg-gradient-to-r from-[#D4A017] to-transparent mb-10" />
+          <div className="w-24 h-px bg-gradient-to-r from-[#D4AF37] to-transparent mb-10" />
 
           <article className="prose prose-invert max-w-none">
             {renderMarkdown(articleContentWithoutFaq)}

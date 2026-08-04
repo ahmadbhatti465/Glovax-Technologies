@@ -41,13 +41,13 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
           className="relative rounded-[2rem] overflow-hidden"
         >
           {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#111111] via-[#0E0E0E] to-[#111111] border border-white/[0.06] rounded-[2rem]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-surface-raised via-[#0E0E0E] to-surface-raised border border-white/[0.06] rounded-[2rem]" />
 
           {/* Radial glow */}
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
             style={{
-              background: "radial-gradient(circle, rgba(212,160,23,0.08) 0%, transparent 60%)",
+              background: "radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 60%)",
               filter: "blur(60px)",
             }}
           />
@@ -57,14 +57,14 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
             <div
               className="absolute top-0 left-1/4 w-96 h-96 rounded-full"
               style={{
-                background: "radial-gradient(circle, rgba(212,160,23,0.08), transparent 70%)",
+                background: "radial-gradient(circle, rgba(212,175,55,0.08), transparent 70%)",
                 filter: "blur(80px)",
               }}
             />
             <div
               className="absolute bottom-0 right-1/4 w-72 h-72 rounded-full"
               style={{
-                background: "radial-gradient(circle, rgba(245,200,66,0.05), transparent 70%)",
+                background: "radial-gradient(circle, rgba(236,203,100,0.05), transparent 70%)",
                 filter: "blur(80px)",
               }}
             />

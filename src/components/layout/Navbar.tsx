@@ -51,7 +51,7 @@ export function Navbar() {
           }`}
           style={{
             background:
-              "linear-gradient(90deg, transparent 0%, rgba(212,160,23,0.3) 50%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.3) 50%, transparent 100%)",
           }}
         />
 
@@ -64,7 +64,7 @@ export function Navbar() {
                 alt="Glovax Technologies"
                 width={140}
                 height={49}
-                className="h-8 w-auto md:h-10 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(212,160,23,0.5)]"
+                className="h-8 w-auto md:h-10 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]"
                 priority
               />
             </Link>
@@ -102,7 +102,7 @@ export function Navbar() {
                 href="/contact"
                 className="relative inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-full overflow-hidden group"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-[#D4A017] to-[#F5C842] transition-all duration-500 group-hover:brightness-110" />
+                <span className="absolute inset-0 bg-gradient-to-r from-[#D4AF37] to-[#EACB64] transition-all duration-500 group-hover:brightness-110" />
                 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
                 <span className="relative z-10 text-[#0A0A0A]">Get in Touch</span>
               </Link>
@@ -141,14 +141,14 @@ export function Navbar() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-[#0E0E0E] border-l border-white/[0.06] z-50 lg:hidden flex flex-col"
+              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-section-alt border-l border-white/[0.06] z-50 lg:hidden flex flex-col"
             >
               {/* Gold top accent */}
               <div
                 className="absolute top-0 left-0 right-0 h-px"
                 style={{
                   background:
-                    "linear-gradient(90deg, transparent 0%, rgba(212,160,23,0.4) 50%, transparent 100%)",
+                    "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.4) 50%, transparent 100%)",
                 }}
               />
 
@@ -187,7 +187,7 @@ export function Navbar() {
                 <Link
                   href="/contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full text-center px-6 py-4 text-base font-semibold rounded-full bg-gradient-to-r from-[#D4A017] to-[#F5C842] text-[#0A0A0A] hover:brightness-110 transition-all"
+                  className="block w-full text-center px-6 py-4 text-base font-semibold rounded-full bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] hover:brightness-110 transition-all"
                 >
                   Get in Touch
                 </Link>

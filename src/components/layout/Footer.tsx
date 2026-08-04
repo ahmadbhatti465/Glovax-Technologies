@@ -21,7 +21,7 @@ export function Footer() {
         className="absolute top-0 left-0 right-0 h-px"
         style={{
           background:
-            "linear-gradient(90deg, transparent 0%, rgba(212,160,23,0.4) 30%, rgba(245,200,66,0.5) 50%, rgba(212,160,23,0.4) 70%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.4) 30%, rgba(236,203,100,0.5) 50%, rgba(212,175,55,0.4) 70%, transparent 100%)",
         }}
       />
 
@@ -42,7 +42,7 @@ export function Footer() {
                 alt="Glovax Technologies"
                 width={160}
                 height={56}
-                className="h-10 w-auto transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(212,160,23,0.4)]"
+                className="h-10 w-auto transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]"
               />
             </Link>
             <p className="mt-5 text-muted text-sm leading-relaxed max-w-xs">
@@ -55,7 +55,7 @@ export function Footer() {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-[#1A1A1A] border border-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-accent hover:border-[#D4A017]/20 hover:shadow-[0_0_15px_rgba(212,160,23,0.1)] transition-all duration-300"
+                  className="w-10 h-10 rounded-full bg-card border border-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-accent hover:border-[#D4AF37]/20 hover:shadow-[0_0_15px_rgba(212,175,55,0.1)] transition-all duration-300"
                   aria-label={`Follow us on ${key}`}
                 >
                   {socialIcons[key.toLowerCase()] || key}

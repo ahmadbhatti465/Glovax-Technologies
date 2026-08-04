@@ -33,11 +33,11 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
-      <div className="w-full max-w-sm bg-[#111111] border border-[#C8A45E]/20 rounded-xl p-8 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="w-full max-w-sm bg-surface-raised border border-[#D4AF37]/20 rounded-xl p-8 shadow-2xl">
         <div className="flex justify-center mb-6">
-          <div className="w-12 h-12 rounded-lg bg-[#C8A45E]/10 flex items-center justify-center">
-            <Shield className="w-6 h-6 text-[#C8A45E]" />
+          <div className="w-12 h-12 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center">
+            <Shield className="w-6 h-6 text-[#D4AF37]" />
           </div>
         </div>
         <h1 className="text-xl font-bold text-center text-white mb-1">Admin Panel</h1>
@@ -50,7 +50,7 @@ export default function AdminLogin() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#C8A45E]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#C8A45E]"
+              className="w-full px-3 py-2 bg-card border border-[#D4AF37]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#D4AF37]"
               placeholder="Enter admin password"
               required
             />
@@ -59,7 +59,7 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-[#C8A45E] hover:bg-[#b8954e] text-black font-semibold rounded-lg transition-colors disabled:opacity-50 text-sm"
+            className="w-full py-2 bg-[#D4AF37] hover:bg-[#EACB64] text-black font-semibold rounded-lg transition-colors disabled:opacity-50 text-sm"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>

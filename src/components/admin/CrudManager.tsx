@@ -162,13 +162,13 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
       const src = getImageSrc(val);
       if (src) {
         return (
-          <div className="w-10 h-10 rounded-lg overflow-hidden border border-[#C8A45E]/20 relative">
+          <div className="w-10 h-10 rounded-lg overflow-hidden border border-[#D4AF37]/20 relative">
             <Image src={src} alt="" fill sizes="40px" className="object-cover" />
           </div>
         );
       }
       return (
-        <div className="w-10 h-10 rounded-lg bg-[#1a1a1a] border border-[#C8A45E]/10 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-lg bg-card border border-[#D4AF37]/10 flex items-center justify-center">
           <ImageIcon className="w-4 h-4 text-gray-600" />
         </div>
       );
@@ -182,8 +182,8 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
   const displayFields = fields.filter((f) => f.key !== "createdAt");
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <nav className="border-b border-[#C8A45E]/20 bg-[#111111]">
+    <div className="min-h-screen bg-background text-white">
+      <nav className="border-b border-[#D4AF37]/20 bg-surface-raised">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/admin/dashboard" className="text-gray-400 hover:text-white transition-colors">
@@ -193,7 +193,7 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
           </div>
           <button
             onClick={openCreate}
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#C8A45E] hover:bg-[#b8954e] text-black text-sm font-semibold rounded-lg transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 bg-[#D4AF37] hover:bg-[#EACB64] text-black text-sm font-semibold rounded-lg transition-colors"
           >
             <Plus className="w-4 h-4" /> Add
           </button>
@@ -206,10 +206,10 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
         ) : items.length === 0 ? (
           <div className="text-gray-500 text-sm">No items found.</div>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-[#C8A45E]/10">
+          <div className="overflow-x-auto rounded-xl border border-[#D4AF37]/10">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-[#111111] border-b border-[#C8A45E]/10 text-left text-gray-400">
+                <tr className="bg-surface-raised border-b border-[#D4AF37]/10 text-left text-gray-400">
                   {displayFields.map((f) => (
                     <th key={f.key} className="px-4 py-3 font-medium whitespace-nowrap">
                       {f.label}
@@ -218,9 +218,9 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                   <th className="px-4 py-3 w-24"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#C8A45E]/10">
+              <tbody className="divide-y divide-[#D4AF37]/10">
                 {items.map((item, idx) => (
-                  <tr key={String(item[idKey] ?? idx)} className="bg-[#0f0f0f] hover:bg-[#161616] transition-colors">
+                  <tr key={String(item[idKey] ?? idx)} className="bg-card hover:bg-card-hover transition-colors">
                     {displayFields.map((f) => (
                       <td key={f.key} className="px-4 py-3 text-gray-300 max-w-xs truncate">
                         {renderCell(item, f)}
@@ -230,7 +230,7 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => openEdit(item)}
-                          className="p-1.5 rounded-md hover:bg-[#C8A45E]/10 text-[#C8A45E] transition-colors"
+                          className="p-1.5 rounded-md hover:bg-[#D4AF37]/10 text-[#D4AF37] transition-colors"
                           title="Edit"
                         >
                           <Pencil className="w-4 h-4" />
@@ -255,8 +255,8 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
       {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-[#111111] border border-[#C8A45E]/20 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#C8A45E]/10">
+          <div className="bg-surface-raised border border-[#D4AF37]/20 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#D4AF37]/10">
               <h2 className="font-semibold text-white">{editing ? "Edit" : "Add"} {title.slice(0, -1)}</h2>
               <button onClick={() => setModalOpen(false)} className="text-gray-400 hover:text-white">
                 <X className="w-5 h-5" />
@@ -280,7 +280,7 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                         />
                         <label
                           htmlFor={`image-upload-${f.key}`}
-                          className="flex items-center gap-2 px-3 py-2 bg-[#1a1a1a] border border-dashed border-[#C8A45E]/30 rounded-lg text-sm text-gray-400 hover:text-white hover:border-[#C8A45E] cursor-pointer transition-colors"
+                          className="flex items-center gap-2 px-3 py-2 bg-card border border-dashed border-[#D4AF37]/30 rounded-lg text-sm text-gray-400 hover:text-white hover:border-[#D4AF37] cursor-pointer transition-colors"
                         >
                           <Upload className="w-4 h-4" />
                           Click to upload image
@@ -290,11 +290,11 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                         type="text"
                         value={String(form[f.key] ?? "")}
                         onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
-                        className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#C8A45E]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#C8A45E]"
+                        className="w-full px-3 py-2 bg-card border border-[#D4AF37]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#D4AF37]"
                         placeholder="Or paste image URL / path (e.g. /images/portfolio/x.jpg)"
                       />
                       {Boolean(form[f.key]) && getImageSrc(form[f.key]) && (
-                        <div className="rounded-lg overflow-hidden border border-[#C8A45E]/20 w-full max-w-[200px] relative aspect-[5/4]">
+                        <div className="rounded-lg overflow-hidden border border-[#D4AF37]/20 w-full max-w-[200px] relative aspect-[5/4]">
                           <Image
                             src={getImageSrc(form[f.key])}
                             alt="Preview"
@@ -309,14 +309,14 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                     <textarea
                       value={String(form[f.key] ?? "")}
                       onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
-                      className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#C8A45E]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#C8A45E] resize-none"
+                      className="w-full px-3 py-2 bg-card border border-[#D4AF37]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#D4AF37] resize-none"
                       rows={3}
                     />
                   ) : f.type === "json" ? (
                     <textarea
                       value={String(form[f.key] ?? "")}
                       onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
-                      className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#C8A45E]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#C8A45E] resize-none"
+                      className="w-full px-3 py-2 bg-card border border-[#D4AF37]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#D4AF37] resize-none"
                       rows={4}
                       placeholder={`One item per line`}
                     />
@@ -326,7 +326,7 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                         type="checkbox"
                         checked={Boolean(form[f.key])}
                         onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.checked }))}
-                        className="w-4 h-4 accent-[#C8A45E]"
+                        className="w-4 h-4 accent-[#D4AF37]"
                       />
                       <span className="text-sm text-gray-300">Enabled</span>
                     </label>
@@ -335,14 +335,14 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                       type="number"
                       value={String(form[f.key] ?? "")}
                       onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
-                      className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#C8A45E]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#C8A45E]"
+                      className="w-full px-3 py-2 bg-card border border-[#D4AF37]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#D4AF37]"
                     />
                   ) : (
                     <input
                       type="text"
                       value={String(form[f.key] ?? "")}
                       onChange={(e) => setForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
-                      className="w-full px-3 py-2 bg-[#1a1a1a] border border-[#C8A45E]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#C8A45E]"
+                      className="w-full px-3 py-2 bg-card border border-[#D4AF37]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#D4AF37]"
                     />
                   )}
                 </div>
@@ -358,7 +358,7 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-4 py-2 bg-[#C8A45E] hover:bg-[#b8954e] text-black text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                  className="px-4 py-2 bg-[#D4AF37] hover:bg-[#EACB64] text-black text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
                 >
                   {saving ? "Saving…" : editing ? "Update" : "Create"}
                 </button>
@@ -371,7 +371,7 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
       {/* Delete confirm */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-[#111111] border border-red-500/20 rounded-xl w-full max-w-sm p-5 shadow-2xl">
+          <div className="bg-surface-raised border border-red-500/20 rounded-xl w-full max-w-sm p-5 shadow-2xl">
             <h3 className="font-semibold text-white mb-2">Confirm Delete</h3>
             <p className="text-sm text-gray-400 mb-5">Are you sure you want to delete this item? This action cannot be undone.</p>
             <div className="flex justify-end gap-3">

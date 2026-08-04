@@ -21,7 +21,7 @@ export function HeroSection() {
         <div
           className="ambient-orb absolute -top-1/3 -left-1/4 w-[900px] h-[900px] rounded-full opacity-20"
           style={{
-            background: "radial-gradient(circle, rgba(212,160,23,0.15) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)",
             filter: "blur(80px)",
             willChange: "transform",
           }}
@@ -29,7 +29,7 @@ export function HeroSection() {
         <div
           className="ambient-orb absolute -bottom-1/3 -right-1/4 w-[700px] h-[700px] rounded-full opacity-15"
           style={{
-            background: "radial-gradient(circle, rgba(245,200,66,0.1) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(236,203,100,0.1) 0%, transparent 70%)",
             filter: "blur(100px)",
             animationDelay: "-7s",
             willChange: "transform",

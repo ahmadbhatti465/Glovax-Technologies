@@ -8,6 +8,13 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
+  --color-card: var(--bg-card);
+  --color-card-hover: var(--bg-card-hover);
+  --color-section-alt: var(--bg-section-alt);
+  --color-gold: var(--gold-primary);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold-muted: var(--gold-muted);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
@@ -35,16 +42,18 @@
   --radius: 0.625rem;
 
   /* === GOLD SCALE === */
-  --gold-primary:   #D4A017;
-  --gold-bright:    #F5C842;
-  --gold-deep:      #B8820A;
-  --gold-muted:     #7A5C00;
-  --gold-glow:      rgba(212, 160, 23, 0.15);
+  --gold-primary:   #D4AF37;
+  --gold-bright:    #EACB64;
+  --gold-deep:      #A88A2F;
+  --gold-muted:     #6E5A1E;
+  --gold-glow:      rgba(212, 175, 55, 0.15);
 
   /* === DARK BACKGROUNDS === */
   --bg-hero:        #0A0A0A;
   --bg-section:     #111111;
+  --bg-section-alt: #0D0D0D;
   --bg-card:        #1A1A1A;
+  --bg-card-hover:  #161616;
   --bg-overlay:     #222222;
   --bg-input:       #151515;
 
@@ -52,13 +61,13 @@
   --text-heading:   #FFFFFF;
   --text-body:      #AAAAAA;
   --text-muted:     #8A8A8A;
-  --text-gold:      #D4A017;
-  --text-gold-hover:#F5C842;
+  --text-gold:      #D4AF37;
+  --text-gold-hover:#EACB64;
 
   /* === BORDERS === */
   --border-default: #2A2A2A;
-  --border-gold:    #B8820A;
-  --border-focus:   #D4A017;
+  --border-gold:    #A88A2F;
+  --border-focus:   #D4AF37;
 
   /* === STATES === */
   --state-success:  #2ECC71;
@@ -121,7 +130,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background-color: rgba(212, 160, 23, 0.3);
+  background-color: rgba(212, 175, 55, 0.3);
   color: #ffffff;
 }
 
@@ -255,7 +264,7 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0;
   background: radial-gradient(
     600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(212, 160, 23, 0.08),
+    rgba(212, 175, 55, 0.08),
     transparent 40%
   );
   opacity: 0;
@@ -270,12 +279,12 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ========== GOLD BORDER GLOW ========== */
 @keyframes border-glow {
-  0%, 100% { border-color: rgba(212, 160, 23, 0.2); box-shadow: 0 0 20px rgba(212, 160, 23, 0.05); }
-  50% { border-color: rgba(212, 160, 23, 0.4); box-shadow: 0 0 30px rgba(212, 160, 23, 0.1); }
+  0%, 100% { border-color: rgba(212, 175, 55, 0.2); box-shadow: 0 0 20px rgba(212, 175, 55, 0.05); }
+  50% { border-color: rgba(212, 175, 55, 0.4); box-shadow: 0 0 30px rgba(212, 175, 55, 0.1); }
 }
 
 .gold-border-glow {
-  border: 1px solid rgba(212, 160, 23, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.2);
   animation: border-glow 3s ease-in-out infinite;
 }
 
@@ -297,8 +306,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ========== PULSE GLOW ========== */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 160, 23, 0.1); }
-  50% { box-shadow: 0 0 40px rgba(212, 160, 23, 0.25); }
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.25); }
 }
 
 .pulse-glow {

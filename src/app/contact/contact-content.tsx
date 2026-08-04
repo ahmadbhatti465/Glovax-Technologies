@@ -187,12 +187,12 @@ export default function ContactContent() {
             <div className="lg:col-span-2">
               <div className="space-y-8">
                 {/* Book a Call */}
-                <div className="relative rounded-2xl overflow-hidden border border-[#D4A017]/20 p-6 bg-surface-raised">
+                <div className="relative rounded-2xl overflow-hidden border border-[#D4AF37]/20 p-6 bg-surface-raised">
                   <div
                     className="absolute inset-0 pointer-events-none opacity-60"
                     style={{
                       background:
-                        "radial-gradient(circle at top right, rgba(212,160,23,0.12), transparent 60%)",
+                        "radial-gradient(circle at top right, rgba(212,175,55,0.12), transparent 60%)",
                     }}
                   />
                   <div className="relative z-10">
@@ -211,7 +211,7 @@ export default function ContactContent() {
                       href={siteConfig.calendarUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 w-full justify-center px-5 py-3 rounded-full bg-gradient-to-r from-[#D4A017] to-[#F5C842] text-[#0A0A0A] font-semibold text-sm shadow-[0_0_25px_rgba(212,160,23,0.15)] hover:shadow-[0_0_35px_rgba(212,160,23,0.25)] hover:brightness-110 transition-all"
+                      className="inline-flex items-center gap-2 w-full justify-center px-5 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] font-semibold text-sm shadow-[0_0_25px_rgba(212,175,55,0.15)] hover:shadow-[0_0_35px_rgba(212,175,55,0.25)] hover:brightness-110 transition-all"
                     >
                       Schedule Now
                       <ArrowUpRight className="w-4 h-4" />

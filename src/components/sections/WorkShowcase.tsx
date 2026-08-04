@@ -15,12 +15,12 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
   const featured = projects.filter((item) => item.featured);
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 bg-[#0D0D0D] relative overflow-hidden">
+    <section className="py-24 md:py-32 lg:py-40 bg-section-alt relative overflow-hidden">
       {/* Subtle ambient glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-20 pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(212,160,23,0.06) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%)",
           filter: "blur(80px)",
         }}
       />
@@ -39,6 +39,7 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
               key={project.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -6 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{
                 duration: 0.8,
@@ -74,7 +75,7 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
                     {featured.slice(0, 3).map((project) => (
                       <div
                         key={project.id}
-                        className="relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-[#0A0A0A] shadow-[0_0_20px_rgba(212,160,23,0.15)]"
+                        className="relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-[#0A0A0A] shadow-[0_0_20px_rgba(212,175,55,0.15)]"
                       >
                         <Image
                           src={project.image || "/images/placeholder.svg"}
@@ -108,7 +109,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
 
   const cardContent = (
     <>
-      <div className="relative aspect-[16/10] rounded-3xl overflow-hidden bg-[#1A1A1A] border border-white/[0.06] mb-6 group">
+      <div className="relative aspect-[16/10] rounded-3xl overflow-hidden bg-card border border-white/[0.06] mb-6 group">
         <Image
           src={project.image || "/images/placeholder.svg"}
           alt={project.title}
@@ -125,7 +126,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
           </span>
         </div>
 
-        <div className="absolute bottom-5 right-5 w-12 h-12 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 shadow-[0_0_20px_rgba(212,160,23,0.15)]">
+        <div className="absolute bottom-5 right-5 w-12 h-12 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
           {hasLink ? (
             <ExternalLink className="w-5 h-5 text-accent" />
           ) : (
@@ -149,7 +150,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
         {(project.technologies || []).slice(0, 5).map((tech) => (
           <span
             key={tech}
-            className="px-3 py-1 text-xs font-medium bg-[#1A1A1A] border border-white/[0.06] rounded-full text-muted-foreground"
+            className="px-3 py-1 text-xs font-medium bg-card border border-white/[0.06] rounded-full text-muted-foreground"
           >
             {tech}
           </span>

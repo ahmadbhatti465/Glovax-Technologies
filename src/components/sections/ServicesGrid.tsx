@@ -50,23 +50,24 @@ function ServiceCard({
       onMouseMove={handleMouseMove}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -6 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{
         duration: 0.7,
         delay: index * 0.1,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative p-8 md:p-10 rounded-3xl bg-[#111111] border border-white/[0.06] hover:border-[#D4A017]/20 transition-all duration-500 spotlight-card overflow-hidden"
+      className="group relative p-8 md:p-10 rounded-3xl bg-surface-raised border border-white/[0.06] hover:border-gold/40 transition-all duration-500 spotlight-card overflow-hidden"
     >
       {/* Glow border on hover */}
       <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
         style={{
-          background: "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212,160,23,0.08), transparent 40%)",
+          background: "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212,175,55,0.08), transparent 40%)",
         }}
       />
 
       <div className="relative z-10">
-        <div className="mb-8 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#1A1A1A] border border-[#D4A017]/20 text-accent shadow-[0_0_20px_rgba(212,160,23,0.1)] group-hover:shadow-[0_0_30px_rgba(212,160,23,0.2)] transition-shadow duration-500">
+        <div className="mb-8 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-card border border-[#D4AF37]/20 text-accent shadow-[0_0_20px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_30px_rgba(212,175,55,0.2)] transition-shadow duration-500">
           {iconMap[service.icon] || <Code2 className="w-6 h-6" />}
         </div>
 
@@ -82,7 +83,7 @@ function ServiceCard({
               key={feature}
               className="text-sm text-muted-foreground flex items-center gap-3"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_rgba(212,160,23,0.5)] flex-shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_rgba(212,175,55,0.5)] flex-shrink-0" />
               {feature}
             </li>
           ))}

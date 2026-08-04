@@ -83,7 +83,7 @@ function ConnectorLine({ isVisible, delay }: { isVisible: boolean; delay: number
         transition={{ duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] }}
         className="w-full h-full origin-left"
         style={{
-          background: "linear-gradient(90deg, rgba(212,160,23,0.4), rgba(212,160,23,0.1))",
+          background: "linear-gradient(90deg, rgba(212,175,55,0.4), rgba(212,175,55,0.1))",
         }}
       />
     </div>
@@ -115,6 +115,7 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
               key={step.number}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -4 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{
                 duration: 0.7,
@@ -132,14 +133,14 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
                 <span className="text-7xl md:text-8xl font-bold absolute -top-5 -left-3 select-none"
                   style={{
                     color: "transparent",
-                    WebkitTextStroke: "1px rgba(212,160,23,0.08)",
+                    WebkitTextStroke: "1px rgba(212,175,55,0.08)",
                   }}
                 >
                   {step.number}
                 </span>
 
                 <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-[#1A1A1A] border border-white/[0.06] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(212,160,23,0.05)] group-hover:shadow-[0_0_30px_rgba(212,160,23,0.15)] group-hover:border-[#D4A017]/20 transition-all duration-500">
+                  <div className="w-16 h-16 rounded-2xl bg-card border border-white/[0.06] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(212,175,55,0.05)] group-hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] group-hover:border-[#D4AF37]/20 transition-all duration-500">
                     {iconMap[step.icon] || <Search className="w-6 h-6 text-accent" />}
                   </div>
 
