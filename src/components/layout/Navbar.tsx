@@ -9,6 +9,7 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
 import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -202,9 +203,10 @@ export function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Site-wide conversion CTAs (mobile bar + desktop WhatsApp float) */}
+      {/* Site-wide conversion CTAs (mobile bar + desktop WhatsApp float + AI concierge) */}
       <StickyMobileCTA />
       <WhatsAppFloat />
+      <ChatWidget />
     </>
   );
 }
