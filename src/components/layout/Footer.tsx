@@ -2,16 +2,68 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
 import { siteConfig, footerLinks } from "@/lib/constants";
-import { ArrowUpRight, Linkedin, Twitter, Instagram, Github } from "lucide-react";
+import { ArrowUpRight, Linkedin, Instagram, Github, Briefcase, MessageCircle, Send } from "lucide-react";
 import Image from "next/image";
 
 const socialIcons: Record<string, React.ReactNode> = {
   linkedin: <Linkedin className="w-4 h-4" />,
-  twitter: <Twitter className="w-4 h-4" />,
   instagram: <Instagram className="w-4 h-4" />,
   github: <Github className="w-4 h-4" />,
+  upwork: <Briefcase className="w-4 h-4" />,
+  whatsapp: <MessageCircle className="w-4 h-4" />,
 };
+
+function NewsletterBand() {
+  const [email, setEmail] = useState("");
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    // TODO: wire to a real newsletter backend (e.g. Resend Audiences) before
+    // launch. Front-end only for now — intentionally does not send anywhere.
+    toast.success("Thanks for subscribing! We'll be in touch.");
+    setEmail("");
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7, delay: 0.2 }}
+      className="py-12 md:py-14 border-t border-white/[0.06]"
+    >
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+        <div className="text-center lg:text-left">
+          <h3 className="text-xl font-semibold tracking-tight">Product &amp; AI insights, monthly</h3>
+          <p className="text-sm text-muted-foreground mt-1.5">
+            One useful email a month on AI, SaaS, and shipping. No spam.
+          </p>
+        </div>
+        <form onSubmit={handleSubmit} className="flex w-full lg:w-auto gap-3">
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@company.com"
+            aria-label="Email address"
+            className="w-full lg:w-72 px-4 py-3 rounded-full bg-card border border-white/[0.06] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-gold/40 transition-colors"
+          />
+          <button
+            type="submit"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#EACB64] text-[#0A0A0A] text-sm font-semibold hover:brightness-110 transition-all flex-shrink-0"
+          >
+            Subscribe <Send className="w-4 h-4" />
+          </button>
+        </form>
+      </div>
+    </motion.div>
+  );
+}
 
 export function Footer() {
   return (
@@ -163,6 +215,9 @@ export function Footer() {
             </div>
           </motion.div>
         </div>
+
+        {/* Newsletter */}
+        <NewsletterBand />
 
         {/* Bottom Bar */}
         <div className="py-6 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">

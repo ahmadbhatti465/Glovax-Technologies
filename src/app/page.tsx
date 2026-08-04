@@ -11,12 +11,22 @@ import {
   getSiteContent,
   getSiteContentUpdatedAt,
 } from "@/lib/data";
-import { clientLogos as fallbackClientLogos } from "@/lib/constants";
-
 // Dynamically import below-the-fold sections to code-split framer-motion
 // and reduce initial JS payload by ~124 KiB
-const ClientMarquee = dynamic(
-  () => import("@/components/sections/ClientMarquee").then((mod) => ({ default: mod.ClientMarquee })),
+const TrustBar = dynamic(
+  () => import("@/components/sections/TrustBar").then((mod) => ({ default: mod.TrustBar })),
+  { ssr: true }
+);
+const WhyGlovax = dynamic(
+  () => import("@/components/sections/WhyGlovax").then((mod) => ({ default: mod.WhyGlovax })),
+  { ssr: true }
+);
+const Pricing = dynamic(
+  () => import("@/components/sections/Pricing").then((mod) => ({ default: mod.Pricing })),
+  { ssr: true }
+);
+const FAQ = dynamic(
+  () => import("@/components/sections/FAQ").then((mod) => ({ default: mod.FAQ })),
   { ssr: true }
 );
 const ServicesGrid = dynamic(
@@ -73,7 +83,6 @@ export default async function Home() {
     buttons: { label: string; href: string; variant: "primary" | "outline" | "ghost" }[];
   }>("cta_banner");
   const lastUpdated = await getSiteContentUpdatedAt("cta_banner");
-  const clientLogos = await getSiteContent<string[]>("client_logos");
   const processSteps = await getSiteContent<{ number: string; title: string; description: string; icon: string }[]>("process_steps");
   const stats = await getSiteContent<{ value: number; suffix: string; label: string }[]>("stats");
 
@@ -82,12 +91,15 @@ export default async function Home() {
       <Navbar />
       <main>
         <HeroSection />
-        <ClientMarquee clientLogos={clientLogos ?? fallbackClientLogos} />
+        <TrustBar />
         <ServicesGrid services={services} />
+        <WhyGlovax />
         <WorkShowcase projects={featuredPortfolio} />
         <ProcessSteps steps={processSteps ?? undefined} />
         <StatsCounter stats={stats ?? undefined} />
+        <Pricing />
         <Testimonials testimonials={testimonials} />
+        <FAQ />
         <CTABanner cta={cta ?? undefined} lastUpdated={lastUpdated} />
       </main>
       <Footer />

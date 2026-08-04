@@ -10,10 +10,12 @@ export const siteConfig = {
   address: "31 K, DHA Phase 5",
   calendarUrl: "https://calendly.com/glovaxtechnologies/30min",
   social: {
-    twitter: "https://twitter.com/glovaxtech",
     linkedin: "https://linkedin.com/company/glovaxtechnologies",
     github: "https://github.com/glovaxtechnologies",
     instagram: "https://www.instagram.com/glovaxtechnologies/",
+    // TODO: replace with your real Upwork profile URL before launch.
+    upwork: "https://www.upwork.com/freelancers/ahmadbhatti465",
+    whatsapp: "https://wa.me/923254255480",
   },
 };
 

@@ -67,9 +67,15 @@ export function Testimonials({ testimonials: serverTestimonials }: TestimonialsP
                   </div>
                 </div>
 
-                <p className="text-foreground/90 text-sm md:text-base leading-relaxed mb-8">
-                  "{testimonial.content}"
-                </p>
+                {testimonial.content.startsWith("[REPLACE") ? (
+                  <p className="text-muted italic text-sm md:text-base leading-relaxed mb-8">
+                    "Real client quote coming soon — add via the admin panel."
+                  </p>
+                ) : (
+                  <p className="text-foreground/90 text-sm md:text-base leading-relaxed mb-8">
+                    "{testimonial.content}"
+                  </p>
+                )}
 
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4AF37]/20 to-[#A88A2F]/20 flex items-center justify-center border border-[#D4AF37]/20 shadow-[0_0_15px_rgba(212,175,55,0.08)]">

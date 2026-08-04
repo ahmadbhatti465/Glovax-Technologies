@@ -55,10 +55,10 @@ export function StructuredData() {
       "SaaS Development",
     ],
     sameAs: [
-      siteConfig.social.twitter,
       siteConfig.social.linkedin,
       siteConfig.social.github,
       siteConfig.social.instagram,
+      siteConfig.social.upwork,
     ],
     contactPoint: {
       "@type": "ContactPoint",

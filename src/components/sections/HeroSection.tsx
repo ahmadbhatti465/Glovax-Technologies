@@ -2,7 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+import { Check } from "lucide-react";
 import { MagneticButton } from "@/components/shared/MagneticButton";
+import { siteConfig } from "@/lib/constants";
 
 // Lazy-load FloatingParticles — they're purely decorative and not needed for initial render
 const FloatingParticles = dynamic(
@@ -59,10 +61,10 @@ export function HeroSection() {
           </motion.div>
 
           {/* Main Heading — VISIBLE IMMEDIATELY (no opacity:0, no delay) */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.05]">
-            We build digital
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-bold tracking-tight leading-[1.08]">
+            We turn your idea into an
             <br />
-            <span className="gold-shimmer">excellence.</span>
+            <span className="gold-shimmer">AI-powered product</span> that scales.
           </h1>
 
           {/* Gold accent line */}
@@ -78,9 +80,9 @@ export function HeroSection() {
 
           {/* Subtitle — LCP ELEMENT — VISIBLE IMMEDIATELY (no animation delay) */}
           <p className="mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-muted max-w-2xl leading-relaxed">
-            Glovax Technologies is a world class software house delivering AI-powered web
-            development, mobile apps, cloud solutions, and digital marketing that
-            drives real business growth.
+            A Lahore-based software house and AI/ML agency trusted by UK &amp; US
+            businesses. We turn bold ideas into AI-powered web, mobile, and SaaS
+            products that drive real revenue.
           </p>
 
           {/* CTA Buttons — can animate since they're below LCP */}
@@ -90,12 +92,30 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-10 md:mt-12 flex flex-wrap items-center gap-4"
           >
-            <MagneticButton href="/work" variant="primary" size="lg">
-              View Our Work
+            <MagneticButton href={siteConfig.calendarUrl} variant="primary" size="lg">
+              Book a Free Call
             </MagneticButton>
-            <MagneticButton href="/contact" variant="outline" size="lg">
-              Start a Project
+            <MagneticButton href="/work" variant="outline" size="lg">
+              See Our Work
             </MagneticButton>
+          </motion.div>
+
+          {/* Trust microcopy */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2.5 text-sm text-muted-foreground"
+          >
+            <span className="inline-flex items-center gap-2">
+              <Check className="w-4 h-4 text-accent" /> UK/US timezone overlap
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <Check className="w-4 h-4 text-accent" /> NDA on request
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <Check className="w-4 h-4 text-accent" /> 24-hour response
+            </span>
           </motion.div>
         </div>
 

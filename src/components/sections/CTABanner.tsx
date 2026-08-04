@@ -17,12 +17,12 @@ interface CTABannerProps {
 
 const fallbackCTA = {
   eyebrow: "Let's Collaborate",
-  title: "Ready to build",
-  titleHighlight: "something great?",
-  subtitle: "Let's discuss your project and explore how Glovax Technologies can help you achieve your business goals with cutting-edge technology.",
+  title: "Have an idea? Let's",
+  titleHighlight: "build it together.",
+  subtitle: "Book a free 30-minute call — we'll scope your project, answer questions, and give you a clear next step. No obligation.",
   buttons: [
-    { label: "Start a Project", href: "/contact", variant: "primary" as const },
-    { label: "Book a Call", href: siteConfig.calendarUrl, variant: "outline" as const },
+    { label: "Book a Free Call", href: siteConfig.calendarUrl, variant: "primary" as const },
+    { label: "See Our Work", href: "/work", variant: "outline" as const },
     { label: "Explore Services", href: "/services", variant: "ghost" as const },
   ],
 };

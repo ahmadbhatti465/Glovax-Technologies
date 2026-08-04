@@ -146,6 +146,25 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
         </div>
       </div>
 
+      {(project.results?.length ?? 0) > 0 && (
+        <div className="mt-5 px-1">
+          <div className="text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground mb-3">
+            Results
+          </div>
+          <ul className="space-y-2.5">
+            {project.results.slice(0, 3).map((result) => (
+              <li
+                key={result}
+                className="flex items-start gap-2.5 text-sm text-muted leading-relaxed"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_rgba(212,175,55,0.5)] flex-shrink-0 mt-1.5" />
+                {result}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="mt-5 flex flex-wrap gap-2 px-1">
         {(project.technologies || []).slice(0, 5).map((tech) => (
           <span

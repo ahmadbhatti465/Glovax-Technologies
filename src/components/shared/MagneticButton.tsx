@@ -77,6 +77,7 @@ export function MagneticButton({
   );
 
   if (href) {
+    const isExternal = href.startsWith("http");
     return (
       <Link
         href={href}
@@ -84,6 +85,8 @@ export function MagneticButton({
         ref={ref as React.RefObject<HTMLAnchorElement>}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
       >
         {content}
       </Link>
