@@ -14,7 +14,7 @@ export function FAQ() {
       <div className="max-w-4xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="FAQ"
-          title="Questions UK & US clients"
+          title="Questions clients"
           titleHighlight="ask us"
           subtitle="Working with a Lahore-based team for the first time? Here's what most clients want to know."
         />
