@@ -240,6 +240,9 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Reserve space on mobile so the sticky bottom CTA bar never covers the footer */}
+      <div aria-hidden="true" className="h-28 lg:hidden" />
     </footer>
   );
 }

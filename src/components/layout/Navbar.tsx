@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import { navLinks, siteConfig } from "@/lib/constants";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
+import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -98,14 +100,17 @@ export function Navbar() {
 
             {/* CTA Button */}
             <div className="hidden lg:block">
-              <Link
-                href="/contact"
+              <a
+                href={siteConfig.calendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Book a call with Glovax Technologies (opens in a new tab)"
                 className="relative inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-full overflow-hidden group"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-[#D4AF37] to-[#EACB64] transition-all duration-500 group-hover:brightness-110" />
                 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]" />
-                <span className="relative z-10 text-[#0A0A0A]">Get in Touch</span>
-              </Link>
+                <span className="relative z-10 text-[#0A0A0A]">Book a Call</span>
+              </a>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -196,6 +201,10 @@ export function Navbar() {
           </>
         )}
       </AnimatePresence>
+
+      {/* Site-wide conversion CTAs (mobile bar + desktop WhatsApp float) */}
+      <StickyMobileCTA />
+      <WhatsAppFloat />
     </>
   );
 }

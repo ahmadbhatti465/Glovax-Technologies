@@ -48,7 +48,7 @@ export default function ContactContent() {
       const result = await response.json();
 
       if (response.ok && result.success) {
-        toast.success(result.message || "Message sent! We'll get back to you within 24 hours.");
+        toast.success(result.message || `Message sent! We'll get back to you within ${siteConfig.responseTime}.`);
         reset();
       } else {
         toast.error(result.message || "Something went wrong. Please try again.");
@@ -256,10 +256,31 @@ export default function ContactContent() {
                     Response Time
                   </h4>
                   <p className="text-sm text-muted">
-                    We typically respond to all inquiries within 24 hours during
+                    We typically respond to all inquiries within {siteConfig.responseTime} during
                     business days.
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Calendly inline booking embed */}
+          <div className="mt-16 md:mt-24">
+            <div className="max-w-4xl">
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
+                Prefer to book a slot <span className="gold-shimmer">right away?</span>
+              </h2>
+              <p className="text-muted text-base mb-8">
+                Skip the form — grab a 30-minute slot on our calendar directly. We reply within{" "}
+                {siteConfig.responseTime} on every inquiry.
+              </p>
+              <div className="rounded-2xl border border-white/[0.06] bg-surface-raised overflow-hidden">
+                <iframe
+                  src={`https://calendly.com/${siteConfig.calendarUrl.replace("https://calendly.com/", "")}?theme=dark&hide_gdpr_banner=1&primary_color=D4AF37`}
+                  title="Schedule a call with Glovax Technologies"
+                  loading="lazy"
+                  className="w-full h-[680px] lg:h-[750px] block"
+                />
               </div>
             </div>
           </div>

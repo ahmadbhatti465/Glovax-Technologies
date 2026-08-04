@@ -29,6 +29,10 @@ const FAQ = dynamic(
   () => import("@/components/sections/FAQ").then((mod) => ({ default: mod.FAQ })),
   { ssr: true }
 );
+const TrustSection = dynamic(
+  () => import("@/components/sections/TrustSection").then((mod) => ({ default: mod.TrustSection })),
+  { ssr: true }
+);
 const ServicesGrid = dynamic(
   () => import("@/components/sections/ServicesGrid").then((mod) => ({ default: mod.ServicesGrid })),
   { ssr: true }
@@ -100,6 +104,7 @@ export default async function Home() {
         <Pricing />
         <Testimonials testimonials={testimonials} />
         <FAQ />
+        <TrustSection />
         <CTABanner cta={cta ?? undefined} lastUpdated={lastUpdated} />
       </main>
       <Footer />
