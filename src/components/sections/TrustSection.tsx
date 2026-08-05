@@ -58,7 +58,7 @@ const trustPoints = [
 
 export function TrustSection() {
   return (
-    <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
+    <section className="py-28 md:py-36 lg:py-44 relative overflow-hidden">
       <div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-20 pointer-events-none"
         style={{
@@ -88,14 +88,14 @@ export function TrustSection() {
                 delay: index * 0.1,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className={`group relative p-8 rounded-3xl border transition-all duration-500 overflow-hidden ${
+              className={`group relative p-8 rounded-3xl border transition-all duration-500 overflow-hidden card-shine ${
                 point.highlighted
-                  ? "bg-surface-raised border-teal/40 shadow-[0_0_40px_var(--teal-glow)]"
-                  : "bg-surface-raised border-neutral-border hover:border-teal/30"
+                  ? "bg-surface-raised border-teal/40 shadow-glow-strong gradient-border"
+                  : "bg-surface-raised border-neutral-border hover:border-teal/30 hover:shadow-card"
               }`}
             >
               <div className="relative z-10">
-                <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-card border border-teal/20 text-accent shadow-[0_0_20px_var(--teal-glow)] group-hover:shadow-[0_0_30px_var(--teal-glow)] transition-shadow duration-500">
+                <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-teal/10 border border-teal/20 text-accent shadow-glow group-hover:shadow-glow-strong group-hover:scale-105 transition-all duration-500">
                   <point.icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 tracking-tight">{point.title}</h3>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { siteConfig } from "@/lib/constants";
+import { ShieldCheck, KeyRound, Timer, Check } from "lucide-react";
 
 interface CTABannerProps {
   cta?: {
@@ -27,11 +28,18 @@ const fallbackCTA = {
   ],
 };
 
+const trustBadges = [
+  { icon: ShieldCheck, label: "NDA on request" },
+  { icon: KeyRound, label: "IP ownership" },
+  { icon: Timer, label: `${siteConfig.responseTime} response` },
+  { icon: Check, label: "Milestone billing" },
+];
+
 export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
   const data = cta || fallbackCTA;
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
+    <section className="py-28 md:py-36 lg:py-44 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -73,6 +81,9 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
             />
           </div>
 
+          {/* Subtle grid texture */}
+          <div className="absolute inset-0 grid-pattern opacity-50" />
+
           <div className="relative z-10 px-8 py-20 md:px-16 md:py-28 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs md:text-sm font-medium text-muted tracking-wide mb-8">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
@@ -90,10 +101,29 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-              {data.buttons?.map((btn) => (
-                <MagneticButton key={btn.label} href={btn.href} variant={btn.variant} size="lg">
+              {data.buttons?.map((btn, i) => (
+                <MagneticButton
+                  key={btn.label}
+                  href={btn.href}
+                  variant={btn.variant}
+                  size="lg"
+                  withArrow={i === 0}
+                >
                   {btn.label}
                 </MagneticButton>
+              ))}
+            </div>
+
+            {/* Trust badges */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+              {trustBadges.map((badge) => (
+                <span
+                  key={badge.label}
+                  className="inline-flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <badge.icon className="w-4 h-4 text-accent" />
+                  {badge.label}
+                </span>
               ))}
             </div>
 

@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     const emailHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #111827;">
         <div style="text-align: center; margin-bottom: 32px;">
-          <h1 style="font-size: 24px; font-weight: 700; color: #378C92; margin: 0;">${siteConfig.name}</h1>
+          <h1 style="font-size: 24px; font-weight: 700; color: #1EDAC6; margin: 0;">${siteConfig.name}</h1>
           <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">New Contact Form Submission</p>
         </div>
 
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
             <tr>
               <td style="padding: 8px 0; color: #6b7280;">Email</td>
               <td style="padding: 8px 0; font-weight: 500;">
-                <a href="mailto:${email}" style="color: #378C92; text-decoration: none;">${email}</a>
+                <a href="mailto:${email}" style="color: #1EDAC6; text-decoration: none;">${email}</a>
               </td>
             </tr>
             <tr>
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
         subject: `We received your message — ${siteConfig.name}`,
         html: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #111827;">
-            <h1 style="font-size: 20px; font-weight: 700; color: #378C92; margin: 0 0 16px 0;">Thanks for reaching out, ${name}!</h1>
+            <h1 style="font-size: 20px; font-weight: 700; color: #1EDAC6; margin: 0 0 16px 0;">Thanks for reaching out, ${name}!</h1>
             <p style="font-size: 14px; line-height: 1.6; margin: 0 0 16px 0;">We have received your message about <strong>${serviceLabel[service] || service}</strong> and will get back to you within 24 hours.</p>
             <p style="font-size: 14px; line-height: 1.6; margin: 0; color: #6b7280;">— The ${siteConfig.name} Team</p>
           </div>

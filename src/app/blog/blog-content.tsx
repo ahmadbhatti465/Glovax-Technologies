@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
@@ -15,6 +16,19 @@ interface BlogContentProps {
 }
 
 export default function BlogContent({ posts = [], lastUpdated }: BlogContentProps) {
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+
+  const categories = useMemo(() => {
+    const seen = new Set<string>();
+    for (const p of posts) if (p.category) seen.add(p.category);
+    return ["All", ...Array.from(seen).sort()];
+  }, [posts]);
+
+  const visiblePosts = useMemo(() => {
+    if (activeCategory === "All") return posts;
+    return posts.filter((p) => p.category === activeCategory);
+  }, [posts, activeCategory]);
+
   return (
     <>
       <Navbar />
@@ -40,14 +54,42 @@ export default function BlogContent({ posts = [], lastUpdated }: BlogContentProp
             </p>
           )}
 
-          {posts.length === 0 && (
+          {/* Category filter */}
+          {categories.length > 1 && (
+            <div
+              className="flex flex-wrap items-center justify-center gap-2.5 mb-12"
+              role="group"
+              aria-label="Filter posts by category"
+            >
+              {categories.map((category) => {
+                const isActive = activeCategory === category;
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setActiveCategory(category)}
+                    aria-pressed={isActive}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 active:scale-[0.97] ${
+                      isActive
+                        ? "gradient-cta text-accent-foreground shadow-glow"
+                        : "bg-surface-raised border border-neutral-border text-muted-foreground hover:text-accent hover:border-teal/40"
+                    }`}
+                  >
+                    {category}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {visiblePosts.length === 0 && (
             <p className="text-center text-muted">
-              No articles published yet. Check back soon for insights on AI, web development, and cloud engineering.
+              No articles in this category yet. Check back soon for insights on AI, web development, and cloud engineering.
             </p>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post, index) => (
+            {visiblePosts.map((post, index) => (
               <motion.article
                 key={post.slug}
                 initial={{ opacity: 0, y: 30 }}
@@ -55,7 +97,7 @@ export default function BlogContent({ posts = [], lastUpdated }: BlogContentProp
                 viewport={{ once: true }}
                 transition={{
                   duration: 0.5,
-                  delay: index * 0.1,
+                  delay: index * 0.05,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >

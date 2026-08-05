@@ -5,16 +5,47 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { siteConfig, footerLinks } from "@/lib/constants";
-import { ArrowUpRight, Linkedin, Instagram, Github, Briefcase, MessageCircle, Send } from "lucide-react";
+import {
+  ArrowUpRight,
+  Linkedin,
+  Instagram,
+  Github,
+  Briefcase,
+  MessageCircle,
+  Send,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+} from "lucide-react";
 import Image from "next/image";
+import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
+
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
 const socialIcons: Record<string, React.ReactNode> = {
   linkedin: <Linkedin className="w-4 h-4" />,
   instagram: <Instagram className="w-4 h-4" />,
   github: <Github className="w-4 h-4" />,
   upwork: <Briefcase className="w-4 h-4" />,
-  whatsapp: <MessageCircle className="w-4 h-4" />,
+  whatsapp: <WhatsAppIcon className="w-4 h-4" />,
+  twitter: <XIcon className="w-3.5 h-3.5" />,
 };
+
+// The socials we surface in the footer (in display order).
+const footerSocials: (keyof typeof siteConfig.social)[] = [
+  "linkedin",
+  "github",
+  "twitter",
+  "instagram",
+  "whatsapp",
+];
 
 function NewsletterBand() {
   const [email, setEmail] = useState("");
@@ -55,12 +86,46 @@ function NewsletterBand() {
           />
           <button
             type="submit"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-teal-deep to-teal text-accent-foreground text-sm font-semibold hover:brightness-110 transition-all flex-shrink-0"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full gradient-cta text-accent-foreground text-sm font-semibold hover:shadow-glow transition-all duration-300 flex-shrink-0 active:scale-[0.98]"
           >
             Subscribe <Send className="w-4 h-4" />
           </button>
         </form>
       </div>
+    </motion.div>
+  );
+}
+
+function FooterColumn({
+  title,
+  links,
+  delay = 0,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+  delay?: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7, delay }}
+    >
+      <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">{title}</h3>
+      <ul className="space-y-3.5">
+        {links.map((link) => (
+          <li key={link.label}>
+            <Link
+              href={link.href}
+              className="link-underline text-sm text-muted-foreground hover:text-accent transition-colors duration-300 inline-flex items-center gap-1 group"
+            >
+              {link.label}
+              <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-0.5 group-hover:translate-y-0" />
+            </Link>
+          </li>
+        ))}
+      </ul>
     </motion.div>
   );
 }
@@ -79,14 +144,14 @@ export function Footer() {
 
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         {/* Main Footer Content */}
-        <div className="py-16 md:py-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
+        <div className="py-16 md:py-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12">
           {/* Brand Column */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="lg:col-span-4"
+            className="lg:col-span-3"
           >
             <Link href="/" className="flex items-center group">
               <Image
@@ -100,93 +165,35 @@ export function Footer() {
             <p className="mt-5 text-muted text-sm leading-relaxed max-w-xs">
               {siteConfig.description}
             </p>
-            <div className="mt-8 flex items-center gap-3">
-              {Object.entries(siteConfig.social).map(([key, url]) => (
-                <a
-                  key={key}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-card border border-neutral-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-teal/20 hover:shadow-[0_0_15px_var(--teal-glow)] transition-all duration-300"
-                  aria-label={`Follow us on ${key}`}
-                >
-                  {socialIcons[key.toLowerCase()] || key}
-                </a>
-              ))}
+            <div className="mt-8 flex items-center gap-2.5">
+              {footerSocials.map((key) => {
+                const url = siteConfig.social[key];
+                if (!url) return null;
+                return (
+                  <a
+                    key={key}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-card border border-neutral-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-teal/20 hover:shadow-glow hover:-translate-y-0.5 transition-all duration-300"
+                    aria-label={`Follow us on ${key}`}
+                  >
+                    {socialIcons[key] || key}
+                  </a>
+                );
+              })}
             </div>
           </motion.div>
 
-          {/* Links Columns */}
+          {/* Link Columns */}
           <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-            >
-              <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Company</h3>
-              <ul className="space-y-3.5">
-                {footerLinks.company.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground hover:text-accent transition-colors duration-300 inline-flex items-center gap-1 group"
-                    >
-                      {link.label}
-                      <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-0.5 group-hover:translate-y-0" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            <FooterColumn title="Company" links={footerLinks.company} delay={0.1} />
           </div>
-
-          <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-            >
-              <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Services</h3>
-              <ul className="space-y-3.5">
-                {footerLinks.services.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground hover:text-accent transition-colors duration-300 inline-flex items-center gap-1 group"
-                    >
-                      {link.label}
-                      <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-0.5 group-hover:translate-y-0" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+          <div className="lg:col-span-3">
+            <FooterColumn title="Services" links={footerLinks.services} delay={0.2} />
           </div>
-
           <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-            >
-              <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Resources</h3>
-              <ul className="space-y-3.5">
-                {footerLinks.resources.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground hover:text-accent transition-colors duration-300 inline-flex items-center gap-1 group"
-                    >
-                      {link.label}
-                      <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-0.5 group-hover:translate-y-0" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            <FooterColumn title="Resources" links={footerLinks.resources} delay={0.3} />
           </div>
 
           {/* Contact */}
@@ -201,17 +208,40 @@ export function Footer() {
             <div className="space-y-3.5 text-sm">
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="block text-muted-foreground hover:text-accent transition-colors duration-300"
+                className="flex items-center gap-2.5 text-muted-foreground hover:text-accent transition-colors duration-300"
               >
-                {siteConfig.email}
+                <Mail className="w-4 h-4 text-accent/70 flex-shrink-0" />
+                <span className="truncate">{siteConfig.email}</span>
               </a>
               <a
                 href={`tel:${siteConfig.phone}`}
-                className="block text-muted-foreground hover:text-accent transition-colors duration-300"
+                className="flex items-center gap-2.5 text-muted-foreground hover:text-accent transition-colors duration-300"
               >
+                <Phone className="w-4 h-4 text-accent/70 flex-shrink-0" />
                 {siteConfig.phone}
               </a>
-              <p className="text-muted-foreground leading-relaxed">{siteConfig.address}</p>
+              <a
+                href={siteConfig.social.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 text-muted-foreground hover:text-accent transition-colors duration-300"
+              >
+                <MessageCircle className="w-4 h-4 text-accent/70 flex-shrink-0" />
+                WhatsApp us
+              </a>
+              <p className="flex items-start gap-2.5 text-muted-foreground leading-relaxed">
+                <MapPin className="w-4 h-4 text-accent/70 flex-shrink-0 mt-0.5" />
+                {siteConfig.address}
+              </p>
+              <a
+                href={siteConfig.calendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-muted text-accent hover:border-teal/40 hover:shadow-glow transition-all duration-300"
+              >
+                <Calendar className="w-4 h-4" />
+                Book a call
+              </a>
             </div>
           </motion.div>
         </div>
@@ -226,13 +256,13 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-6">
             <Link
-              href="#"
+              href="/privacy"
               className="text-xs text-muted-foreground hover:text-accent transition-colors duration-300"
             >
               Privacy Policy
             </Link>
             <Link
-              href="#"
+              href="/terms"
               className="text-xs text-muted-foreground hover:text-accent transition-colors duration-300"
             >
               Terms of Service

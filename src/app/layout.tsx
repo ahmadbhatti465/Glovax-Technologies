@@ -4,6 +4,9 @@ import "./globals.css";
 import { siteConfig } from "@/lib/constants";
 import { Toaster } from "sonner";
 import { StructuredData } from "@/components/shared/StructuredData";
+import { ScrollProgress } from "@/components/layout/ScrollProgress";
+import { CursorGlow } from "@/components/layout/CursorGlow";
+import { BackToTop } from "@/components/layout/BackToTop";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-heading",
@@ -24,8 +27,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#060C0B" },
-    { media: "(prefers-color-scheme: light)", color: "#060C0B" },
+    { media: "(prefers-color-scheme: dark)", color: "#08110F" },
+    { media: "(prefers-color-scheme: light)", color: "#08110F" },
   ],
   colorScheme: "dark",
 };
@@ -113,8 +116,11 @@ export default function RootLayout({
       <body
         className={`${jakarta.variable} ${inter.variable} antialiased bg-background text-foreground min-h-screen`}
       >
+        <ScrollProgress />
+        <CursorGlow />
         <StructuredData />
         {children}
+        <BackToTop />
         <Toaster
           position="bottom-right"
           toastOptions={{

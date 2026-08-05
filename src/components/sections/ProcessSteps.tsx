@@ -1,106 +1,102 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { Search, PenTool, Code, Rocket } from "lucide-react";
+import {
+  Search,
+  Lightbulb,
+  PenTool,
+  Code2,
+  Bug,
+  Rocket,
+  LifeBuoy,
+} from "lucide-react";
 
 const fallbackSteps = [
   {
     number: "01",
-    title: "Discover",
+    title: "Discovery",
     description:
-      "We dive deep into your business, users, and goals through research and stakeholder interviews to build a solid foundation.",
+      "We dive deep into your business, users, and goals through stakeholder interviews and market research to build a solid foundation.",
     icon: "Search",
   },
   {
     number: "02",
+    title: "Research",
+    description:
+      "We validate the approach, map technical constraints, and turn fuzzy requirements into a precise, prioritized plan.",
+    icon: "Lightbulb",
+  },
+  {
+    number: "03",
     title: "Design",
     description:
       "We craft intuitive, beautiful interfaces and system architectures that solve real problems and delight users.",
     icon: "PenTool",
   },
   {
-    number: "03",
-    title: "Develop",
+    number: "04",
+    title: "Development",
     description:
       "We build with clean, scalable code using modern frameworks and best practices for performance and maintainability.",
-    icon: "Code",
+    icon: "Code2",
   },
   {
-    number: "04",
-    title: "Deliver",
+    number: "05",
+    title: "Testing",
     description:
-      "We deploy, monitor, and optimize your product with CI/CD pipelines, ensuring long-term success and growth.",
+      "Automated and manual QA, performance checks, and accessibility passes — every release is verified before it ships.",
+    icon: "Bug",
+  },
+  {
+    number: "06",
+    title: "Launch",
+    description:
+      "We deploy with CI/CD, monitor in production, and roll out without disruption — on time and on budget.",
     icon: "Rocket",
+  },
+  {
+    number: "07",
+    title: "Support",
+    description:
+      "Post-launch monitoring, fixes, and iteration. We stay with you as your product grows — we don't disappear at launch.",
+    icon: "LifeBuoy",
   },
 ];
 
 const iconMap: Record<string, React.ReactNode> = {
-  Search: <Search className="w-6 h-6 text-accent" />,
-  PenTool: <PenTool className="w-6 h-6 text-accent" />,
-  Code: <Code className="w-6 h-6 text-accent" />,
-  Rocket: <Rocket className="w-6 h-6 text-accent" />,
+  Search: <Search className="w-6 h-6" />,
+  Lightbulb: <Lightbulb className="w-6 h-6" />,
+  PenTool: <PenTool className="w-6 h-6" />,
+  Code: <Code2 className="w-6 h-6" />,
+  Code2: <Code2 className="w-6 h-6" />,
+  Bug: <Bug className="w-6 h-6" />,
+  Rocket: <Rocket className="w-6 h-6" />,
+  LifeBuoy: <LifeBuoy className="w-6 h-6" />,
 };
-
-const steps = [
-  {
-    number: "01",
-    title: "Discover",
-    description:
-      "We dive deep into your business, users, and goals through research and stakeholder interviews to build a solid foundation.",
-    icon: Search,
-  },
-  {
-    number: "02",
-    title: "Design",
-    description:
-      "We craft intuitive, beautiful interfaces and system architectures that solve real problems and delight users.",
-    icon: PenTool,
-  },
-  {
-    number: "03",
-    title: "Develop",
-    description:
-      "We build with clean, scalable code using modern frameworks and best practices for performance and maintainability.",
-    icon: Code,
-  },
-  {
-    number: "04",
-    title: "Deliver",
-    description:
-      "We deploy, monitor, and optimize your product with CI/CD pipelines, ensuring long-term success and growth.",
-    icon: Rocket,
-  },
-];
-
-function ConnectorLine({ isVisible, delay }: { isVisible: boolean; delay: number }) {
-  return (
-    <div className="hidden lg:block absolute top-10 left-[calc(50%+2rem)] w-[calc(100%-4rem)] h-px overflow-hidden">
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={isVisible ? { scaleX: 1 } : { scaleX: 0 }}
-        transition={{ duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full h-full origin-left"
-        style={{
-          background: "linear-gradient(90deg, color-mix(in srgb, var(--teal) 40%, transparent), color-mix(in srgb, var(--teal) 10%, transparent))",
-        }}
-      />
-    </div>
-  );
-}
 
 interface ProcessStepsProps {
   steps?: { number: string; title: string; description: string; icon: string }[];
 }
 
 export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const listRef = useRef<HTMLDivElement>(null);
   const steps = serverSteps?.length ? serverSteps : fallbackSteps;
 
+  // Draw the connecting line as the section scrolls into view.
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    offset: ["start 80%", "end 55%"],
+  });
+  const lineScale = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 24,
+    restDelta: 0.001,
+  });
+
   return (
-    <section className="py-24 md:py-32 lg:py-40 relative">
+    <section className="py-28 md:py-36 lg:py-44 relative">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="Our Process"
@@ -109,50 +105,86 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
           subtitle="A battle-tested methodology refined over 100+ projects. We combine agility with rigor to deliver exceptional results on time and on budget."
         />
 
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.number}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -4 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{
-                duration: 0.7,
-                delay: index * 0.15,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="relative group"
-            >
-              {/* Connector line */}
-              {index < steps.length - 1 && (
-                <ConnectorLine isVisible={isInView} delay={index * 0.15 + 0.5} />
-              )}
+        <div ref={listRef} className="relative max-w-4xl mx-auto">
+          {/* Base line */}
+          <div
+            aria-hidden
+            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-neutral-border/60"
+          />
+          {/* Progress line — draws as you scroll */}
+          <motion.div
+            aria-hidden
+            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2 origin-top"
+            style={{
+              scaleY: lineScale,
+              background:
+                "linear-gradient(180deg, var(--teal-deep), var(--teal) 60%, var(--teal-bright))",
+              boxShadow: "0 0 12px var(--teal-glow)",
+            }}
+          />
 
-              <div className="relative">
-                <span className="text-7xl md:text-8xl font-bold absolute -top-5 -left-3 select-none"
-                  style={{
-                    color: "transparent",
-                    WebkitTextStroke: "1px var(--teal-glow)",
-                  }}
+          <div className="space-y-8 md:space-y-12">
+            {steps.map((step, index) => {
+              const isRight = index % 2 === 1;
+              return (
+                <div
+                  key={step.number}
+                  className="relative md:grid md:grid-cols-2 md:gap-24"
                 >
-                  {step.number}
-                </span>
+                  {/* Icon node on the line */}
+                  <motion.div
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{
+                      delay: index * 0.04,
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 18,
+                    }}
+                    className="absolute left-6 md:left-1/2 top-0 z-10 -translate-x-1/2"
+                  >
+                    <div className="group/node relative w-12 h-12 md:w-14 md:h-14 rounded-2xl glass-strong border border-teal/25 flex items-center justify-center text-accent shadow-glow transition-all duration-500 group-hover:shadow-glow-strong">
+                      <span className="transition-transform duration-500 group-hover:scale-110">
+                        {iconMap[step.icon] || <Search className="w-6 h-6" />}
+                      </span>
+                      {/* number chip */}
+                      <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-accent text-accent-foreground text-[10px] font-bold tracking-wide">
+                        {step.number}
+                      </span>
+                    </div>
+                  </motion.div>
 
-                <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-card border border-neutral-border flex items-center justify-center mb-6 shadow-[0_0_20px_var(--teal-glow)] group-hover:shadow-[0_0_30px_var(--teal-glow)] group-hover:border-teal/20 transition-all duration-500">
-                    {iconMap[step.icon] || <Search className="w-6 h-6 text-accent" />}
-                  </div>
-
-                  <h3 className="text-xl md:text-2xl font-semibold mb-3 tracking-tight">{step.title}</h3>
-
-                  <p className="text-sm md:text-base text-muted leading-relaxed">
-                    {step.description}
-                  </p>
+                  {/* Content — alternates sides on desktop, right column on mobile */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{
+                      duration: 0.6,
+                      delay: index * 0.06,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className={[
+                      "pl-20 md:pl-0",
+                      isRight
+                        ? "md:col-start-2"
+                        : "md:col-start-1 md:text-right",
+                    ].join(" ")}
+                  >
+                    <div className="group inline-block w-full md:w-auto rounded-2xl border border-neutral-border bg-surface-raised p-6 md:p-7 hover:border-teal/25 hover:shadow-card transition-all duration-500 text-left">
+                      <h3 className="text-xl md:text-2xl font-semibold tracking-tight">
+                        {step.title}
+                      </h3>
+                      <p className="mt-3 text-sm md:text-base text-muted leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                  </motion.div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

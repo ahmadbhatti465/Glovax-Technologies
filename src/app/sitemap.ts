@@ -124,14 +124,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.8,
     },
+    {
+      url: `${siteConfig.url}/privacy`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${siteConfig.url}/terms`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
   ];
 
   let posts: { slug: string; publishedAt: string }[] = [];
   let directorySlugs: { slug: string }[] = [];
+  let caseStudyIds: { id: string }[] = [];
   try {
     posts = await db.select({ slug: blogPosts.slug, publishedAt: blogPosts.publishedAt }).from(blogPosts);
     const bizRows = await db.select({ slug: businesses.slug }).from(businesses);
     directorySlugs = bizRows;
+    const caseRows = await db.select({ id: portfolioItems.id }).from(portfolioItems);
+    caseStudyIds = caseRows;
   } catch {
     // DB unavailable
   }
@@ -150,5 +165,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...blogEntries, ...directoryEntries];
+  const caseStudyEntries: MetadataRoute.Sitemap = caseStudyIds.map((p) => ({
+    url: `${siteConfig.url}/work/${p.id}`,
+    lastModified: toSitemapDate(portfolioUpdated) ?? now,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...caseStudyEntries, ...blogEntries, ...directoryEntries];
 }

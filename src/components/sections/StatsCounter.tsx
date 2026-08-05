@@ -12,7 +12,7 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
   const stats = serverStats?.length ? serverStats : fallbackStats;
 
   return (
-    <section className="py-20 md:py-28 border-y border-neutral-border bg-section-alt relative overflow-hidden">
+    <section className="py-24 md:py-32 lg:py-36 border-y border-neutral-border bg-section-alt relative overflow-hidden">
       {/* Ambient glow */}
       <div
         className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none"
@@ -53,17 +53,17 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
                 />
               )}
 
-              <div className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              <div className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight drop-shadow-[0_0_20px_var(--teal-glow)]">
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}
                   className="teal-shimmer"
                 />
               </div>
-              <div className="mt-3 flex items-center justify-center gap-2">
-                <div className="w-4 h-px bg-accent/30" />
+              <div className="mt-4 flex items-center justify-center gap-2">
+                <div className="w-5 h-px bg-gradient-to-r from-transparent to-accent/40" />
                 <p className="text-sm md:text-base text-muted-foreground tracking-wide">{stat.label}</p>
-                <div className="w-4 h-px bg-accent/30" />
+                <div className="w-5 h-px bg-gradient-to-l from-transparent to-accent/40" />
               </div>
             </motion.div>
           ))}

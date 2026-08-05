@@ -14,7 +14,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
     <nav aria-label="Breadcrumb" className="py-4">
       <ol className="max-w-7xl mx-auto px-6 md:px-8 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
         <li className="flex items-center gap-2">
-          <Link href="/" className="hover:text-accent transition-colors">
+          <Link href="/" className="link-underline hover:text-accent transition-colors">
             Home
           </Link>
         </li>
@@ -26,7 +26,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
               {isLast || !item.href ? (
                 <span className={isLast ? "text-foreground" : ""}>{item.label}</span>
               ) : (
-                <Link href={item.href} className="hover:text-accent transition-colors">
+                <Link href={item.href} className="link-underline hover:text-accent transition-colors">
                   {item.label}
                 </Link>
               )}

@@ -16,12 +16,12 @@ import { useRef, MouseEvent } from "react";
 import { Service } from "@/types";
 
 const iconMap: Record<string, React.ReactNode> = {
-  Code2: <Code2 className="w-6 h-6" />,
-  Smartphone: <Smartphone className="w-6 h-6" />,
-  Brain: <Brain className="w-6 h-6" />,
-  Cloud: <Cloud className="w-6 h-6" />,
-  TrendingUp: <TrendingUp className="w-6 h-6" />,
-  Palette: <Palette className="w-6 h-6" />,
+  Code2: <Code2 className="w-7 h-7" />,
+  Smartphone: <Smartphone className="w-7 h-7" />,
+  Brain: <Brain className="w-7 h-7" />,
+  Cloud: <Cloud className="w-7 h-7" />,
+  TrendingUp: <TrendingUp className="w-7 h-7" />,
+  Palette: <Palette className="w-7 h-7" />,
 };
 
 // Per-service accent colors (brand palette): AI/ML → mint, Digital Marketing → amber,
@@ -57,16 +57,24 @@ function ServiceCard({
       onMouseMove={handleMouseMove}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -8 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{
         duration: 0.7,
         delay: index * 0.1,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative p-8 md:p-10 rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/40 transition-all duration-500 spotlight-card overflow-hidden"
+      className="group relative p-8 md:p-10 rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/25 hover:shadow-card transition-all duration-500 spotlight-card card-shine gradient-border overflow-hidden"
     >
-      {/* Glow border on hover */}
+      {/* Watermark index */}
+      <span
+        aria-hidden
+        className="absolute top-6 right-7 text-5xl font-bold select-none opacity-[0.06] group-hover:opacity-10 transition-opacity duration-500"
+      >
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      {/* Cursor-tracked glow */}
       <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
         style={{
           background: "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--teal-glow), transparent 40%)",
@@ -74,8 +82,8 @@ function ServiceCard({
       />
 
       <div className="relative z-10">
-        <div className={`mb-8 inline-flex items-center justify-center w-14 h-14 rounded-2xl ${serviceAccent[service.icon] || "bg-teal/10 border-teal/30 text-teal"} shadow-[0_0_20px_var(--teal-glow)] group-hover:shadow-[0_0_30px_var(--teal-glow)] transition-shadow duration-500`}>
-          {iconMap[service.icon] || <Code2 className="w-6 h-6" />}
+        <div className={`mb-8 inline-flex items-center justify-center w-16 h-16 rounded-2xl ${serviceAccent[service.icon] || "bg-teal/10 border-teal/25 text-accent"} shadow-glow group-hover:shadow-glow-strong group-hover:scale-105 transition-all duration-500`}>
+          {iconMap[service.icon] || <Code2 className="w-7 h-7" />}
         </div>
 
         <h3 className="text-xl md:text-2xl font-semibold mb-4 tracking-tight">{service.title}</h3>
@@ -96,9 +104,9 @@ function ServiceCard({
           ))}
         </ul>
 
-        <div className="flex items-center gap-2 text-sm font-medium text-accent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-2 group-hover:translate-y-0">
+        <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground group-hover:text-accent transition-colors duration-500">
           Learn More
-          <ArrowUpRight className="w-4 h-4" />
+          <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </div>
       </div>
     </motion.div>
@@ -113,7 +121,7 @@ export function ServicesGrid({ services: serverServices }: ServicesGridProps) {
   const services = serverServices?.length ? serverServices : fallbackServices;
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 relative">
+    <section id="services" className="py-28 md:py-36 lg:py-44 relative">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="What We Do"
@@ -122,7 +130,7 @@ export function ServicesGrid({ services: serverServices }: ServicesGridProps) {
           subtitle="From concept to deployment, we deliver end-to-end solutions that transform your business and delight your users."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service, index) => (
             <ServiceCard
               key={service.id}

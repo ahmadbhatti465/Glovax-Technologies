@@ -34,10 +34,10 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="w-full max-w-sm bg-surface-raised border border-[#378C92]/20 rounded-xl p-8 shadow-2xl">
+      <div className="w-full max-w-sm bg-surface-raised border border-[#1EDAC6]/20 rounded-xl p-8 shadow-2xl">
         <div className="flex justify-center mb-6">
-          <div className="w-12 h-12 rounded-lg bg-[#378C92]/10 flex items-center justify-center">
-            <Shield className="w-6 h-6 text-[#378C92]" />
+          <div className="w-12 h-12 rounded-lg bg-[#1EDAC6]/10 flex items-center justify-center">
+            <Shield className="w-6 h-6 text-[#1EDAC6]" />
           </div>
         </div>
         <h1 className="text-xl font-bold text-center text-white mb-1">Admin Panel</h1>
@@ -50,7 +50,7 @@ export default function AdminLogin() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-card border border-[#378C92]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#378C92]"
+              className="w-full px-3 py-2 bg-card border border-[#1EDAC6]/20 rounded-lg text-white text-sm focus:outline-none focus:border-[#1EDAC6]"
               placeholder="Enter admin password"
               required
             />
@@ -59,7 +59,7 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-[#378C92] hover:bg-[#47AAB6] text-black font-semibold rounded-lg transition-colors disabled:opacity-50 text-sm"
+            className="w-full py-2 bg-[#1EDAC6] hover:bg-[#34F5E2] text-black font-semibold rounded-lg transition-colors disabled:opacity-50 text-sm"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>

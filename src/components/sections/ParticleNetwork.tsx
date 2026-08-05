@@ -71,7 +71,7 @@ export function ParticleNetwork() {
           const dist = Math.hypot(dx, dy);
           if (dist < LINK_DIST) {
             const alpha = (1 - dist / LINK_DIST) * LINK_ALPHA;
-            ctx.strokeStyle = `rgba(55, 140, 146, ${alpha.toFixed(3)})`;
+            ctx.strokeStyle = `rgba(30, 218, 198, ${alpha.toFixed(3)})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -83,7 +83,7 @@ export function ParticleNetwork() {
 
       // Dots — near-white, low opacity.
       for (const p of particles) {
-        ctx.fillStyle = `rgba(230, 244, 241, ${p.o.toFixed(3)})`;
+        ctx.fillStyle = `rgba(244, 250, 248, ${p.o.toFixed(3)})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();

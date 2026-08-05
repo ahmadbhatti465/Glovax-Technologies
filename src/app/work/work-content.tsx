@@ -4,11 +4,12 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { motion } from "framer-motion";
-import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { PortfolioItem } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { enrichWithCaseStudy } from "@/data/case-studies";
 
 interface FAQItem {
   question: string;
@@ -54,7 +55,11 @@ export default function WorkContent({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
-              <WorkCard key={project.id} project={project} index={index} />
+              <WorkCard
+                key={project.id}
+                project={enrichWithCaseStudy(project)}
+                index={index}
+              />
             ))}
           </div>
 
@@ -133,7 +138,22 @@ function WorkCard({
       </div>
 
       <h2 className="text-xl md:text-2xl font-semibold mb-2">{project.title}</h2>
-      <p className="text-sm text-muted-foreground mb-4">{project.client}</p>
+      <div className="flex flex-wrap items-center gap-2.5 mb-4">
+        <p className="text-sm text-muted-foreground">{project.client}</p>
+        {project.timeline && (
+          <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+            <span className="w-1 h-1 rounded-full bg-accent/40" />
+            <Clock className="w-3 h-3 text-accent/70" />
+            {project.timeline}
+          </span>
+        )}
+        {project.industry && (
+          <span className="inline-flex items-center text-xs text-muted-foreground">
+            <span className="w-1 h-1 rounded-full bg-accent/40 mr-2" />
+            {project.industry}
+          </span>
+        )}
+      </div>
       <p className="text-sm text-muted leading-relaxed mb-4">
         {project.description}
       </p>
@@ -166,40 +186,28 @@ function WorkCard({
         ))}
       </div>
 
-      {hasLink && (
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+      <div className="flex flex-wrap items-center gap-3 mt-5">
+        <Link
+          href={`/work/${project.id}`}
+          className="group/btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full gradient-cta text-accent-foreground text-sm font-semibold shadow-glow hover:shadow-glow-strong transition-all duration-300 active:scale-[0.98]"
         >
-          Visit Live Project
-          <ExternalLink className="w-3.5 h-3.5" />
-        </a>
-      )}
+          Read Case Study
+          <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+        </Link>
+        {hasLink && (
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-accent transition-colors"
+          >
+            Visit Website
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        )}
+      </div>
     </>
   );
-
-  if (hasLink) {
-    return (
-      <motion.a
-        href={project.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block cursor-pointer group"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{
-          duration: 0.6,
-          delay: index * 0.1,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-      >
-        {cardBody}
-      </motion.a>
-    );
-  }
 
   return (
     <motion.div
@@ -211,10 +219,11 @@ function WorkCard({
         delay: index * 0.1,
         ease: [0.22, 1, 0.36, 1],
       }}
+      className="h-full"
     >
-      <Link href={`/work#${project.id}`} className="block group">
+      <div className="group h-full rounded-2xl bg-surface-raised border border-neutral-border p-3 md:p-4 hover:border-teal/25 hover:shadow-card transition-all duration-500">
         {cardBody}
-      </Link>
+      </div>
     </motion.div>
   );
 }

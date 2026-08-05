@@ -4,18 +4,18 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   GLOVAX BRAND — DEEP TEAL + CREAM (techietribe-inspired)
+   GLOVAX BRAND — PREMIUM DEEP TEAL SYSTEM
    ------------------------------------------------------------
    Single source of truth. Components must reference these tokens
    (via Tailwind utilities) — never hardcode hex values inline.
 
    USAGE RULES
-   • Teal   — primary CTAs (deep→bright gradient), highlights,
-              hover states, key stats/numbers, links, active states.
-              Never a large background fill; CTAs carry dark text.
-   • Cream  — headlines & body text on deep-green backgrounds.
-   • Mint   — AI/ML service accent + success indicators.
-   • Amber  — Digital Marketing service accent + warnings.
+   • Teal   — primary CTAs, highlights, links, active states,
+              key stats/numbers. CTA fills carry dark text.
+   • Cream/White — headlines & body text on deep-green backgrounds.
+   • Azure  — reserved accent (AI badge, rare highlights). Use
+              sparingly — the brand is teal, not blue.
+   • Mint/success — success indicators, AI/ML service accent.
    • Teal is never used at full saturation over large fills —
               separate with deep-green space or reduced opacity.
    ============================================================ */
@@ -34,8 +34,10 @@
   --color-teal-deep: var(--teal-deep);
   --color-teal-muted: var(--teal-muted);
   --color-teal-glow: var(--teal-glow);
+  --color-azure: var(--azure);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-muted-dim: var(--muted-dim);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-foreground: var(--accent-foreground);
@@ -54,43 +56,56 @@
   --color-surface-light: var(--neutral-light);
   --color-neutral-border: var(--neutral-border);
   --color-whatsapp: var(--brand-whatsapp);
+
   --font-sans: var(--font-body);
   --font-mono: var(--font-body);
   --font-heading: var(--font-heading);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Soft premium shadows */
+  --shadow-card: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+  --shadow-card-lg: 0 40px 90px -30px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 40px rgba(30, 218, 198, 0.10);
+  --shadow-glow-strong: 0 0 60px rgba(30, 218, 198, 0.18);
+  --shadow-glow-azure: 0 0 40px rgba(57, 167, 255, 0.14);
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
   /* ==================== RAW TOKENS ==================== */
 
-  /* Backgrounds — near-black teal-tinted scale (techietribe-inspired) */
-  --brand-bg:        #060C0B;
-  --brand-bg-raise:  #0B1412;
-  --brand-bg-hi:     #101B19;
+  /* Backgrounds — near-black teal-tinted scale (premium system) */
+  --brand-bg:        #08110F;
+  --brand-bg-raise:  #0F1A18;
+  --brand-bg-hi:     #142320;
 
   /* Accent — Teal (CTAs, highlights) */
-  --teal:            #378C92;
-  --teal-bright:     #47AAB6;
-  --teal-deep:       #2D7A85;
-  --teal-muted:      rgba(55, 140, 146, 0.18); /* subtle borders/dividers ONLY */
-  --teal-glow:       rgba(71, 170, 182, 0.10); /* hover glows / radial accents */
+  --teal:            #1EDAC6;
+  --teal-bright:     #34F5E2;
+  --teal-deep:       #0FA79B;
+  --teal-muted:      rgba(30, 218, 198, 0.14); /* subtle borders/dividers ONLY */
+  --teal-glow:       rgba(30, 218, 198, 0.12); /* hover glows / radial accents */
+
+  /* Reserved accent — Azure (AI badge, sparse highlights) */
+  --azure:           #39A7FF;
 
   /* Text */
-  --text-primary:    #F2F3EB;   /* cream — headlines, body copy */
-  --text-muted:      #93AAA3;   /* sage-gray secondary text */
-  --text-on-teal:    #041E18;   /* text on teal buttons/backgrounds */
+  --text-primary:    #FFFFFF;   /* pure white — headlines, body copy */
+  --text-muted:      #AAB8B4;   /* sage secondary text */
+  --text-muted-dim:  #6D7C78;   /* faintest text — meta, placeholders */
+  --text-on-teal:    #05211B;   /* dark text on teal buttons/backgrounds */
 
   /* Neutrals */
   --neutral-light:   #F7F8F3;   /* light cream surface — sparingly on dark site */
-  --neutral-border:  #1A2E2A;   /* card/border neutral on deep green */
+  --neutral-border:  #1D3935;   /* card/border on deep green */
 
   /* Status */
-  --status-success:  #10B981;
+  --status-success:  #34D399;
   --status-warning:  #F59E0B;
   --status-error:    #EF4444;
 
@@ -98,7 +113,8 @@
   --brand-whatsapp:  #25D366;
 
   /* Brand gradient — near-black → teal (hero, banners) */
-  --gradient-brand:  linear-gradient(135deg, #060C0B 0%, #378C92 100%);
+  --gradient-brand:  linear-gradient(135deg, #08110F 0%, #0FA79B 100%);
+  --gradient-cta:    linear-gradient(135deg, #0FA79B 0%, #1EDAC6 100%);
 
   /* ==================== SEMANTIC MAPPINGS ==================== */
 
@@ -143,6 +159,7 @@
   /* ==================== THEME MAPPINGS ==================== */
   --muted:                var(--text-muted);
   --muted-foreground:     var(--text-muted);
+  --muted-dim:            var(--text-muted-dim);
   --border:               var(--border-default);
   --input:                var(--border-default);
   --ring:                 var(--teal);
@@ -154,7 +171,7 @@
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body:    'Inter', system-ui, sans-serif;
 
-  /* === TYPE SCALE === */
+  /* === TYPE SCALE (fluid where it matters) === */
   --text-xs:   0.75rem;    /* 12px — labels, tags */
   --text-sm:   0.875rem;   /* 14px — captions, meta */
   --text-base: 1rem;       /* 16px — body text */
@@ -169,29 +186,38 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 110px; /* offset for the fixed navbar on anchor jumps */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-body);
-  font-feature-settings: "rlig" 1, "calt" 1;
+  font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 ::selection {
-  background-color: color-mix(in srgb, var(--teal) 30%, transparent);
+  background-color: color-mix(in srgb, var(--teal) 32%, transparent);
   color: #ffffff;
 }
 
 /* ========== BRAND SCROLLBAR ========== */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -199,8 +225,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--teal-muted), var(--teal-deep));
-  border-radius: 3px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--teal) 30%, transparent), var(--teal-deep));
+  border-radius: 4px;
+  border: 2px solid var(--background);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -214,7 +241,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 36s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
 /* ========== MESH GRADIENT BACKGROUND ========== */
@@ -234,7 +265,7 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.02;
+  opacity: 0.03;
   pointer-events: none;
   z-index: 1;
 }
@@ -253,6 +284,10 @@ h1, h2, h3, h4, h5, h6 {
 /* ========== BRAND GRADIENT (deep green → teal) ========== */
 .gradient-brand {
   background-image: var(--gradient-brand);
+}
+
+.gradient-cta {
+  background-image: var(--gradient-cta);
 }
 
 /* ========== GRADIENT TEXT ========== */
@@ -282,7 +317,7 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 4s linear infinite;
+  animation: shimmer 5s linear infinite;
 }
 
 /* ========== AMBIENT GLOW ORB ========== */
@@ -297,19 +332,52 @@ h1, h2, h3, h4, h5, h6 {
   animation: ambient-float 15s ease-in-out infinite;
 }
 
+/* ========== ANIMATED MESH GRADIENT (hero "wow", very subtle) ========== */
+@keyframes mesh-rotate {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(14deg) scale(1.06); }
+}
+
+.mesh-gradient {
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(30, 218, 198, 0.12) 0deg,
+    rgba(57, 167, 255, 0.06) 90deg,
+    rgba(30, 218, 198, 0.02) 180deg,
+    rgba(57, 167, 255, 0.10) 270deg,
+    rgba(30, 218, 198, 0.12) 360deg
+  );
+  animation: mesh-rotate 22s ease-in-out infinite;
+}
+
+/* ========== GENTLE VERTICAL FLOAT (floating UI cards) ========== */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.float-y {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+.float-y-delay {
+  animation: float-y 7s ease-in-out infinite;
+  animation-delay: -2.5s;
+}
+
 /* ========== GLASS MORPHISM ========== */
 .glass {
-  background: rgba(55, 140, 146, 0.05);
+  background: rgba(30, 218, 198, 0.05);
   backdrop-filter: blur(20px) saturate(1.2);
   -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid rgba(55, 140, 146, 0.12);
+  border: 1px solid rgba(30, 218, 198, 0.12);
 }
 
 .glass-strong {
-  background: rgba(55, 140, 146, 0.08);
+  background: rgba(30, 218, 198, 0.08);
   backdrop-filter: blur(40px) saturate(1.5);
   -webkit-backdrop-filter: blur(40px) saturate(1.5);
-  border: 1px solid rgba(55, 140, 146, 0.18);
+  border: 1px solid rgba(30, 218, 198, 0.18);
 }
 
 /* ========== SPOTLIGHT HOVER CARD ========== */
@@ -337,6 +405,60 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
+/* ========== GRADIENT BORDER CARD (premium hover ring) ========== */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(30, 218, 198, 0.55) 0%,
+    rgba(30, 218, 198, 0.06) 42%,
+    rgba(57, 167, 255, 0.25) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+}
+
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
+/* ========== DIAGONAL SHEEN (card shine on hover) ========== */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shine::after {
+  content: "";
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 150%;
+  height: 300%;
+  background: linear-gradient(115deg, transparent 42%, rgba(255, 255, 255, 0.045) 50%, transparent 58%);
+  transform: rotate(8deg) translateX(-120%);
+  transition: transform 0.9s ease;
+  pointer-events: none;
+}
+
+.card-shine:hover::after {
+  transform: rotate(8deg) translateX(120%);
+}
+
 /* ========== TEAL BORDER GLOW ========== */
 @keyframes border-glow {
   0%, 100% { border-color: var(--teal-muted); box-shadow: 0 0 20px var(--teal-glow); }
@@ -351,9 +473,11 @@ h1, h2, h3, h4, h5, h6 {
 /* ========== SUBTLE GRID PATTERN ========== */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(55,140,146,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(55,140,146,0.035) 1px, transparent 1px);
-  background-size: 60px 60px;
+    linear-gradient(rgba(30, 218, 198, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 218, 198, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, black 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, black 30%, transparent 75%);
 }
 
 /* ========== PARTICLE FLOAT ========== */
@@ -374,16 +498,104 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulse-glow 3s ease-in-out infinite;
 }
 
+/* ========== TYPING DOTS (AI copilot indicator) ========== */
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+.typing-dot {
+  animation: typing-bounce 1.2s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
 /* ========== REVEAL ANIMATION ========== */
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ========== PAGE ENTER (template transition) ========== */
+/* Opacity-only: a transform here would create a containing block and break
+   position:fixed chrome (Navbar/BackToTop) inside the template wrapper. */
+@keyframes page-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.page-enter {
+  animation: page-enter 0.45s ease-out both;
+}
+
+/* ========== CURSOR GLOW ========== */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 520px;
+  height: 520px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(30, 218, 198, 0.055) 0%,
+    rgba(57, 167, 255, 0.035) 35%,
+    transparent 70%
+  );
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: 1;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
+}
+
+/* ========== SCROLL PROGRESS BAR ========== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--teal-deep), var(--teal), var(--teal-bright));
+  box-shadow: 0 0 12px rgba(30, 218, 198, 0.5);
+}
+
+/* ========== NO SCROLLBAR ========== */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ========== LINK UNDERLINE (animated grow on hover) ========== */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
 /* ========== FOCUS VISIBLE ========== */
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 /* ========== REDUCED MOTION ========== */
@@ -403,4 +615,7 @@ h1, h2, h3, h4, h5, h6 {
   .teal-shimmer { animation: none; }
   .teal-border-glow { animation: none; }
   .pulse-glow { animation: none; }
+  .float-y, .float-y-delay { animation: none; }
+  .page-enter { animation: none; }
+  .cursor-glow { display: none; }
 }

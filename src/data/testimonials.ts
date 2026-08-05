@@ -1,5 +1,7 @@
 import { Testimonial } from "@/types";
 
+// Fallback demo copy shown when the CMS has no testimonials. The CMS/admin
+// panel is the source of truth for real, attributed client quotes.
 export const testimonials: Testimonial[] = [
   {
     id: "1",
@@ -9,6 +11,9 @@ export const testimonials: Testimonial[] = [
     role: "CEO",
     company: "TechStart Inc.",
     rating: 5,
+    country: "United Kingdom",
+    countryCode: "GB",
+    projectType: "SaaS Platform",
   },
   {
     id: "2",
@@ -18,6 +23,9 @@ export const testimonials: Testimonial[] = [
     role: "CTO",
     company: "InnovateLabs",
     rating: 5,
+    country: "United States",
+    countryCode: "US",
+    projectType: "Mobile App",
   },
   {
     id: "3",
@@ -27,6 +35,9 @@ export const testimonials: Testimonial[] = [
     role: "Marketing Director",
     company: "GrowthCo",
     rating: 5,
+    country: "United States",
+    countryCode: "US",
+    projectType: "AI / Marketing Engine",
   },
   {
     id: "4",
@@ -36,6 +47,9 @@ export const testimonials: Testimonial[] = [
     role: "VP of Engineering",
     company: "GlobalTech",
     rating: 5,
+    country: "Singapore",
+    countryCode: "SG",
+    projectType: "Cloud Migration",
   },
   {
     id: "5",
@@ -45,5 +59,8 @@ export const testimonials: Testimonial[] = [
     role: "Founder",
     company: "DigitalFirst",
     rating: 5,
+    country: "United Kingdom",
+    countryCode: "GB",
+    projectType: "Web Redesign",
   },
 ];

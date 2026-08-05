@@ -17,6 +17,20 @@ export interface PortfolioItem {
   technologies: string[];
   image?: string;
   featured: boolean;
+  /** Case-study enrichment (optional — merged from the case-study data file). */
+  industry?: string;
+  timeline?: string;
+  challenge?: string;
+  solution?: string;
+  process?: string[];
+  testimonial?: {
+    quote: string;
+    author: string;
+    role: string;
+    company: string;
+    rating?: number;
+  };
+  screenshots?: string[];
 }
 
 export interface Testimonial {
@@ -26,6 +40,14 @@ export interface Testimonial {
   role: string;
   company: string;
   rating: number;
+  /** Optional trust/social-proof fields — surfaced when present. */
+  country?: string;
+  countryCode?: string;
+  linkedin?: string;
+  avatar?: string;
+  companyLogo?: string;
+  /** Type of project delivered (e.g. "SaaS Platform", "Mobile App"). */
+  projectType?: string;
 }
 
 export interface TeamMember {

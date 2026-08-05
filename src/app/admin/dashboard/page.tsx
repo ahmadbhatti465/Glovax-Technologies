@@ -15,13 +15,13 @@ import {
 } from "lucide-react";
 
 const cards = [
-  { label: "Services", href: "/admin/dashboard/services", icon: Rocket, color: "#378C92" },
-  { label: "Portfolio", href: "/admin/dashboard/portfolio", icon: FolderOpen, color: "#378C92" },
-  { label: "Testimonials", href: "/admin/dashboard/testimonials", icon: MessageSquare, color: "#378C92" },
-  { label: "Team", href: "/admin/dashboard/team", icon: Users, color: "#378C92" },
-  { label: "Blog", href: "/admin/dashboard/blog", icon: Newspaper, color: "#378C92" },
-  { label: "Careers", href: "/admin/dashboard/careers", icon: Briefcase, color: "#378C92" },
-  { label: "Settings", href: "/admin/dashboard/settings", icon: Settings, color: "#378C92" },
+  { label: "Services", href: "/admin/dashboard/services", icon: Rocket, color: "#1EDAC6" },
+  { label: "Portfolio", href: "/admin/dashboard/portfolio", icon: FolderOpen, color: "#1EDAC6" },
+  { label: "Testimonials", href: "/admin/dashboard/testimonials", icon: MessageSquare, color: "#1EDAC6" },
+  { label: "Team", href: "/admin/dashboard/team", icon: Users, color: "#1EDAC6" },
+  { label: "Blog", href: "/admin/dashboard/blog", icon: Newspaper, color: "#1EDAC6" },
+  { label: "Careers", href: "/admin/dashboard/careers", icon: Briefcase, color: "#1EDAC6" },
+  { label: "Settings", href: "/admin/dashboard/settings", icon: Settings, color: "#1EDAC6" },
 ];
 
 export default function AdminDashboard() {
@@ -30,10 +30,10 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background text-white">
-      <nav className="border-b border-[#378C92]/20 bg-surface-raised">
+      <nav className="border-b border-[#1EDAC6]/20 bg-surface-raised">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <LayoutDashboard className="w-5 h-5 text-[#378C92]" />
+            <LayoutDashboard className="w-5 h-5 text-[#1EDAC6]" />
             <span className="font-semibold">Glovax Admin</span>
           </div>
           <button
@@ -58,7 +58,7 @@ export default function AdminDashboard() {
             <Link
               key={label}
               href={href}
-              className="group bg-surface-raised border border-[#378C92]/10 hover:border-[#378C92]/40 rounded-xl p-6 transition-all"
+              className="group bg-surface-raised border border-[#1EDAC6]/10 hover:border-[#1EDAC6]/40 rounded-xl p-6 transition-all"
             >
               <div className="flex items-center gap-4">
                 <div
@@ -68,7 +68,7 @@ export default function AdminDashboard() {
                   <Icon className="w-5 h-5" style={{ color }} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white group-hover:text-[#378C92] transition-colors">
+                  <h3 className="font-semibold text-white group-hover:text-[#1EDAC6] transition-colors">
                     {label}
                   </h3>
                   <p className="text-xs text-gray-500 mt-0.5">Manage {label.toLowerCase()}</p>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 interface MagneticButtonProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ interface MagneticButtonProps {
   variant?: "primary" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
   type?: "button" | "submit";
+  withArrow?: boolean;
 }
 
 export function MagneticButton({
@@ -22,6 +24,7 @@ export function MagneticButton({
   variant = "primary",
   size = "md",
   type = "button",
+  withArrow = false,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -34,9 +37,9 @@ export function MagneticButton({
 
   const variantClasses = {
     primary:
-      "bg-gradient-to-r from-teal-deep to-teal text-accent-foreground font-semibold shadow-[0_0_25px_var(--teal-glow)] hover:shadow-[0_0_35px_var(--teal-glow)] hover:brightness-110",
+      "gradient-cta text-accent-foreground font-semibold shadow-glow hover:shadow-glow-strong active:scale-[0.98]",
     outline:
-      "border border-teal-muted text-foreground hover:border-teal/50 hover:text-accent bg-transparent hover:shadow-[0_0_20px_var(--teal-glow)]",
+      "border border-teal-muted text-foreground hover:border-teal/50 hover:text-accent bg-transparent hover:shadow-glow active:scale-[0.98]",
     ghost: "text-foreground hover:text-accent bg-transparent",
   };
 
@@ -59,21 +62,36 @@ export function MagneticButton({
   };
 
   const classes = `
-    relative inline-flex items-center justify-center gap-2
-    rounded-full transition-all duration-300
+    group relative inline-flex items-center justify-center gap-2
+    rounded-full transition-all duration-300 overflow-hidden
     ${sizeClasses[size]}
     ${variantClasses[variant]}
     ${className}
   `;
 
+  // Soft sheen for the primary fill — keeps the button feeling alive on hover.
+  const sheen =
+    variant === "primary" ? (
+      <span className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(255,255,255,0.28),transparent_65%)] opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
+    ) : null;
+
   const content = (
-    <motion.span
-      className="relative z-10 inline-flex items-center gap-2"
-      animate={{ x: position.x, y: position.y }}
-      transition={{ type: "spring", stiffness: 350, damping: 15, mass: 0.5 }}
-    >
-      {children}
-    </motion.span>
+    <>
+      {sheen}
+      <motion.span
+        className="relative z-10 inline-flex items-center gap-2"
+        animate={{ x: position.x, y: position.y }}
+        transition={{ type: "spring", stiffness: 350, damping: 15, mass: 0.5 }}
+      >
+        {children}
+        {withArrow && (
+          <ArrowUpRight
+            className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            aria-hidden
+          />
+        )}
+      </motion.span>
+    </>
   );
 
   if (href) {

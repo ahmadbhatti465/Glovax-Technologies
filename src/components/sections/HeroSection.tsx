@@ -6,11 +6,16 @@ import { motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { MagneticButton } from "@/components/shared/MagneticButton";
+import { HeroDashboardMockup } from "@/components/sections/HeroDashboardMockup";
 import { siteConfig } from "@/lib/constants";
 
-// Lazy-load the particle network — decorative and not needed for initial render
+// Decorative backgrounds — lazy-loaded, not needed for initial render
 const ParticleNetwork = dynamic(
   () => import("./ParticleNetwork").then((mod) => ({ default: mod.ParticleNetwork })),
+  { ssr: false }
+);
+const FloatingParticles = dynamic(
+  () => import("./HeroParticles").then((mod) => ({ default: mod.FloatingParticles })),
   { ssr: false }
 );
 
@@ -47,12 +52,9 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
+    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden noise-overlay">
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 grid-pattern z-[1]" />
-
-      {/* Brand gradient layer (deep green → teal) */}
-      <div className="absolute inset-0 gradient-brand opacity-30 z-0" />
 
       {/* Ambient orbs — simplified, no heavy blur on initial paint */}
       <div className="absolute inset-0 overflow-hidden z-0">
@@ -75,29 +77,30 @@ export function HeroSection() {
         />
       </div>
 
-      {/* Depth vignette — darkens toward the bottom so the hero melts into the page */}
+      {/* Depth vignette — melts into the page */}
       <div
         aria-hidden
         className="absolute inset-0 z-[1] bg-gradient-to-b from-transparent via-transparent to-background"
       />
 
-      {/* Top light accent line (techietribe early-access shimmer line) */}
+      {/* Top light accent line */}
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
+        className="absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"
       />
 
-      {/* Particle constellation network — lazy loaded, not critical */}
+      {/* Interactive backgrounds — particle constellation + minimal floaters */}
       <ParticleNetwork />
+      <FloatingParticles />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 py-32">
-        <div className="max-w-5xl">
-          {/* Eyebrow — can animate since it's not the LCP element */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 pt-32 md:pt-40 pb-28 md:pb-36">
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mb-8"
+            className="mb-8 flex justify-center"
           >
             <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass text-xs md:text-sm font-medium text-muted tracking-wide">
               <span className="relative flex h-2.5 w-2.5">
@@ -109,7 +112,7 @@ export function HeroSection() {
           </motion.div>
 
           {/* Main Heading — VISIBLE IMMEDIATELY (no opacity:0, no delay) */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-bold tracking-tight leading-[1.08]">
+          <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-[4.25rem] xl:text-[4.75rem] font-bold tracking-tight leading-[1.04]">
             We turn your idea into an
             <br />
             <span className="teal-shimmer">AI-powered product</span> that scales.
@@ -120,25 +123,25 @@ export function HeroSection() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8 w-24 h-px origin-left"
+            className="mx-auto mt-8 w-24 h-px origin-center"
             style={{
-              background: "linear-gradient(90deg, var(--teal), transparent)",
+              background: "linear-gradient(90deg, transparent, var(--teal), transparent)",
             }}
           />
 
-          {/* Subtitle — LCP ELEMENT — VISIBLE IMMEDIATELY (no animation delay) */}
-          <p className="mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-muted max-w-2xl leading-relaxed">
-            A Lahore-based software house and AI/ML agency trusted by UK &amp; US
-            businesses. We turn bold ideas into AI-powered web, mobile, and SaaS
-            products that drive real revenue.
+          {/* Subtitle — LCP ELEMENT — VISIBLE IMMEDIATELY */}
+          <p className="mx-auto mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-muted max-w-2xl leading-relaxed">
+            A senior engineering team in Lahore, trusted by UK &amp; US businesses.
+            We ship AI-powered web, mobile, and SaaS products in weeks — with
+            transparent communication and long-term support.
           </p>
 
-          {/* CTA Buttons — can animate since they're below LCP */}
+          {/* CTA Buttons — clear hierarchy: gradient primary, outlined secondary */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-10 md:mt-12 flex flex-wrap items-center gap-4"
+            className="mt-10 md:mt-12 flex flex-wrap items-center justify-center gap-4"
           >
             <MagneticButton href={siteConfig.calendarUrl} variant="primary" size="lg">
               Book a Free Call
@@ -148,18 +151,36 @@ export function HeroSection() {
             </MagneticButton>
           </motion.div>
 
-          {/* Link-style email capture — underline input, no box */}
+          {/* Trust microcopy */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-12 md:mt-14 max-w-xl"
+            className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 text-sm text-muted-foreground"
+          >
+            <span className="inline-flex items-center gap-2">
+              <Check className="w-4 h-4 text-accent" /> UK/US timezone overlap
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <Check className="w-4 h-4 text-accent" /> NDA on request
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <Check className="w-4 h-4 text-accent" /> 24-hour response
+            </span>
+          </motion.div>
+
+          {/* Email capture — compact, no box */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="mt-10 max-w-xl mx-auto"
           >
             <label
               htmlFor="hero-email"
               className="block text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-2"
             >
-              Email address
+              Get a free, no-obligation estimate
             </label>
             <form
               onSubmit={handleSubmit}
@@ -188,43 +209,34 @@ export function HeroSection() {
               Free, no obligation — we reply within {siteConfig.responseTime}.
             </p>
           </motion.div>
-
-          {/* Trust microcopy */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2.5 text-sm text-muted-foreground"
-          >
-            <span className="inline-flex items-center gap-2">
-              <Check className="w-4 h-4 text-accent" /> UK/US timezone overlap
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <Check className="w-4 h-4 text-accent" /> NDA on request
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <Check className="w-4 h-4 text-accent" /> 24-hour response
-            </span>
-          </motion.div>
         </div>
 
-        {/* Scroll indicator — deferred animation */}
+        {/* Product preview — the centerpiece */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
         >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-3 text-muted-foreground"
-          >
-            <span className="text-xs tracking-[0.25em] uppercase font-medium">Scroll</span>
-            <div className="w-px h-10 bg-gradient-to-b from-muted-foreground/50 to-transparent" />
-          </motion.div>
+          <HeroDashboardMockup />
         </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-3 text-muted-foreground"
+        >
+          <span className="text-xs tracking-[0.25em] uppercase font-medium">Scroll</span>
+          <div className="w-px h-10 bg-gradient-to-b from-muted-foreground/50 to-transparent" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
