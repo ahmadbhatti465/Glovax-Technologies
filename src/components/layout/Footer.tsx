@@ -155,9 +155,9 @@ export function Footer() {
           >
             <Link href="/" className="flex items-center group">
               <Image
-                src="/images/glovax-logo.svg"
+                src="/images/glovax-logo.png"
                 alt="Glovax Technologies"
-                width={160}
+                width={184}
                 height={56}
                 className="h-10 w-auto transition-all duration-500 group-hover:drop-shadow-[0_0_8px_var(--teal-glow)]"
               />

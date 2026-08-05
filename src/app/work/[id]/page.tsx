@@ -101,7 +101,7 @@ export default async function CaseStudyPage({
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: `${siteConfig.url}${siteConfig.ogImage}`,
+        url: `${siteConfig.url}${siteConfig.logo}`,
       },
     },
     mainEntityOfPage: {

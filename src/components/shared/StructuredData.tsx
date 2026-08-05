@@ -22,7 +22,7 @@ export function StructuredData() {
     "@type": ["Organization", "ProfessionalService", "LocalBusiness"],
     name: siteConfig.name,
     url: siteConfig.url,
-    logo: absoluteUrl(siteConfig.ogImage),
+    logo: absoluteUrl(siteConfig.logo),
     image: absoluteUrl(siteConfig.ogImage),
     email: siteConfig.email,
     telephone: siteConfig.phone,
@@ -79,7 +79,7 @@ export function StructuredData() {
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl(siteConfig.ogImage),
+        url: absoluteUrl(siteConfig.logo),
       },
     },
     potentialAction: {
@@ -239,7 +239,7 @@ export function JobPostingJsonLd({ positions }: { positions: JobPosition[] }) {
       "@type": "Organization",
       name: siteConfig.name,
       sameAs: siteConfig.url,
-      logo: absoluteUrl(siteConfig.ogImage),
+      logo: absoluteUrl(siteConfig.logo),
     },
     jobLocation: {
       "@type": "Place",
@@ -310,7 +310,7 @@ export function ArticleJsonLd({ post, url }: { post: BlogPost; url: string }) {
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: absoluteUrl(siteConfig.ogImage),
+        url: absoluteUrl(siteConfig.logo),
       },
     },
     mainEntityOfPage: {

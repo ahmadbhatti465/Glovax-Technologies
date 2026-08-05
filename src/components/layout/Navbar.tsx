@@ -132,9 +132,9 @@ export function Navbar() {
               {/* Logo */}
               <Link href="/" className="flex items-center group" aria-label="Glovax Technologies — home">
                 <Image
-                  src="/images/glovax-logo.svg"
+                  src="/images/glovax-logo.png"
                   alt="Glovax Technologies"
-                  width={140}
+                  width={161}
                   height={49}
                   priority
                   className={`w-auto transition-all duration-500 group-hover:drop-shadow-[0_0_10px_var(--teal-glow)] ${
@@ -222,9 +222,9 @@ export function Navbar() {
 
               <div className="flex items-center justify-between h-20 px-6">
                 <Image
-                  src="/images/glovax-logo.svg"
+                  src="/images/glovax-logo.png"
                   alt="Glovax Technologies"
-                  width={120}
+                  width={138}
                   height={42}
                   className="h-8 w-auto"
                 />

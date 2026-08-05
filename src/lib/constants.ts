@@ -4,7 +4,8 @@ export const siteConfig = {
   description:
     "Glovax Technologies is a world-class software house and digital agency delivering AI-powered web development, mobile apps, cloud solutions, and digital marketing that drives real business growth.",
   url: "https://www.glovaxtechnologies.com",
-  ogImage: "/images/glovax_technologies_logo.jpeg",
+  logo: "/images/glovax-logo.png",
+  ogImage: "/images/glovax-og.png",
   email: "glovaxtechnologies@gmail.com",
   phone: "+923254255480",
   address: "31 K, DHA Phase 5",

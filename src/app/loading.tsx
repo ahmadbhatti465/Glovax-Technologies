@@ -10,9 +10,9 @@ export default function Loading() {
       <div className="relative">
         <div className="absolute inset-0 rounded-2xl bg-teal/20 blur-2xl animate-pulse" />
         <Image
-          src="/images/glovax-logo.svg"
+          src="/images/glovax-logo.png"
           alt="Glovax Technologies"
-          width={140}
+          width={161}
           height={49}
           priority
           className="relative w-36 h-auto opacity-90"

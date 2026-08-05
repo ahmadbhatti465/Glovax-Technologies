@@ -12,8 +12,13 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#18D6C3",
     icons: [
       {
-        src: "/icon.png",
-        sizes: "any",
+        src: "/images/glovax-icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "/images/glovax-icon-512.png",
+        sizes: "512x512",
         type: "image/png",
       },
     ],

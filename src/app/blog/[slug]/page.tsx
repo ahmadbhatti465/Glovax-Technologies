@@ -297,7 +297,7 @@ export default async function BlogPostPage({
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: `${siteConfig.url}/images/glovax_technologies_logo.jpeg`,
+        url: `${siteConfig.url}${siteConfig.logo}`,
       },
     },
     mainEntityOfPage: {
