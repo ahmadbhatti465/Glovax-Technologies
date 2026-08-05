@@ -143,7 +143,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-10 md:mt-12 flex flex-wrap items-center justify-center gap-4"
           >
-            <MagneticButton href={siteConfig.calendarUrl} variant="primary" size="lg">
+            <MagneticButton href="/contact" variant="primary" size="lg">
               Book a Free Call
             </MagneticButton>
             <MagneticButton href="/work" variant="outline" size="lg">

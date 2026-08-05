@@ -31,7 +31,7 @@ const defaultContent: Record<string, unknown> = {
     subtitle: "Let's discuss your project and explore how Glovax Technologies can help you achieve your business goals with cutting-edge technology.",
     buttons: [
       { label: "Start a Project", href: "/contact", variant: "primary" },
-      { label: "Book a Call", href: "https://calendly.com/glovaxtechnologies/30min", variant: "outline" },
+      { label: "Book a Call", href: "/contact", variant: "outline" },
       { label: "Explore Services", href: "/services", variant: "ghost" },
     ],
   },

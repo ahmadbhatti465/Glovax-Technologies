@@ -279,7 +279,7 @@ export default async function ListingPage({
                 <MagneticButton href="/contact" variant="primary" size="lg">
                   Start a Project
                 </MagneticButton>
-                <MagneticButton href={siteConfig.calendarUrl} variant="outline" size="lg">
+                <MagneticButton href="/contact" variant="outline" size="lg">
                   Book a Call
                 </MagneticButton>
               </div>

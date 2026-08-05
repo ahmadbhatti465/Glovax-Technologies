@@ -208,9 +208,7 @@ export default function ContactContent() {
                       calendar and let&apos;s discuss your project live.
                     </p>
                     <a
-                      href={siteConfig.calendarUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="#book"
                       className="inline-flex items-center gap-2 w-full justify-center px-5 py-3 rounded-full gradient-cta text-accent-foreground font-semibold text-sm shadow-glow hover:shadow-glow-strong hover:brightness-110 transition-all"
                     >
                       Schedule Now
@@ -265,7 +263,7 @@ export default function ContactContent() {
           </div>
 
           {/* Calendly inline booking embed */}
-          <div className="mt-16 md:mt-24">
+          <div id="book" className="mt-16 md:mt-24">
             <div className="max-w-4xl">
               <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
                 Prefer to book a slot <span className="teal-shimmer">right away?</span>

@@ -234,9 +234,7 @@ export function Footer() {
                 {siteConfig.address}
               </p>
               <a
-                href={siteConfig.calendarUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/contact"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-muted text-accent hover:border-teal/40 hover:shadow-glow transition-all duration-300"
               >
                 <Calendar className="w-4 h-4" />

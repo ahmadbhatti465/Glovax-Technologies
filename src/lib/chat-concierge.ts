@@ -12,7 +12,7 @@ export interface ChatEntry {
 
 const fmt = (tpl: string) =>
   tpl
-    .replace("{calendar}", siteConfig.calendarUrl)
+    .replace("{calendar}", `${siteConfig.url}/contact`)
     .replace("{whatsapp}", siteConfig.social.whatsapp)
     .replace("{email}", siteConfig.email)
     .replace("{phone}", siteConfig.phone)

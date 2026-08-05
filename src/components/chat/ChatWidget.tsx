@@ -70,8 +70,8 @@ export function ChatWidget() {
           {
             role: "bot",
             content:
-              "Thanks! Our team will reach out within 24 hours. Meanwhile, you can also book a call directly: " +
-              siteConfig.calendarUrl,
+              "Thanks! Our team will reach out within 24 hours. Meanwhile, you can also reach us through our contact page: " +
+              `${siteConfig.url}/contact`,
           },
         ]);
       }, 700);
@@ -89,7 +89,7 @@ export function ChatWidget() {
           ...m,
           {
             role: "bot",
-            content: `I've noted ${email} — want our team to reach out? Reply "yes" and I'll send it through. Or book a free call: ${siteConfig.calendarUrl}`,
+            content: `I've noted ${email} — want our team to reach out? Reply "yes" and I'll send it through. Or reach us on our contact page: ${siteConfig.url}/contact`,
           },
         ]);
       } else {

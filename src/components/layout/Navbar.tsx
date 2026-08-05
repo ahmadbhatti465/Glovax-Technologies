@@ -159,10 +159,8 @@ export function Navbar() {
               {/* CTA Button */}
               <div className="hidden lg:block">
                 <a
-                  href={siteConfig.calendarUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Book a call with Glovax Technologies (opens in a new tab)"
+                  href="/contact"
+                  aria-label="Book a call with Glovax Technologies"
                   className="group relative inline-flex items-center gap-2 pl-5 pr-2 py-1.5 text-sm font-semibold rounded-full overflow-hidden gradient-cta text-accent-foreground shadow-glow hover:shadow-glow-strong transition-shadow duration-300"
                 >
                   <span className="relative z-10">Book a Call</span>
@@ -268,9 +266,7 @@ export function Navbar() {
 
               <div className="p-8 space-y-3">
                 <a
-                  href={siteConfig.calendarUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/contact"
                   onClick={closeMobile}
                   className="group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold rounded-full gradient-cta text-accent-foreground shadow-glow"
                 >

@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { siteConfig } from "@/lib/constants";
 import { PortfolioItem } from "@/types";
 
 interface CaseStudyContentProps {
@@ -107,7 +106,7 @@ export default function CaseStudyContent({ project, related }: CaseStudyContentP
                   </MagneticButton>
                 )}
                 <MagneticButton
-                  href={siteConfig.calendarUrl}
+                  href="/contact"
                   variant={hasLink ? "outline" : "primary"}
                   size="lg"
                 >
@@ -334,7 +333,7 @@ export default function CaseStudyContent({ project, related }: CaseStudyContentP
                   Tell us about your idea — we'll scope it on a free 30-minute call, no obligation.
                 </p>
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                  <MagneticButton href={siteConfig.calendarUrl} variant="primary" size="lg" withArrow>
+                  <MagneticButton href="/contact" variant="primary" size="lg" withArrow>
                     Book a Free Call
                   </MagneticButton>
                   <MagneticButton href="/work" variant="outline" size="lg">

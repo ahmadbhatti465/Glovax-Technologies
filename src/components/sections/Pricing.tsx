@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MagneticButton } from "@/components/shared/MagneticButton";
-import { siteConfig } from "@/lib/constants";
 import { Check, Sparkles, ShieldCheck, CalendarCheck, FileSignature, BadgeCheck } from "lucide-react";
 
 const tiers = [
@@ -148,7 +147,7 @@ export function Pricing() {
               </ul>
 
               <MagneticButton
-                href={siteConfig.calendarUrl}
+                href="/contact"
                 variant={tier.highlighted ? "primary" : "outline"}
                 size="md"
                 withArrow
@@ -211,9 +210,7 @@ export function Pricing() {
         <p className="mt-10 text-center text-sm text-muted-foreground">
           Not sure which fits?{" "}
           <a
-            href={siteConfig.calendarUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/contact"
             className="text-accent hover:text-teal-bright transition-colors underline underline-offset-4 decoration-teal/30"
           >
             Book a 30-minute call
