@@ -17,7 +17,7 @@ const trustPoints = [
     icon: FileSignature,
     title: "NDA on request",
     description:
-      "We sign your NDA — or ours — before we discuss your idea in detail. Your concept stays confidential, always.",
+      "We sign your NDA or ours before we discuss your idea in detail. Your concept stays confidential, always.",
     highlighted: false,
   },
   {
@@ -51,7 +51,7 @@ const trustPoints = [
   {
     icon: Timer,
     title: "Fast, honest replies",
-    description: `We reply within ${siteConfig.responseTime} on business days — and you'll always know exactly where the project stands.`,
+    description: `We reply within ${siteConfig.responseTime} on business days and you'll always know exactly where the project stands.`,
     highlighted: true,
   },
 ];

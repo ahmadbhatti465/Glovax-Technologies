@@ -46,21 +46,21 @@ const fallbackSteps = [
     number: "05",
     title: "Testing",
     description:
-      "Automated and manual QA, performance checks, and accessibility passes — every release is verified before it ships.",
+      "Automated and manual QA, performance checks, and accessibility passes every release is verified before it ships.",
     icon: "Bug",
   },
   {
     number: "06",
     title: "Launch",
     description:
-      "We deploy with CI/CD, monitor in production, and roll out without disruption — on time and on budget.",
+      "We deploy with CI/CD, monitor in production, and roll out without disruption on time and on budget.",
     icon: "Rocket",
   },
   {
     number: "07",
     title: "Support",
     description:
-      "Post-launch monitoring, fixes, and iteration. We stay with you as your product grows — we don't disappear at launch.",
+      "Post-launch monitoring, fixes, and iteration. We stay with you as your product grows we don't disappear at launch.",
     icon: "LifeBuoy",
   },
 ];

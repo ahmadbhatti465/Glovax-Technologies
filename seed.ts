@@ -2,6 +2,7 @@ import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./src/db/schema";
 import { businesses as seedBusinesses } from "./src/data/businesses";
+import { testimonials as seedTestimonials } from "./src/data/testimonials";
 
 const url = process.env.DATABASE_URL || "file:./sqlite.db";
 const isTurso = url.startsWith("libsql://") || url.startsWith("https://");
@@ -165,13 +166,20 @@ async function seed() {
     },
   ]);
 
-  // PLACEHOLDER TESTIMONIALS — replace each with a real, attributed UK/US client
-  // quote (or a genuine Upwork review) before launch. Never ship fabricated praise.
-  await db.insert(schema.testimonials).values([
-    { id: "1", content: "[REPLACE WITH REAL QUOTE] Add a genuine client review here.", author: "[Client name]", role: "[Role]", company: "[Company]", rating: 5 },
-    { id: "2", content: "[REPLACE WITH REAL QUOTE] Add a genuine client review here.", author: "[Client name]", role: "[Role]", company: "[Company]", rating: 5 },
-    { id: "3", content: "[REPLACE WITH REAL QUOTE] Add a genuine client review here.", author: "[Client name]", role: "[Role]", company: "[Company]", rating: 5 },
-  ]);
+  // Demo testimonials — single source of truth lives in src/data/testimonials.ts
+  // (fallback + seed stay in sync, same pattern as businesses). The DB table only
+  // stores the core fields. Swap in real, attributed client quotes via /admin as
+  // they come in — never ship fabricated praise from real named clients.
+  await db.insert(schema.testimonials).values(
+    seedTestimonials.map(({ id, content, author, role, company, rating }) => ({
+      id,
+      content,
+      author,
+      role,
+      company,
+      rating,
+    }))
+  );
 
   // Business directory listings — single source of truth lives in
   // src/data/businesses.ts (fallback + seed stay in sync).

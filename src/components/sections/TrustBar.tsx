@@ -24,7 +24,7 @@ const proofNumbers = [
   { value: "120", suffix: "+", label: "Projects delivered" },
   { value: "30", suffix: "+", label: "Countries served" },
   { value: "12", suffix: "+", label: "Industries served" },
-  { value: "5", suffix: "+", label: "Years of experience" },
+  { value: "8", suffix: "+", label: "Years of experience" },
 ];
 
 const container = {

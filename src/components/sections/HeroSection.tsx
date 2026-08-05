@@ -131,8 +131,8 @@ export function HeroSection() {
 
           {/* Subtitle — LCP ELEMENT — VISIBLE IMMEDIATELY */}
           <p className="mx-auto mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-muted max-w-2xl leading-relaxed">
-            A senior engineering team in Lahore, trusted by UK &amp; US businesses.
-            We ship AI-powered web, mobile, and SaaS products in weeks — with
+            A senior software engineering team, trusted by world wide businesses.
+            We ship AI-powered web, mobile, and SaaS products in weeks with
             transparent communication and long-term support.
           </p>
 

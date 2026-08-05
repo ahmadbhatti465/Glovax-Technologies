@@ -9,7 +9,7 @@ const differentiators = [
     icon: UserCheck,
     title: "You work with the founder",
     description:
-      "Talk directly to the senior engineer building your product — no account-manager middlemen or hand-offs.",
+      "Talk directly to the senior engineer building your product no account-manager middlemen or hand-offs.",
   },
   {
     icon: Clock,
@@ -21,7 +21,7 @@ const differentiators = [
     icon: Brain,
     title: "AI + full-stack in one team",
     description:
-      "LLM/RAG expertise and React/Node delivery under one roof — no juggling multiple vendors.",
+      "LLM/RAG expertise and React/Node delivery under one roof no juggling multiple vendors.",
   },
   {
     icon: ShieldCheck,
@@ -39,7 +39,7 @@ const differentiators = [
     icon: LifeBuoy,
     title: "We stay after launch",
     description:
-      "Post-launch support and monitoring — we don't disappear once your product is live.",
+      "Post-launch support and monitoring we don't disappear once your product is live.",
   },
 ];
 

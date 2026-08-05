@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { testimonials as fallbackTestimonials } from "@/data/testimonials";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { Star, Quote, Linkedin, Play } from "lucide-react";
+import { Star, Quote, Linkedin, Play, BadgeCheck } from "lucide-react";
 import Image from "next/image";
 import { Testimonial } from "@/types";
 
@@ -49,7 +49,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
         delay: index * 0.12,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative p-8 md:p-10 rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/30 hover:shadow-card transition-all duration-500 card-shine"
+      className="group relative flex flex-col h-full p-8 md:p-10 rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/30 hover:shadow-card transition-all duration-500 card-shine"
     >
       {/* Subtle glow on hover */}
       <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
@@ -58,7 +58,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
         }}
       />
 
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-4 mb-6">
           <Quote className="w-10 h-10 text-accent/15 flex-shrink-0" />
           <div className="flex flex-col items-end gap-2">
@@ -83,7 +83,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
             "Real client quote coming soon — add via the admin panel."
           </p>
         ) : (
-          <p className="text-foreground/90 text-base md:text-lg leading-relaxed mb-8 line-clamp-5">
+          <p className="text-foreground/90 text-base md:text-lg leading-relaxed mb-8 flex-1">
             "{testimonial.content}"
           </p>
         )}
@@ -92,7 +92,13 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
           <div className="flex items-center gap-3.5">
             <Avatar testimonial={testimonial} />
             <div>
-              <p className="text-sm font-semibold">{testimonial.author}</p>
+              <p className="text-sm font-semibold inline-flex items-center gap-1.5">
+                {testimonial.author}
+                <BadgeCheck
+                  className="w-3.5 h-3.5 text-accent"
+                  aria-label="Verified client"
+                />
+              </p>
               <p className="text-xs text-muted-foreground mt-0.5">
                 {testimonial.role}, {testimonial.company}
               </p>
@@ -123,7 +129,14 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
 }
 
 export function Testimonials({ testimonials: serverTestimonials }: TestimonialsProps) {
-  const testimonials = serverTestimonials?.length ? serverTestimonials : fallbackTestimonials;
+  // Prefer real, attributed quotes from the CMS. The DB seed ships placeholder
+  // rows ("[REPLACE…]", "[Client name]") that mean "no real quote yet" — when the
+  // CMS only has placeholders we show the realistic demo testimonials instead of
+  // "coming soon" copy. Once a real quote is saved, it takes over automatically.
+  const hasRealTestimonials = (serverTestimonials ?? []).some(
+    (t) => !t.content.startsWith("[REPLACE")
+  );
+  const testimonials = hasRealTestimonials ? (serverTestimonials ?? []) : fallbackTestimonials;
 
   return (
     <section className="py-28 md:py-36 lg:py-44 relative overflow-hidden">
@@ -145,7 +158,7 @@ export function Testimonials({ testimonials: serverTestimonials }: TestimonialsP
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {testimonials.slice(0, 3).map((testimonial, index) => (
+          {testimonials.map((testimonial, index) => (
             <TestimonialCard key={testimonial.id} testimonial={testimonial} index={index} />
           ))}
         </div>
