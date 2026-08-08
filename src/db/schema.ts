@@ -30,6 +30,11 @@ export const testimonials = sqliteTable("testimonials", {
   role: text("role").notNull(),
   company: text("company").notNull(),
   rating: integer("rating").notNull().default(5),
+  avatar: text("avatar"),
+  country: text("country"),
+  countryCode: text("country_code"),
+  linkedin: text("linkedin"),
+  projectType: text("project_type"),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 

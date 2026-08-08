@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { testimonials as fallbackTestimonials } from "@/data/testimonials";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Star, Quote, Linkedin, Play, BadgeCheck } from "lucide-react";
 import Image from "next/image";
 import { Testimonial } from "@/types";
+import { isValidExternalUrl } from "@/lib/utils";
 
 interface TestimonialsProps {
   testimonials?: Testimonial[];
@@ -35,8 +35,6 @@ function Avatar({ testimonial }: { testimonial: Testimonial }) {
 }
 
 function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
-  const placeholder = testimonial.content.startsWith("[REPLACE");
-
   return (
     <motion.div
       key={testimonial.id}
@@ -78,15 +76,9 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
           </div>
         </div>
 
-        {placeholder ? (
-          <p className="text-muted italic text-base md:text-lg leading-relaxed mb-8">
-            "Real client quote coming soon — add via the admin panel."
-          </p>
-        ) : (
-          <p className="text-foreground/90 text-base md:text-lg leading-relaxed mb-8 flex-1">
-            "{testimonial.content}"
-          </p>
-        )}
+        <p className="text-foreground/90 text-base md:text-lg leading-relaxed mb-8 flex-1">
+          "{testimonial.content}"
+        </p>
 
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
@@ -111,7 +103,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
             </div>
           </div>
 
-          {testimonial.linkedin && (
+          {isValidExternalUrl(testimonial.linkedin) && (
             <a
               href={testimonial.linkedin}
               target="_blank"
@@ -128,15 +120,10 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
   );
 }
 
-export function Testimonials({ testimonials: serverTestimonials }: TestimonialsProps) {
-  // Prefer real, attributed quotes from the CMS. The DB seed ships placeholder
-  // rows ("[REPLACE…]", "[Client name]") that mean "no real quote yet" — when the
-  // CMS only has placeholders we show the realistic demo testimonials instead of
-  // "coming soon" copy. Once a real quote is saved, it takes over automatically.
-  const hasRealTestimonials = (serverTestimonials ?? []).some(
-    (t) => !t.content.startsWith("[REPLACE")
-  );
-  const testimonials = hasRealTestimonials ? (serverTestimonials ?? []) : fallbackTestimonials;
+export function Testimonials({ testimonials }: TestimonialsProps) {
+  // Testimonials come exclusively from the admin panel via the DB — no hardcoded
+  // fallback. Hide the whole section until the admin has added some.
+  if (!testimonials || testimonials.length === 0) return null;
 
   return (
     <section className="py-28 md:py-36 lg:py-44 relative overflow-hidden">

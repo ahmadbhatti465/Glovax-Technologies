@@ -2,7 +2,6 @@ import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./src/db/schema";
 import { businesses as seedBusinesses } from "./src/data/businesses";
-import { testimonials as seedTestimonials } from "./src/data/testimonials";
 
 const url = process.env.DATABASE_URL || "file:./sqlite.db";
 const isTurso = url.startsWith("libsql://") || url.startsWith("https://");
@@ -23,7 +22,6 @@ async function seed() {
   // production (Turso) if you've added real content via the admin panel —
   // it will overwrite it. For prod, update records via /admin instead.
   await db.delete(schema.portfolioItems);
-  await db.delete(schema.testimonials);
   await db.delete(schema.services);
   await db.delete(schema.blogPosts);
   await db.delete(schema.businesses);
@@ -166,20 +164,8 @@ async function seed() {
     },
   ]);
 
-  // Demo testimonials — single source of truth lives in src/data/testimonials.ts
-  // (fallback + seed stay in sync, same pattern as businesses). The DB table only
-  // stores the core fields. Swap in real, attributed client quotes via /admin as
-  // they come in — never ship fabricated praise from real named clients.
-  await db.insert(schema.testimonials).values(
-    seedTestimonials.map(({ id, content, author, role, company, rating }) => ({
-      id,
-      content,
-      author,
-      role,
-      company,
-      rating,
-    }))
-  );
+  // Note: testimonials are intentionally NOT seeded — they are managed entirely
+  // via the /admin panel and rendered from the DB on the public site.
 
   // Business directory listings — single source of truth lives in
   // src/data/businesses.ts (fallback + seed stay in sync).

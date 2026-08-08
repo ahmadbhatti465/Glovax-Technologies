@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getBlogPostBySlug } from "@/lib/data";
 import { blogPosts as blogPostsTable } from "@/db/schema";
 import { db } from "@/db";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MagneticButton } from "@/components/shared/MagneticButton";
@@ -58,9 +58,7 @@ export async function generateMetadata({
       tags: post.tags,
       images: [
         {
-          url: siteConfig.ogImage,
-          width: 1200,
-          height: 630,
+          ...ogImage,
           alt: post.title,
         },
       ],
@@ -69,8 +67,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: post.title,
       description,
-      images: [siteConfig.ogImage],
-      creator: "@glovaxtech",
+      images: [ogImage.url],
     },
   };
 }

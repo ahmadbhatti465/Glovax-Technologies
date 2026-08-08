@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { Toaster } from "sonner";
 import { StructuredData } from "@/components/shared/StructuredData";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
@@ -73,22 +73,13 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: `${siteConfig.name} — ${siteConfig.tagline}`,
-      },
-    ],
+    images: [ogImage],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@glovaxtech",
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: "@glovaxtech",
+    images: [ogImage.url],
   },
   robots: {
     index: true,

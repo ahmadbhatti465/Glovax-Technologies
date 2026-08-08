@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd, ContactPageJsonLd } from "@/components/shared/StructuredData";
 import ContactContent from "./contact-content";
 
@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     description:
       "Have a project in mind? Reach out and we'll get back to you within 24 hours.",
     type: "website",
+    images: [ogImage],
   },
 };
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     description:
       "How Glovax Technologies collects, uses, and protects your personal information.",
     type: "website",
+    images: [ogImage],
   },
 };
 

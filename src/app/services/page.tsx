@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import {
   BreadcrumbJsonLd,
   FAQJsonLD,
@@ -35,6 +35,7 @@ export const metadata: Metadata = {
     description:
       "Explore our end-to-end digital services: AI-powered web and mobile development, cloud infrastructure, and growth marketing.",
     type: "website",
+    images: [ogImage],
   },
 };
 

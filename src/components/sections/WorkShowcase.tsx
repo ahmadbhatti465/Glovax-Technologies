@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortfolioItem } from "@/types";
 import { enrichWithCaseStudy } from "@/data/case-studies";
+import { isValidExternalUrl } from "@/lib/utils";
 
 interface WorkShowcaseProps {
   projects?: PortfolioItem[];
@@ -127,7 +128,7 @@ function BrowserFrame({ children }: { children: React.ReactNode }) {
 }
 
 function ProjectCard({ project }: { project: PortfolioItem }) {
-  const hasLink = Boolean(project.link);
+  const hasLink = isValidExternalUrl(project.link);
   const hasImage = Boolean(project.image);
 
   return (

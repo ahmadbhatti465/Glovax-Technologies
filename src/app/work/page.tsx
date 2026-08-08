@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd, CollectionPageJsonLd } from "@/components/shared/StructuredData";
 import WorkContent from "./work-content";
 import { getPortfolioItems, getLatestUpdatedAt } from "@/lib/data";
@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     description:
       "A curated collection of our finest work across web, mobile, AI, and cloud infrastructure.",
     type: "website",
+    images: [ogImage],
   },
 };
 

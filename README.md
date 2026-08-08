@@ -1,4 +1,4 @@
-# AhmadSols
+# Glovax Technologies
 
 A premium, dark-themed agency website built with Next.js 16, React 19, and Tailwind CSS v4. Designed for a software house and digital agency to showcase services, portfolio, team, and capture leads through a fully functional contact form.
 
@@ -37,7 +37,7 @@ A premium, dark-themed agency website built with Next.js 16, React 19, and Tailw
 ## Project Structure
 
 ```
-AhmadSolutions/
+glovax-technologies/
 ├── public/
 │   └── images/
 │       └── portfolio/          # Portfolio project images
@@ -91,7 +91,7 @@ AhmadSolutions/
 ```bash
 # Clone the repository
 git clone <repo-url>
-cd AhmadSolutions
+cd glovax-technologies
 
 # Install dependencies
 npm install

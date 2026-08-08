@@ -17,6 +17,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { PortfolioItem } from "@/types";
+import { isValidExternalUrl } from "@/lib/utils";
 
 interface CaseStudyContentProps {
   project: PortfolioItem;
@@ -61,7 +62,7 @@ function MetaChip({
 }
 
 export default function CaseStudyContent({ project, related }: CaseStudyContentProps) {
-  const hasLink = Boolean(project.link);
+  const hasLink = isValidExternalUrl(project.link);
   const steps = project.process ?? [];
   const hasScreenshot = Boolean(project.image);
 

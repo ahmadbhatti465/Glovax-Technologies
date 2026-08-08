@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd, AboutPageJsonLd } from "@/components/shared/StructuredData";
 import AboutContent from "./about-content";
 import { getSiteContent, getSiteContentUpdatedAt } from "@/lib/data";
@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     description:
       "Meet the global team behind Glovax Technologies. Discover our story, values, and mission to build impactful digital products.",
     type: "website",
+    images: [ogImage],
   },
 };
 

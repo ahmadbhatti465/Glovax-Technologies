@@ -13,13 +13,25 @@ export const siteConfig = {
   responseTime: "24 hours",
   social: {
     linkedin: "https://linkedin.com/company/glovaxtechnologies",
-    github: "https://github.com/glovaxtechnologies",
     instagram: "https://www.instagram.com/glovaxtechnologies/",
-    twitter: "https://x.com/glovaxtech",
     // TODO: replace with your real Upwork profile URL before launch.
     upwork: "https://www.upwork.com/freelancers/ahmadbhatti465",
     whatsapp: "https://wa.me/923254255480",
   },
+};
+
+/**
+ * Default Open Graph image (absolute URL). Pages define their own `openGraph`,
+ * which replaces the root layout's `images`, so each page includes this via
+ * `images: [ogImage]` — otherwise `og:image` is missing from social shares.
+ */
+export const ogImage = {
+  url: siteConfig.ogImage.startsWith("http")
+    ? siteConfig.ogImage
+    : `${siteConfig.url}${siteConfig.ogImage}`,
+  width: 1200,
+  height: 630,
+  alt: `${siteConfig.name} — ${siteConfig.tagline}`,
 };
 
 export const navLinks = [

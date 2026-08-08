@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
 import DirectoryContent from "@/components/directory/DirectoryContent";
 import { getBusinesses } from "@/lib/data";
@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     description:
       "Discover the businesses and services we've helped bring online — from e-commerce stores to cloud consultancies.",
     type: "website",
+    images: [ogImage],
   },
 };
 

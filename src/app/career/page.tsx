@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd, JobPostingJsonLd } from "@/components/shared/StructuredData";
 import CareerContent from "./career-content";
 import { getJobPositions, getSiteContent, getLatestUpdatedAt } from "@/lib/data";
@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     description:
       "We're always looking for exceptional people who are passionate about building great products.",
     type: "website",
+    images: [ogImage],
   },
 };
 

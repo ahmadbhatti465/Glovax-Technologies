@@ -56,7 +56,6 @@ export function StructuredData() {
     ],
     sameAs: [
       siteConfig.social.linkedin,
-      siteConfig.social.github,
       siteConfig.social.instagram,
       siteConfig.social.upwork,
     ],

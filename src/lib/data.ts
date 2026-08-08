@@ -85,7 +85,16 @@ export const getJobPositions = cache(async (): Promise<JobPosition[]> => {
 export const getTestimonials = cache(async (): Promise<Testimonial[]> => {
   try {
     const rows = await db.select().from(schema.testimonials);
-    return rows.map((row) => serializeDates(row));
+    return rows.map((row) => ({
+      ...serializeDates(row),
+      // Optional display fields are nullable in the DB — normalize to undefined
+      // so the UI's truthiness checks work (no broken <Image> or stray "●" flag).
+      avatar: row.avatar || undefined,
+      country: row.country || undefined,
+      countryCode: row.countryCode || undefined,
+      linkedin: row.linkedin || undefined,
+      projectType: row.projectType || undefined,
+    }));
   } catch {
     return [];
   }

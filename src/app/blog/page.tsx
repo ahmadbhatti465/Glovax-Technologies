@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
 import BlogContent from "./blog-content";
 import { getBlogPosts, getLatestUpdatedAt } from "@/lib/data";
@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     description:
       "Thoughts on technology, design, and building products that matter.",
     type: "website",
+    images: [ogImage],
   },
 };
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPortfolioItems } from "@/lib/data";
 import { enrichWithCaseStudy } from "@/data/case-studies";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
 import CaseStudyContent from "./case-study-content";
 
@@ -51,7 +51,7 @@ export async function generateMetadata({
         {
           url: project.image
             ? `${siteConfig.url}${project.image}`
-            : siteConfig.ogImage,
+            : ogImage.url,
           width: 1200,
           height: 630,
           alt: project.title,
@@ -63,9 +63,8 @@ export async function generateMetadata({
       title: `${project.title} — Case Study | ${siteConfig.name}`,
       description,
       images: [
-        project.image ? `${siteConfig.url}${project.image}` : siteConfig.ogImage,
+        project.image ? `${siteConfig.url}${project.image}` : ogImage.url,
       ],
-      creator: "@glovaxtech",
     },
   };
 }

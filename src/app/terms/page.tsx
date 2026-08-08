@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: `Terms of Service | ${siteConfig.name}`,
     description: "The terms that govern the use of our website and services.",
     type: "website",
+    images: [ogImage],
   },
 };
 

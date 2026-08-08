@@ -10,6 +10,7 @@ import Link from "next/link";
 import { PortfolioItem } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { enrichWithCaseStudy } from "@/data/case-studies";
+import { isValidExternalUrl } from "@/lib/utils";
 
 interface FAQItem {
   question: string;
@@ -107,7 +108,7 @@ function WorkCard({
   project: PortfolioItem;
   index: number;
 }) {
-  const hasLink = Boolean(project.link);
+  const hasLink = isValidExternalUrl(project.link);
 
   const cardBody = (
     <>

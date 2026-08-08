@@ -4,12 +4,13 @@ import Link from "next/link";
 import { getBusinessBySlug } from "@/lib/data";
 import { businesses as businessesTable } from "@/db/schema";
 import { db } from "@/db";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { isValidExternalUrl } from "@/lib/utils";
 import {
   ArrowLeft,
   Star,
@@ -60,7 +61,7 @@ export async function generateMetadata({
       url,
       title: `${business.name} | ${siteConfig.name} Directory`,
       description: business.shortDescription,
-      images: business.image ? [{ url: `${siteConfig.url}${business.image}` }] : undefined,
+      images: business.image ? [{ url: `${siteConfig.url}${business.image}` }] : [ogImage],
     },
   };
 }
@@ -213,7 +214,7 @@ export default async function ListingPage({
                     </a>
                   </li>
                 )}
-                {business.website ? (
+                {isValidExternalUrl(business.website) ? (
                   <li className="flex items-start gap-3">
                     <Globe className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
                     <a
