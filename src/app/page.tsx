@@ -12,6 +12,7 @@ import {
   getTestimonials,
   getSiteContent,
   getSiteContentUpdatedAt,
+  getBlogPosts,
 } from "@/lib/data";
 // Dynamically import below-the-fold sections to code-split framer-motion
 // and reduce initial JS payload by ~124 KiB
@@ -59,6 +60,10 @@ const CTABanner = dynamic(
   () => import("@/components/sections/CTABanner").then((mod) => ({ default: mod.CTABanner })),
   { ssr: true }
 );
+const BlogHighlights = dynamic(
+  () => import("@/components/sections/BlogHighlights").then((mod) => ({ default: mod.BlogHighlights })),
+  { ssr: true }
+);
 
 export const revalidate = 60;
 
@@ -91,6 +96,13 @@ export default async function Home() {
   const lastUpdated = await getSiteContentUpdatedAt("cta_banner");
   const processSteps = await getSiteContent<{ number: string; title: string; description: string; icon: string }[]>("process_steps");
   const stats = await getSiteContent<{ value: number; suffix: string; label: string }[]>("stats");
+  const allPosts = await getBlogPosts();
+  const latestPosts = allPosts
+    .sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    )
+    .slice(0, 3);
 
   return (
     <>
@@ -106,6 +118,7 @@ export default async function Home() {
         <StatsCounter stats={stats ?? undefined} />
         <Pricing />
         <Testimonials testimonials={testimonials} />
+        <BlogHighlights posts={latestPosts} />
         <FAQ />
         <TrustSection />
         <CTABanner cta={cta ?? undefined} lastUpdated={lastUpdated} />

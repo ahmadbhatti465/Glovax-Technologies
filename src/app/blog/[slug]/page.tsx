@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getBlogPostBySlug } from "@/lib/data";
-import { blogPosts as blogPostsTable } from "@/db/schema";
-import { db } from "@/db";
+import { getBlogPostBySlug, getRelatedPosts, getAllBlogSlugs } from "@/lib/data";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -16,12 +14,8 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 export const dynamic = "force-static";
 
 export async function generateStaticParams() {
-  try {
-    const rows = await db.select().from(blogPostsTable);
-    return rows.map((p) => ({ slug: p.slug }));
-  } catch {
-    return [];
-  }
+  const rows = await getAllBlogSlugs();
+  return rows.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -276,6 +270,7 @@ export default async function BlogPostPage({
 
   const url = `${siteConfig.url}/blog/${post.slug}`;
   const faqs = extractFaqs(post.content);
+  const relatedPosts = await getRelatedPosts(post.slug, post.category, 3);
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -384,6 +379,31 @@ export default async function BlogPostPage({
                 </span>
               ))}
             </div>
+          )}
+
+          {relatedPosts.length > 0 && (
+            <section className="mt-16" aria-label="Related articles">
+              <h2 className="text-2xl font-semibold mb-6">Related Articles</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedPosts.map((related) => (
+                  <Link
+                    key={related.slug}
+                    href={`/blog/${related.slug}`}
+                    className="group block p-6 rounded-2xl bg-surface border border-border hover:border-accent/30 transition-all duration-300"
+                  >
+                    <span className="inline-block px-2.5 py-1 text-xs font-medium bg-surface-raised border border-border rounded-full text-muted-foreground mb-3">
+                      {related.category}
+                    </span>
+                    <h3 className="text-base font-semibold mb-2 group-hover:text-accent transition-colors">
+                      {related.title}
+                    </h3>
+                    <p className="text-sm text-muted leading-relaxed line-clamp-2">
+                      {related.excerpt}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </section>
           )}
 
           <div className="mt-8 flex items-center gap-2 text-xs text-muted-foreground">

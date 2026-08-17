@@ -138,11 +138,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  let posts: { slug: string; publishedAt: string }[] = [];
+  let posts: { slug: string; publishedAt: string; updatedAt: Date | null }[] = [];
   let directorySlugs: { slug: string }[] = [];
   let caseStudyIds: { id: string }[] = [];
   try {
-    posts = await db.select({ slug: blogPosts.slug, publishedAt: blogPosts.publishedAt }).from(blogPosts);
+    posts = await db
+      .select({
+        slug: blogPosts.slug,
+        publishedAt: blogPosts.publishedAt,
+        updatedAt: blogPosts.updatedAt,
+      })
+      .from(blogPosts);
     const bizRows = await db.select({ slug: businesses.slug }).from(businesses);
     directorySlugs = bizRows;
     const caseRows = await db.select({ id: portfolioItems.id }).from(portfolioItems);
@@ -151,12 +157,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // DB unavailable
   }
 
-  const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${siteConfig.url}/blog/${post.slug}`,
-    lastModified: toSitemapDate(post.publishedAt) ?? now,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
+  const blogEntries: MetadataRoute.Sitemap = posts.map((post) => {
+    // Use the later of published/updated so edited articles advertise fresh
+    // `lastmod` dates — a signal that prompts Google to re-crawl sooner.
+    const published = toSitemapDate(post.publishedAt);
+    const updated = post.updatedAt ? toSitemapDate(post.updatedAt) : undefined;
+    const lastModified = updated && published && updated > published ? updated : published;
+    return {
+      url: `${siteConfig.url}/blog/${post.slug}`,
+      lastModified: lastModified ?? now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    };
+  });
 
   const directoryEntries: MetadataRoute.Sitemap = directorySlugs.map((b) => ({
     url: `${siteConfig.url}/directory/${b.slug}`,

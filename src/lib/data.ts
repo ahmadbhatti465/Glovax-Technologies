@@ -11,6 +11,30 @@ import type {
   Business,
 } from "@/types";
 
+/**
+ * Retry a DB-backed call on transient failures.
+ *
+ * The blog routes are statically rendered against the hosted (Turso) database.
+ * A brief network blip at request/build time used to surface as a 404 or an
+ * empty list (Google recorded two blog posts as 404s for exactly this reason).
+ * Retrying masks transient errors so a single hiccup doesn't poison a cached
+ * page or a crawl. We keep it short so it never meaningfully slows the happy path.
+ */
+async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
+  let lastError: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      if (i < attempts - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 150 * (i + 1)));
+      }
+    }
+  }
+  throw lastError;
+}
+
 function serializeDates<T extends { createdAt?: Date | null; updatedAt?: Date | null }>(
   row: T,
   keepUpdatedAt = false
@@ -102,7 +126,7 @@ export const getTestimonials = cache(async (): Promise<Testimonial[]> => {
 
 export const getBlogPosts = cache(async (): Promise<BlogPost[]> => {
   try {
-    const rows = await db.select().from(schema.blogPosts);
+    const rows = await withRetry(() => db.select().from(schema.blogPosts));
     return rows.map((row) => ({
       ...serializeDates(row, true),
       tags: row.tags ?? [],
@@ -115,7 +139,7 @@ export const getBlogPosts = cache(async (): Promise<BlogPost[]> => {
 
 export const getBlogPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   try {
-    const rows = await db.select().from(schema.blogPosts);
+    const rows = await withRetry(() => db.select().from(schema.blogPosts));
     const found = rows.find((row) => row.slug === slug);
     if (!found) return null;
     return {
@@ -127,6 +151,46 @@ export const getBlogPostBySlug = cache(async (slug: string): Promise<BlogPost | 
     return null;
   }
 });
+
+/** All blog slugs, used by generateStaticParams so builds pre-render every post. */
+export const getAllBlogSlugs = cache(async (): Promise<{ slug: string }[]> => {
+  try {
+    const rows = await withRetry(() => db.select({ slug: schema.blogPosts.slug }).from(schema.blogPosts));
+    return rows;
+  } catch {
+    return [];
+  }
+});
+
+/**
+ * Related posts for cross-linking. Prefers posts sharing the current post's
+ * category, then fills with the most recent posts. Excludes the current post.
+ * Internal links between articles help Google crawl and value the thinner
+ * pages that otherwise only get a link from /blog.
+ */
+export const getRelatedPosts = cache(
+  async (currentSlug: string, category?: string | null, limit = 3): Promise<BlogPost[]> => {
+    try {
+      const rows = await withRetry(() => db.select().from(schema.blogPosts));
+      const posts = rows
+        .filter((row) => row.slug !== currentSlug)
+        .map((row) => ({
+          ...serializeDates(row, true),
+          tags: row.tags ?? [],
+          featured: Boolean(row.featured),
+        }))
+        .sort(
+          (a, b) =>
+            new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+        );
+      const sameCategory = category ? posts.filter((p) => p.category === category) : [];
+      const related = [...sameCategory, ...posts.filter((p) => p.category !== category)];
+      return related.slice(0, limit);
+    } catch {
+      return [];
+    }
+  }
+);
 
 export async function getSiteContent<T>(key: string): Promise<T | null> {
   try {
