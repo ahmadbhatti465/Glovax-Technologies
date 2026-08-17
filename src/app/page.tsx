@@ -97,7 +97,9 @@ export default async function Home() {
   const processSteps = await getSiteContent<{ number: string; title: string; description: string; icon: string }[]>("process_steps");
   const stats = await getSiteContent<{ value: number; suffix: string; label: string }[]>("stats");
   const allPosts = await getBlogPosts();
-  const latestPosts = allPosts
+  // Copy before sorting — getBlogPosts is React-cached, so we must not
+  // mutate the shared array in place.
+  const latestPosts = [...allPosts]
     .sort(
       (a, b) =>
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
