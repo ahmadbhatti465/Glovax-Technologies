@@ -96,7 +96,7 @@ Add these in **Settings > Environment Variables**:
 | `DATABASE_AUTH_TOKEN` | `YOUR-TURSO-AUTH-TOKEN` |
 | `ADMIN_PASSWORD` | `glovax-admin-2026` (or your own) |
 | `JWT_SECRET` | Generate a random 32+ char string |
-| `RESEND_API_KEY` | `re_88o8LdeM_8zptthtje4HRE4TkSMGQvDSn` |
+| `RESEND_API_KEY` | `re_YOUR-RESEND-API-KEY` (from resend.com/api-keys) |
 | `OWNER_EMAIL` | `ahmad765rajput@gmail.com` |
 
 **IMPORTANT**: Add the same variables in:
