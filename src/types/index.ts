@@ -72,7 +72,29 @@ export interface BlogPost {
   publishedAt: string;
   readTime: number;
   featured: boolean;
+  featuredImage?: string;
+  featuredImageAlt?: string;
+  featuredImageTitle?: string;
+  featuredImageCaption?: string;
+  seoTitle?: string;
+  metaDescription?: string;
+  focusKeyword?: string;
+  secondaryKeywords?: string[];
+  canonicalUrl?: string;
+  robotsIndex?: boolean;
+  robotsFollow?: boolean;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  faqs?: FAQItem[];
+  status?: PageStatus;
+  createdAt?: Date;
   updatedAt?: Date;
+  versionHistory?: PageVersion[];
 }
 
 export interface JobPosition {
@@ -106,4 +128,98 @@ export interface Business {
   image?: string;
   featured: boolean;
   isRemote: boolean;
+}
+
+export type PageType =
+  | "standard"
+  | "service"
+  | "landing"
+  | "portfolio"
+  | "case_study"
+  | "company"
+  | "contact"
+  | "policy"
+  | "custom";
+
+export type PageStatus = "draft" | "published" | "scheduled" | "archived";
+
+export type SchemaType =
+  | "WebPage"
+  | "AboutPage"
+  | "ContactPage"
+  | "Service"
+  | "FAQPage"
+  | "Organization"
+  | "SoftwareApplication"
+  | "BreadcrumbList"
+  | "None";
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface PageVersion {
+  version: number;
+  title: string;
+  updatedAt: string;
+  author: string;
+  note?: string;
+  contentSnippet?: string;
+}
+
+export interface Page {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  pageType: PageType;
+  featuredImage?: string;
+  featuredImageAlt?: string;
+  featuredImageTitle?: string;
+  featuredImageCaption?: string;
+  seoTitle?: string;
+  metaDescription?: string;
+  focusKeyword?: string;
+  secondaryKeywords: string[];
+  canonicalUrl?: string;
+  robotsIndex: boolean;
+  robotsFollow: boolean;
+  includeInSitemap: boolean;
+  sitemapPriority: number;
+  changeFrequency: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  schemaType: SchemaType;
+  faqs: FAQItem[];
+  status: PageStatus;
+  author: string;
+  featured: boolean;
+  readTime: number;
+  scheduledAt?: Date | string | null;
+  publishedAt?: Date | string | null;
+  createdAt?: Date | string | null;
+  updatedAt?: Date | string | null;
+  versionHistory?: PageVersion[];
+}
+
+export interface Redirect {
+  id: string;
+  source: string;
+  destination: string;
+  statusCode: number;
+  createdAt?: Date | string | null;
+}
+
+export interface InternalLinkTarget {
+  title: string;
+  url: string;
+  category: "Page" | "Service" | "Portfolio" | "Blog" | "System";
+  description?: string;
 }

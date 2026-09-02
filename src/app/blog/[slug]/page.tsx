@@ -1,77 +1,101 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect, RedirectType } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
-import { getBlogPostBySlug, getRelatedPosts, getAllBlogSlugs } from "@/lib/data";
-import { siteConfig, ogImage } from "@/lib/constants";
+import { getBlogPostBySlug, getRelatedPosts, getAllBlogSlugs, getRedirect } from "@/lib/data";
+import { siteConfig, ogImage as defaultOgImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { FAQJsonLD, BreadcrumbJsonLd } from "@/components/shared/StructuredData";
-import { ArrowLeft, Clock, Calendar, RefreshCw } from "lucide-react";
-import { BlogPost } from "@/types";
+import { FaqAccordion } from "@/components/shared/FaqAccordion";
+import { ArrowLeft, Clock, Calendar, RefreshCw, User, Lock } from "lucide-react";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { FAQItem } from "@/types";
 
-export const dynamic = "force-static";
-
-export async function generateStaticParams() {
-  const rows = await getAllBlogSlugs();
-  return rows.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ preview?: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const { preview } = await searchParams;
+  const isPreview = preview === "true";
+
+  const redir = (await getRedirect(`blog/${slug}`)) || (await getRedirect(slug));
+  if (redir) {
+    return { title: "Redirecting...", robots: { index: false, follow: false } };
+  }
+
+  const post = await getBlogPostBySlug(slug, isPreview);
   if (!post) {
     return {
       title: "Article Not Found",
-      description: "The article you're looking for doesn't exist or has been moved. Explore AI, web, and SaaS insights on the Glovax Technologies blog.",
+      description: "The article you're looking for doesn't exist or has been moved.",
       robots: { index: false, follow: false },
     };
   }
 
-  const url = `${siteConfig.url}/blog/${post.slug}`;
-  const description = post.excerpt.slice(0, 160);
+  const url = post.canonicalUrl || `${siteConfig.url}/blog/${post.slug}`;
+  const title = post.seoTitle || `${post.title} | ${siteConfig.name}`;
+  const description = post.metaDescription || post.excerpt.slice(0, 160);
+
+  const ogImageUrl = post.ogImage || post.featuredImage || siteConfig.ogImage;
+  const resolvedOgImage = ogImageUrl.startsWith("http")
+    ? ogImageUrl
+    : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
+
+  const shouldIndex = !isPreview && (post.status || "published") === "published" && post.robotsIndex !== false;
+  const shouldFollow = !isPreview && post.robotsFollow !== false;
 
   return {
-    title: post.title,
+    title,
     description,
-    keywords: post.tags,
+    keywords: post.secondaryKeywords && post.secondaryKeywords.length > 0 ? post.secondaryKeywords : post.tags,
     alternates: { canonical: url },
     openGraph: {
       type: "article",
       url,
-      title: post.title,
-      description,
+      title: post.ogTitle || title,
+      description: post.ogDescription || description,
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt?.toISOString() || post.publishedAt,
       authors: [post.author],
       tags: post.tags,
       images: [
         {
-          ...ogImage,
-          alt: post.title,
+          url: resolvedOgImage,
+          width: 1200,
+          height: 630,
+          alt: post.ogImageAlt || post.featuredImageAlt || post.title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description,
-      images: [ogImage.url],
+      title: post.twitterTitle || post.ogTitle || title,
+      description: post.twitterDescription || post.ogDescription || description,
+      images: [post.twitterImage || resolvedOgImage],
+    },
+    robots: {
+      index: shouldIndex,
+      follow: shouldFollow,
+      googleBot: {
+        index: shouldIndex,
+        follow: shouldFollow,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   };
 }
 
-interface FAQItem {
-  question: string;
-  answer: string;
-}
-
-function extractFaqs(content: string): FAQItem[] {
+function extractFaqsFromMarkdown(content: string): FAQItem[] {
   const faqMatch = content.match(/## FAQ\s*([\s\S]*?)$/);
   if (!faqMatch) return [];
   const faqSection = faqMatch[1].trim();
@@ -261,27 +285,43 @@ function renderBold(text: string): React.ReactNode {
 
 export default async function BlogPostPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ preview?: string }>;
 }) {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const { preview } = await searchParams;
+  const isPreview = preview === "true";
+
+  // Check 301 Permanent Redirect
+  const redir = (await getRedirect(`blog/${slug}`)) || (await getRedirect(slug));
+  if (redir) {
+    redirect(redir.destination, RedirectType.replace);
+  }
+
+  const post = await getBlogPostBySlug(slug, isPreview);
   if (!post) notFound();
 
-  const url = `${siteConfig.url}/blog/${post.slug}`;
-  const faqs = extractFaqs(post.content);
+  const url = post.canonicalUrl || `${siteConfig.url}/blog/${post.slug}`;
+  const faqs = (post.faqs && post.faqs.length > 0) ? post.faqs : extractFaqsFromMarkdown(post.content);
   const relatedPosts = await getRelatedPosts(post.slug, post.category, 3);
+
+  const ogImageUrl = post.ogImage || post.featuredImage || siteConfig.ogImage;
+  const resolvedOgImage = ogImageUrl.startsWith("http")
+    ? ogImageUrl
+    : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
 
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    description: post.excerpt,
+    description: post.metaDescription || post.excerpt,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt?.toISOString() || post.publishedAt,
     author: {
       "@type": "Organization",
-      name: post.author,
+      name: post.author || siteConfig.name,
       url: siteConfig.url,
     },
     publisher: {
@@ -297,18 +337,30 @@ export default async function BlogPostPage({
       "@id": url,
     },
     keywords: post.tags.join(", "),
-    image: [`${siteConfig.url}${siteConfig.ogImage}`],
+    image: [resolvedOgImage],
   };
 
-  const articleContentWithoutFaq = post.content;
   const publishedDate = new Date(post.publishedAt);
   const modifiedDate = post.updatedAt || publishedDate;
+
+  // Check if content is rich HTML or raw Markdown
+  const isHtml = /<[a-z][\s\S]*>/i.test(post.content);
 
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main className="pt-28 pb-24 min-h-screen">
         <div className="max-w-3xl mx-auto px-6 md:px-8">
+          {/* Draft Preview Warning Banner */}
+          {post.status && post.status !== "published" && (
+            <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 flex items-center gap-3">
+              <Lock className="w-5 h-5 text-amber-400 shrink-0" />
+              <div className="text-xs">
+                <strong>Admin Preview Mode:</strong> This article is currently a <strong>{post.status.toUpperCase()}</strong>. It is not publicly indexable by search engines until published.
+              </div>
+            </div>
+          )}
+
           <Breadcrumbs
             items={[
               { label: "Blog", href: "/blog" },
@@ -336,12 +388,12 @@ export default async function BlogPostPage({
             Back to Blog
           </Link>
 
-          <div className="flex items-center gap-3 mb-6">
-            <span className="px-2.5 py-1 text-xs font-medium bg-surface-raised border border-border rounded-full text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <span className="px-2.5 py-1 text-xs font-medium bg-surface-raised border border-border rounded-full text-accent">
               {post.category}
             </span>
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Calendar className="w-3 h-3" />
+              <Calendar className="w-3.5 h-3.5" />
               {publishedDate.toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -349,12 +401,16 @@ export default async function BlogPostPage({
               })}
             </span>
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Clock className="w-3 h-3" />
+              <Clock className="w-3.5 h-3.5" />
               {post.readTime} min read
+            </span>
+            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <User className="w-3.5 h-3.5" />
+              {post.author || "Glovax Team"}
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight mb-6">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6 text-foreground">
             {post.title}
           </h1>
 
@@ -362,11 +418,43 @@ export default async function BlogPostPage({
             {post.excerpt}
           </p>
 
+          {/* Featured Image */}
+          {post.featuredImage && (
+            <div className="my-8 rounded-2xl overflow-hidden border border-border bg-surface relative aspect-[16/9] shadow-xl">
+              <Image
+                src={
+                  post.featuredImage.startsWith("/") || post.featuredImage.startsWith("http")
+                    ? post.featuredImage
+                    : `/${post.featuredImage}`
+                }
+                alt={post.featuredImageAlt || post.title}
+                title={post.featuredImageTitle || undefined}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
+              />
+              {post.featuredImageCaption && (
+                <div className="absolute bottom-0 inset-x-0 bg-black/60 backdrop-blur-sm px-4 py-2 text-xs text-gray-300 text-center">
+                  {post.featuredImageCaption}
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="w-24 h-px bg-gradient-to-r from-teal/70 to-transparent mb-10" />
 
-          <article className="prose prose-invert max-w-none">
-            {renderMarkdown(articleContentWithoutFaq)}
+          {/* Article Body */}
+          <article className="prose prose-invert max-w-none text-foreground/90 leading-relaxed space-y-6">
+            {isHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            ) : (
+              renderMarkdown(post.content)
+            )}
           </article>
+
+          {/* Interactive FAQs Accordion */}
+          {faqs.length > 0 && <FaqAccordion items={faqs} />}
 
           {post.tags.length > 0 && (
             <div className="mt-10 flex flex-wrap gap-2">

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/constants";
 import { db } from "@/db";
-import { blogPosts, portfolioItems, services, teamMembers, jobPositions, siteContent, businesses } from "@/db/schema";
+import { blogPosts, portfolioItems, services, teamMembers, jobPositions, siteContent, businesses, pages } from "@/db/schema";
 
 function toSitemapDate(date: Date | string | number | null | undefined): Date | undefined {
   if (!date) return undefined;
@@ -141,6 +141,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let posts: { slug: string; publishedAt: string; updatedAt: Date | null }[] = [];
   let directorySlugs: { slug: string }[] = [];
   let caseStudyIds: { id: string }[] = [];
+  let cmsPages: {
+    slug: string;
+    canonicalUrl: string | null;
+    status: string;
+    robotsIndex: boolean;
+    includeInSitemap: boolean;
+    sitemapPriority: number;
+    changeFrequency: string;
+    publishedAt: Date | null;
+    updatedAt: Date | null;
+    scheduledAt: Date | null;
+  }[] = [];
+
   try {
     posts = await db
       .select({
@@ -153,13 +166,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     directorySlugs = bizRows;
     const caseRows = await db.select({ id: portfolioItems.id }).from(portfolioItems);
     caseStudyIds = caseRows;
+
+    const pageRows = await db.select().from(pages);
+    cmsPages = pageRows.map((p) => ({
+      slug: p.slug,
+      canonicalUrl: p.canonicalUrl,
+      status: p.status,
+      robotsIndex: Boolean(p.robotsIndex),
+      includeInSitemap: Boolean(p.includeInSitemap),
+      sitemapPriority: p.sitemapPriority,
+      changeFrequency: p.changeFrequency,
+      publishedAt: p.publishedAt,
+      updatedAt: p.updatedAt,
+      scheduledAt: p.scheduledAt,
+    }));
   } catch {
     // DB unavailable
   }
 
   const blogEntries: MetadataRoute.Sitemap = posts.map((post) => {
-    // Use the later of published/updated so edited articles advertise fresh
-    // `lastmod` dates — a signal that prompts Google to re-crawl sooner.
     const published = toSitemapDate(post.publishedAt);
     const updated = post.updatedAt ? toSitemapDate(post.updatedAt) : undefined;
     const lastModified = updated && published && updated > published ? updated : published;
@@ -185,5 +210,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...caseStudyEntries, ...blogEntries, ...directoryEntries];
+  // Filter and map published CMS pages for the sitemap
+  const cmsPageEntries: MetadataRoute.Sitemap = cmsPages
+    .filter(
+      (p) =>
+        p.status === "published" &&
+        p.includeInSitemap &&
+        p.robotsIndex &&
+        (!p.scheduledAt || new Date(p.scheduledAt) <= now)
+    )
+    .map((p) => {
+      const published = toSitemapDate(p.publishedAt);
+      const updated = p.updatedAt ? toSitemapDate(p.updatedAt) : undefined;
+      const lastModified = updated && published && updated > published ? updated : published || now;
+      const pageUrl = p.canonicalUrl || `${siteConfig.url}/${p.slug}`;
+
+      return {
+        url: pageUrl,
+        lastModified,
+        changeFrequency: (p.changeFrequency as "monthly" | "daily" | "weekly" | "yearly" | "always" | "hourly" | "never") || "monthly",
+        priority: p.sitemapPriority || 0.8,
+      };
+    });
+
+  return [...staticRoutes, ...cmsPageEntries, ...caseStudyEntries, ...blogEntries, ...directoryEntries];
 }

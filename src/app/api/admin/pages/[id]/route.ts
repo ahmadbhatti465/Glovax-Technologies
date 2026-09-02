@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { db } from "@/db";
-import { blogPosts, redirects } from "@/db/schema";
+import { pages, redirects } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
 import { cleanSlug, validateSlug } from "@/lib/slug";
 import { eq, and, ne } from "drizzle-orm";
@@ -14,13 +14,13 @@ export async function GET(_request: Request, { params }: { params: Params }) {
 
   try {
     const { id } = await params;
-    const rows = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+    const rows = await db.select().from(pages).where(eq(pages.id, id));
     if (rows.length === 0) {
-      return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+      return NextResponse.json({ error: "Page not found" }, { status: 404 });
     }
     return NextResponse.json(rows[0]);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Failed to fetch blog post";
+    const message = err instanceof Error ? err.message : "Failed to fetch page";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
@@ -33,9 +33,9 @@ export async function PUT(request: Request, { params }: { params: Params }) {
     const { id } = await params;
     const body = await request.json();
 
-    const existingRows = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+    const existingRows = await db.select().from(pages).where(eq(pages.id, id));
     if (existingRows.length === 0) {
-      return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+      return NextResponse.json({ error: "Page not found" }, { status: 404 });
     }
     const existing = existingRows[0];
 
@@ -47,14 +47,14 @@ export async function PUT(request: Request, { params }: { params: Params }) {
         return NextResponse.json({ error: slugCheck.error }, { status: 400 });
       }
 
-      // Check if slug is used by another post
+      // Check if slug is used by another page
       const duplicate = await db
         .select()
-        .from(blogPosts)
-        .where(and(eq(blogPosts.slug, newSlug), ne(blogPosts.id, id)));
+        .from(pages)
+        .where(and(eq(pages.slug, newSlug), ne(pages.id, id)));
       if (duplicate.length > 0) {
         return NextResponse.json(
-          { error: `The slug "/blog/${newSlug}" is already in use by another article.` },
+          { error: `The slug "/${newSlug}" is already in use by another page.` },
           { status: 409 }
         );
       }
@@ -62,12 +62,13 @@ export async function PUT(request: Request, { params }: { params: Params }) {
 
     const now = new Date();
 
-    // Check if slug changed and create 301 redirect if requested
+    // Check if slug changed and create 301 redirect if requested or page was published
     if (existing.slug !== newSlug) {
       if (body.createRedirect !== false) {
-        const sourcePath = `/blog/${existing.slug}`;
-        const destPath = `/blog/${newSlug}`;
+        const sourcePath = `/${existing.slug}`;
+        const destPath = `/${newSlug}`;
 
+        // Check if redirect source already exists
         const existingRedirect = await db
           .select()
           .from(redirects)
@@ -102,25 +103,23 @@ export async function PUT(request: Request, { params }: { params: Params }) {
         title: body.title || existing.title,
         updatedAt: now.toISOString(),
         author: body.author || existing.author || "Admin",
-        note: body.versionNote || (existing.slug !== newSlug ? `Slug changed to /blog/${newSlug}` : `Version ${nextVersionNum} saved`),
+        note: body.versionNote || (existing.slug !== newSlug ? `Slug changed to /${newSlug}` : `Version ${nextVersionNum} saved`),
       },
     ];
 
-    const plainText = (body.content || existing.content || "").replace(/<[^>]*>/g, " ").trim();
-    const wordCount = plainText.split(/\s+/).filter(Boolean).length;
-    const calculatedReadTime = Math.max(1, Math.ceil(wordCount / 220));
+    let publishedAt = existing.publishedAt;
+    if (body.status === "published" && !publishedAt) {
+      publishedAt = now;
+    } else if (body.publishedAt) {
+      publishedAt = new Date(body.publishedAt);
+    }
 
-    const updatedPost = {
+    const updatedPage = {
       title: body.title !== undefined ? body.title.trim() : existing.title,
       slug: newSlug,
       excerpt: body.excerpt !== undefined ? body.excerpt : existing.excerpt,
       content: body.content !== undefined ? body.content : existing.content,
-      author: body.author !== undefined ? body.author : existing.author,
-      category: body.category !== undefined ? body.category : existing.category,
-      tags: Array.isArray(body.tags) ? body.tags : existing.tags,
-      publishedAt: body.publishedAt || existing.publishedAt,
-      readTime: typeof body.readTime === "number" ? body.readTime : calculatedReadTime,
-      featured: body.featured !== undefined ? Boolean(body.featured) : existing.featured,
+      pageType: body.pageType !== undefined ? body.pageType : existing.pageType,
       featuredImage: body.featuredImage !== undefined ? body.featuredImage : existing.featuredImage,
       featuredImageAlt: body.featuredImageAlt !== undefined ? body.featuredImageAlt : existing.featuredImageAlt,
       featuredImageTitle: body.featuredImageTitle !== undefined ? body.featuredImageTitle : existing.featuredImageTitle,
@@ -132,6 +131,9 @@ export async function PUT(request: Request, { params }: { params: Params }) {
       canonicalUrl: body.canonicalUrl !== undefined ? body.canonicalUrl : existing.canonicalUrl,
       robotsIndex: body.robotsIndex !== undefined ? Boolean(body.robotsIndex) : existing.robotsIndex,
       robotsFollow: body.robotsFollow !== undefined ? Boolean(body.robotsFollow) : existing.robotsFollow,
+      includeInSitemap: body.includeInSitemap !== undefined ? Boolean(body.includeInSitemap) : existing.includeInSitemap,
+      sitemapPriority: typeof body.sitemapPriority === "number" ? body.sitemapPriority : existing.sitemapPriority,
+      changeFrequency: body.changeFrequency !== undefined ? body.changeFrequency : existing.changeFrequency,
       ogTitle: body.ogTitle !== undefined ? body.ogTitle : existing.ogTitle,
       ogDescription: body.ogDescription !== undefined ? body.ogDescription : existing.ogDescription,
       ogImage: body.ogImage !== undefined ? body.ogImage : existing.ogImage,
@@ -139,24 +141,29 @@ export async function PUT(request: Request, { params }: { params: Params }) {
       twitterTitle: body.twitterTitle !== undefined ? body.twitterTitle : existing.twitterTitle,
       twitterDescription: body.twitterDescription !== undefined ? body.twitterDescription : existing.twitterDescription,
       twitterImage: body.twitterImage !== undefined ? body.twitterImage : existing.twitterImage,
+      schemaType: body.schemaType !== undefined ? body.schemaType : existing.schemaType,
       faqs: Array.isArray(body.faqs) ? body.faqs : existing.faqs,
       status: body.status !== undefined ? body.status : existing.status,
+      author: body.author !== undefined ? body.author : existing.author,
+      featured: body.featured !== undefined ? Boolean(body.featured) : existing.featured,
+      readTime: typeof body.readTime === "number" ? body.readTime : existing.readTime,
+      scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : null,
+      publishedAt: publishedAt ? new Date(publishedAt) : null,
       updatedAt: now,
       versionHistory: updatedHistory,
     };
 
-    await db.update(blogPosts).set(updatedPost).where(eq(blogPosts.id, id));
+    await db.update(pages).set(updatedPage).where(eq(pages.id, id));
 
     revalidatePath("/");
-    revalidatePath("/blog");
     revalidatePath("/sitemap.xml");
-    revalidatePath(`/blog/${existing.slug}`);
-    if (newSlug !== existing.slug) revalidatePath(`/blog/${newSlug}`);
+    revalidatePath(`/${existing.slug}`);
+    if (newSlug !== existing.slug) revalidatePath(`/${newSlug}`);
     revalidateTag("public-data", "max");
 
-    return NextResponse.json({ success: true, post: { id, ...updatedPost } });
+    return NextResponse.json({ success: true, page: { id, ...updatedPage } });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Failed to update blog post";
+    const message = err instanceof Error ? err.message : "Failed to update page";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
@@ -167,23 +174,22 @@ export async function DELETE(_request: Request, { params }: { params: Params }) 
 
   try {
     const { id } = await params;
-    const existingRows = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+    const existingRows = await db.select().from(pages).where(eq(pages.id, id));
     if (existingRows.length === 0) {
-      return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+      return NextResponse.json({ error: "Page not found" }, { status: 404 });
     }
     const slug = existingRows[0].slug;
 
-    await db.delete(blogPosts).where(eq(blogPosts.id, id));
+    await db.delete(pages).where(eq(pages.id, id));
 
     revalidatePath("/");
-    revalidatePath("/blog");
     revalidatePath("/sitemap.xml");
-    if (slug) revalidatePath(`/blog/${slug}`);
+    if (slug) revalidatePath(`/${slug}`);
     revalidateTag("public-data", "max");
 
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Failed to delete blog post";
+    const message = err instanceof Error ? err.message : "Failed to delete page";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

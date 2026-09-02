@@ -12,14 +12,15 @@ import {
   LogOut,
   LayoutDashboard,
   Settings,
+  Globe,
 } from "lucide-react";
 
 const cards = [
+  { label: "Blog & SEO CMS", href: "/admin/dashboard/blog", icon: Newspaper, color: "#1EDAC6" },
   { label: "Services", href: "/admin/dashboard/services", icon: Rocket, color: "#1EDAC6" },
   { label: "Portfolio", href: "/admin/dashboard/portfolio", icon: FolderOpen, color: "#1EDAC6" },
   { label: "Testimonials", href: "/admin/dashboard/testimonials", icon: MessageSquare, color: "#1EDAC6" },
   { label: "Team", href: "/admin/dashboard/team", icon: Users, color: "#1EDAC6" },
-  { label: "Blog", href: "/admin/dashboard/blog", icon: Newspaper, color: "#1EDAC6" },
   { label: "Careers", href: "/admin/dashboard/careers", icon: Briefcase, color: "#1EDAC6" },
   { label: "Settings", href: "/admin/dashboard/settings", icon: Settings, color: "#1EDAC6" },
 ];
