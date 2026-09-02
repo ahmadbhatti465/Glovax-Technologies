@@ -155,13 +155,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }[] = [];
 
   try {
-    posts = await db
+    const blogRows = await db
       .select({
         slug: blogPosts.slug,
+        status: blogPosts.status,
+        robotsIndex: blogPosts.robotsIndex,
         publishedAt: blogPosts.publishedAt,
         updatedAt: blogPosts.updatedAt,
       })
       .from(blogPosts);
+    posts = blogRows
+      .filter((p) => (p.status || "published") === "published" && p.robotsIndex !== false)
+      .map((p) => ({
+        slug: p.slug,
+        publishedAt: p.publishedAt,
+        updatedAt: p.updatedAt,
+      }));
+
     const bizRows = await db.select({ slug: businesses.slug }).from(businesses);
     directorySlugs = bizRows;
     const caseRows = await db.select({ id: portfolioItems.id }).from(portfolioItems);
@@ -191,8 +201,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return {
       url: `${siteConfig.url}/blog/${post.slug}`,
       lastModified: lastModified ?? now,
-      changeFrequency: "monthly",
-      priority: 0.7,
+      changeFrequency: "weekly",
+      priority: 0.8,
     };
   });
 

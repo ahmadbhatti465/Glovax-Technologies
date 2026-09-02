@@ -2,36 +2,42 @@ import type { Metadata } from "next";
 import { notFound, redirect, RedirectType } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { getBlogPostBySlug, getRelatedPosts, getAllBlogSlugs, getRedirect } from "@/lib/data";
+import { getBlogPostBySlug, getRelatedPosts, getAllBlogSlugs, getRedirect, getBlogPosts } from "@/lib/data";
 import { siteConfig, ogImage as defaultOgImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { FAQJsonLD, BreadcrumbJsonLd } from "@/components/shared/StructuredData";
 import { FaqAccordion } from "@/components/shared/FaqAccordion";
-import { ArrowLeft, Clock, Calendar, RefreshCw, User, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Calendar, RefreshCw, User, Lock, ChevronLeft, ChevronRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { FAQItem } from "@/types";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: revalidate once an hour
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  try {
+    const slugs = await getAllBlogSlugs();
+    return slugs.map((s) => ({ slug: s.slug }));
+  } catch {
+    return [];
+  }
+}
 
 export async function generateMetadata({
   params,
-  searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ preview?: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { preview } = await searchParams;
-  const isPreview = preview === "true";
 
   const redir = (await getRedirect(`blog/${slug}`)) || (await getRedirect(slug));
   if (redir) {
     return { title: "Redirecting...", robots: { index: false, follow: false } };
   }
 
-  const post = await getBlogPostBySlug(slug, isPreview);
+  const post = await getBlogPostBySlug(slug, false);
   if (!post) {
     return {
       title: "Article Not Found",
@@ -49,8 +55,8 @@ export async function generateMetadata({
     ? ogImageUrl
     : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
 
-  const shouldIndex = !isPreview && (post.status || "published") === "published" && post.robotsIndex !== false;
-  const shouldFollow = !isPreview && post.robotsFollow !== false;
+  const shouldIndex = (post.status || "published") === "published" && post.robotsIndex !== false;
+  const shouldFollow = post.robotsFollow !== false;
 
   return {
     title,
@@ -288,11 +294,11 @@ export default async function BlogPostPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ preview?: string }>;
+  searchParams?: Promise<{ preview?: string }>;
 }) {
   const { slug } = await params;
-  const { preview } = await searchParams;
-  const isPreview = preview === "true";
+  const searchParamsObj = searchParams ? await searchParams : {};
+  const isPreview = searchParamsObj.preview === "true";
 
   // Check 301 Permanent Redirect
   const redir = (await getRedirect(`blog/${slug}`)) || (await getRedirect(slug));
@@ -305,7 +311,16 @@ export default async function BlogPostPage({
 
   const url = post.canonicalUrl || `${siteConfig.url}/blog/${post.slug}`;
   const faqs = (post.faqs && post.faqs.length > 0) ? post.faqs : extractFaqsFromMarkdown(post.content);
-  const relatedPosts = await getRelatedPosts(post.slug, post.category, 3);
+  const relatedPosts = await getRelatedPosts(post.slug, post.category, 4);
+
+  // Get all published posts to determine Previous and Next articles for continuous internal crawl graph
+  const allPosts = await getBlogPosts("published");
+  const sortedPosts = [...allPosts].sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+  const currentIndex = sortedPosts.findIndex((p) => p.slug === post.slug);
+  const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+  const nextPost = currentIndex >= 0 && currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 
   const ogImageUrl = post.ogImage || post.featuredImage || siteConfig.ogImage;
   const resolvedOgImage = ogImageUrl.startsWith("http")
@@ -314,11 +329,18 @@ export default async function BlogPostPage({
 
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: post.title,
     description: post.metaDescription || post.excerpt,
     datePublished: post.publishedAt,
-    dateModified: post.updatedAt?.toISOString() || post.publishedAt,
+    dateModified: post.updatedAt
+      ? (post.updatedAt instanceof Date ? post.updatedAt.toISOString() : new Date(post.updatedAt).toISOString())
+      : post.publishedAt,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    inLanguage: "en-US",
     author: {
       "@type": "Organization",
       name: post.author || siteConfig.name,
@@ -327,14 +349,11 @@ export default async function BlogPostPage({
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
+      url: siteConfig.url,
       logo: {
         "@type": "ImageObject",
         url: `${siteConfig.url}${siteConfig.logo}`,
       },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": url,
     },
     keywords: post.tags.join(", "),
     image: [resolvedOgImage],
@@ -350,7 +369,7 @@ export default async function BlogPostPage({
     <>
       <Navbar />
       <main className="pt-28 pb-24 min-h-screen">
-        <div className="max-w-3xl mx-auto px-6 md:px-8">
+        <div className="max-w-4xl mx-auto px-6 md:px-8">
           {/* Draft Preview Warning Banner */}
           {post.status && post.status !== "published" && (
             <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 flex items-center gap-3">
@@ -431,7 +450,7 @@ export default async function BlogPostPage({
                 title={post.featuredImageTitle || undefined}
                 fill
                 priority
-                sizes="(max-width: 768px) 100vw, 768px"
+                sizes="(max-width: 896px) 100vw, 896px"
                 className="object-cover"
               />
               {post.featuredImageCaption && (
@@ -469,23 +488,55 @@ export default async function BlogPostPage({
             </div>
           )}
 
+          {/* Previous & Next Post Internal Navigation Loop */}
+          {(prevPost || nextPost) && (
+            <nav className="mt-14 pt-8 border-t border-border grid grid-cols-1 sm:grid-cols-2 gap-4" aria-label="Previous and Next Article">
+              {prevPost ? (
+                <Link
+                  href={`/blog/${prevPost.slug}`}
+                  className="group flex flex-col p-4 rounded-xl bg-surface border border-border hover:border-accent/40 transition-all text-left"
+                >
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                    <ChevronLeft className="w-3.5 h-3.5 text-accent" /> Previous Article
+                  </span>
+                  <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">
+                    {prevPost.title}
+                  </span>
+                </Link>
+              ) : <div />}
+              {nextPost && (
+                <Link
+                  href={`/blog/${nextPost.slug}`}
+                  className="group flex flex-col p-4 rounded-xl bg-surface border border-border hover:border-accent/40 transition-all text-right sm:items-end"
+                >
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                    Next Article <ChevronRight className="w-3.5 h-3.5 text-accent" />
+                  </span>
+                  <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">
+                    {nextPost.title}
+                  </span>
+                </Link>
+              )}
+            </nav>
+          )}
+
           {relatedPosts.length > 0 && (
             <section className="mt-16" aria-label="Related articles">
               <h2 className="text-2xl font-semibold mb-6">Related Articles</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {relatedPosts.map((related) => (
                   <Link
                     key={related.slug}
                     href={`/blog/${related.slug}`}
-                    className="group block p-6 rounded-2xl bg-surface border border-border hover:border-accent/30 transition-all duration-300"
+                    className="group block p-5 rounded-2xl bg-surface border border-border hover:border-accent/30 transition-all duration-300"
                   >
-                    <span className="inline-block px-2.5 py-1 text-xs font-medium bg-surface-raised border border-border rounded-full text-muted-foreground mb-3">
+                    <span className="inline-block px-2.5 py-0.5 text-xs font-medium bg-surface-raised border border-border rounded-full text-muted-foreground mb-2.5">
                       {related.category}
                     </span>
-                    <h3 className="text-base font-semibold mb-2 group-hover:text-accent transition-colors">
+                    <h3 className="text-sm font-semibold mb-2 group-hover:text-accent transition-colors line-clamp-2">
                       {related.title}
                     </h3>
-                    <p className="text-sm text-muted leading-relaxed line-clamp-2">
+                    <p className="text-xs text-muted leading-relaxed line-clamp-2">
                       {related.excerpt}
                     </p>
                   </Link>

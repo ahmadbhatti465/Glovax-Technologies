@@ -100,11 +100,12 @@ export default async function Home() {
   // Copy before sorting — getBlogPosts is React-cached, so we must not
   // mutate the shared array in place.
   const latestPosts = [...allPosts]
+    .filter((p) => p.status === "published")
     .sort(
       (a, b) =>
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     )
-    .slice(0, 3);
+    .slice(0, 6);
 
   return (
     <>

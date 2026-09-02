@@ -31,6 +31,34 @@ const nextConfig: NextConfig = {
     scrollRestoration: true, // Better scroll position restoration
     optimizePackageImports: ['lucide-react', 'framer-motion'], // Tree-shake unused exports
   },
+  // Host and path redirects
+  async redirects() {
+    return [
+      // Direct 301 from apex domain (glovaxtechnologies.com) to www canonical domain
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "glovaxtechnologies.com",
+          },
+        ],
+        destination: "https://www.glovaxtechnologies.com/:path*",
+        permanent: true,
+      },
+      // Legacy route redirects
+      {
+        source: "/portfolio",
+        destination: "/work",
+        permanent: true,
+      },
+      {
+        source: "/portfolio/:path*",
+        destination: "/work/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

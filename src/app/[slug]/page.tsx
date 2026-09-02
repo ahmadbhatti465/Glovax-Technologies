@@ -12,25 +12,31 @@ import { FaqAccordion } from "@/components/shared/FaqAccordion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { Clock, Calendar, User, ArrowLeft, Lock } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: revalidate once an hour
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  try {
+    const slugs = await getAllPageSlugs();
+    return slugs.map((s) => ({ slug: s.slug }));
+  } catch {
+    return [];
+  }
+}
 
 export async function generateMetadata({
   params,
-  searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ preview?: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { preview } = await searchParams;
-  const isPreview = preview === "true";
 
   const redir = await getRedirect(slug);
   if (redir) {
     return { title: "Redirecting...", robots: { index: false, follow: false } };
   }
 
-  const page = await getPageBySlug(slug, isPreview);
+  const page = await getPageBySlug(slug, false);
   if (!page) {
     return {
       title: "Page Not Found",
@@ -46,9 +52,9 @@ export async function generateMetadata({
   const ogImageUrl = page.ogImage || page.featuredImage || siteConfig.ogImage;
   const resolvedOgImage = ogImageUrl.startsWith("http") ? ogImageUrl : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
 
-  // If preview or draft, force noindex
-  const shouldIndex = !isPreview && page.status === "published" && page.robotsIndex;
-  const shouldFollow = !isPreview && page.robotsFollow;
+  // If published, index and follow
+  const shouldIndex = page.status === "published" && page.robotsIndex;
+  const shouldFollow = page.robotsFollow;
 
   return {
     title,
@@ -97,11 +103,11 @@ export default async function DynamicCmsPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ preview?: string }>;
+  searchParams?: Promise<{ preview?: string }>;
 }) {
   const { slug } = await params;
-  const { preview } = await searchParams;
-  const isPreview = preview === "true";
+  const searchParamsObj = searchParams ? await searchParams : {};
+  const isPreview = searchParamsObj.preview === "true";
 
   // Check 301 Permanent Redirect first
   const redir = await getRedirect(slug);
