@@ -6,23 +6,41 @@ export interface Service {
   icon: string;
 }
 
+export interface PortfolioGalleryItem {
+  url: string;
+  alt?: string;
+  title?: string;
+  caption?: string;
+}
+
 export interface PortfolioItem {
   id: string;
   title: string;
+  slug?: string;
   client: string;
   category: string;
+  shortDescription?: string;
   description: string;
   link?: string;
-  results: string[];
-  technologies: string[];
-  image?: string;
-  featured: boolean;
-  /** Case-study enrichment (optional — merged from the case-study data file). */
+  clientWebsite?: string;
   industry?: string;
+  services?: string[];
+  technologies: string[];
   timeline?: string;
+  projectYear?: string;
+  location?: string;
+  featured: boolean;
+  status?: "draft" | "published" | "archived";
   challenge?: string;
   solution?: string;
   process?: string[];
+  results: string[];
+  keyFeatures?: string[];
+  testimonialQuote?: string;
+  testimonialAuthor?: string;
+  testimonialRole?: string;
+  testimonialCompany?: string;
+  testimonialRating?: number;
   testimonial?: {
     quote: string;
     author: string;
@@ -30,7 +48,34 @@ export interface PortfolioItem {
     company: string;
     rating?: number;
   };
+  image?: string;
+  imageAlt?: string;
+  imageTitle?: string;
+  imageCaption?: string;
+  gallery?: PortfolioGalleryItem[];
   screenshots?: string[];
+  relatedProjects?: string[];
+  seoTitle?: string;
+  metaDescription?: string;
+  focusKeyword?: string;
+  secondaryKeywords?: string[];
+  canonicalUrl?: string;
+  robotsIndex?: boolean;
+  robotsFollow?: boolean;
+  includeInSitemap?: boolean;
+  sitemapPriority?: number;
+  changeFrequency?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  schemaType?: "CreativeWork" | "Article" | "WebPage" | "None";
+  publishedAt?: string;
+  createdAt?: Date | string | null;
+  updatedAt?: Date | string | null;
 }
 
 export interface Testimonial {

@@ -61,25 +61,108 @@ export const getServices = cache(async (): Promise<Service[]> => {
   }
 });
 
-export const getPortfolioItems = cache(async (): Promise<PortfolioItem[]> => {
+export const getPortfolioItems = cache(async (status?: string): Promise<PortfolioItem[]> => {
   try {
-    const rows = await db.select().from(schema.portfolioItems);
-    return rows.map((row) => ({
-      ...serializeDates(row),
-      results: row.results ?? [],
-      technologies: row.technologies ?? [],
-      featured: Boolean(row.featured),
-      link: row.link ?? undefined,
-      image: row.image ?? undefined,
-    }));
+    const rows = await withRetry(() => db.select().from(schema.portfolioItems));
+    const items = rows.map((row) => {
+      const base: PortfolioItem = {
+        ...serializeDates(row, true),
+        slug: row.slug || row.id,
+        shortDescription: row.shortDescription ?? undefined,
+        clientWebsite: row.clientWebsite ?? undefined,
+        industry: row.industry ?? undefined,
+        services: row.services ?? [],
+        technologies: row.technologies ?? [],
+        timeline: row.timeline ?? undefined,
+        projectYear: row.projectYear ?? undefined,
+        location: row.location ?? undefined,
+        featured: Boolean(row.featured),
+        status: (row.status as PortfolioItem["status"]) || "published",
+        challenge: row.challenge ?? undefined,
+        solution: row.solution ?? undefined,
+        process: row.process ?? [],
+        results: row.results ?? [],
+        keyFeatures: row.keyFeatures ?? [],
+        testimonialQuote: row.testimonialQuote ?? undefined,
+        testimonialAuthor: row.testimonialAuthor ?? undefined,
+        testimonialRole: row.testimonialRole ?? undefined,
+        testimonialCompany: row.testimonialCompany ?? undefined,
+        testimonialRating: row.testimonialRating ?? 5,
+        testimonial: row.testimonialQuote
+          ? {
+              quote: row.testimonialQuote,
+              author: row.testimonialAuthor || "Client",
+              role: row.testimonialRole || "",
+              company: row.testimonialCompany || row.client || "",
+              rating: row.testimonialRating || 5,
+            }
+          : undefined,
+        image: row.image ?? undefined,
+        imageAlt: row.imageAlt ?? undefined,
+        imageTitle: row.imageTitle ?? undefined,
+        imageCaption: row.imageCaption ?? undefined,
+        gallery: row.gallery ?? [],
+        relatedProjects: row.relatedProjects ?? [],
+        seoTitle: row.seoTitle ?? undefined,
+        metaDescription: row.metaDescription ?? undefined,
+        focusKeyword: row.focusKeyword ?? undefined,
+        secondaryKeywords: row.secondaryKeywords ?? [],
+        canonicalUrl: row.canonicalUrl ?? undefined,
+        robotsIndex: row.robotsIndex !== undefined ? Boolean(row.robotsIndex) : true,
+        robotsFollow: row.robotsFollow !== undefined ? Boolean(row.robotsFollow) : true,
+        includeInSitemap: row.includeInSitemap !== undefined ? Boolean(row.includeInSitemap) : true,
+        sitemapPriority: row.sitemapPriority ?? 0.8,
+        changeFrequency: (row.changeFrequency as PortfolioItem["changeFrequency"]) || "monthly",
+        ogTitle: row.ogTitle ?? undefined,
+        ogDescription: row.ogDescription ?? undefined,
+        ogImage: row.ogImage ?? undefined,
+        ogImageAlt: row.ogImageAlt ?? undefined,
+        twitterTitle: row.twitterTitle ?? undefined,
+        twitterDescription: row.twitterDescription ?? undefined,
+        twitterImage: row.twitterImage ?? undefined,
+        schemaType: (row.schemaType as PortfolioItem["schemaType"]) || "CreativeWork",
+        publishedAt: row.publishedAt ?? undefined,
+        link: row.link ?? undefined,
+      };
+
+      return base;
+    });
+
+    if (status) {
+      return items.filter((p) => (p.status || "published") === status);
+    }
+    return items;
   } catch {
     return [];
   }
 });
 
 export const getFeaturedPortfolioItems = cache(async (): Promise<PortfolioItem[]> => {
-  const items = await getPortfolioItems();
+  const items = await getPortfolioItems("published");
   return items.filter((item) => item.featured);
+});
+
+export const getPortfolioItemByIdOrSlug = cache(
+  async (idOrSlug: string, allowUnpublished = false): Promise<PortfolioItem | null> => {
+    try {
+      const items = await getPortfolioItems();
+      const found = items.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
+      if (!found) return null;
+      if (!allowUnpublished && (found.status || "published") !== "published") return null;
+      return found;
+    } catch {
+      return null;
+    }
+  }
+);
+
+export const getAllPortfolioSlugs = cache(async (): Promise<{ id: string; slug: string }[]> => {
+  try {
+    const items = await getPortfolioItems("published");
+    return items.map((p) => ({ id: p.id, slug: p.slug || p.id }));
+  } catch {
+    return [];
+  }
 });
 
 export const getTeamMembers = cache(async (): Promise<TeamMember[]> => {
@@ -416,9 +499,9 @@ export const getInternalLinkTargets = cache(async (): Promise<InternalLinkTarget
     portfolioList.forEach((p) => {
       targets.push({
         title: `${p.title} (${p.client})`,
-        url: p.link || `/work#${p.id}`,
+        url: `/work/${p.slug || p.id}`,
         category: "Portfolio",
-        description: p.description.slice(0, 80),
+        description: (p.shortDescription || p.description || "").slice(0, 80),
       });
     });
 

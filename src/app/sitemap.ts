@@ -140,7 +140,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let posts: { slug: string; publishedAt: string; updatedAt: Date | null }[] = [];
   let directorySlugs: { slug: string }[] = [];
-  let caseStudyIds: { id: string }[] = [];
+  let caseStudyIds: {
+    id: string;
+    slug: string;
+    canonicalUrl: string | null;
+    publishedAt: string | null;
+    updatedAt: Date | null;
+    sitemapPriority: number;
+    changeFrequency: string;
+  }[] = [];
   let cmsPages: {
     slug: string;
     canonicalUrl: string | null;
@@ -174,8 +182,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const bizRows = await db.select({ slug: businesses.slug }).from(businesses);
     directorySlugs = bizRows;
-    const caseRows = await db.select({ id: portfolioItems.id }).from(portfolioItems);
-    caseStudyIds = caseRows;
+    const caseRows = await db.select().from(portfolioItems);
+    caseStudyIds = caseRows
+      .filter((p) => (p.status || "published") === "published" && p.includeInSitemap !== false && p.robotsIndex !== false)
+      .map((p) => ({
+        id: p.id,
+        slug: p.slug || p.id,
+        canonicalUrl: p.canonicalUrl,
+        publishedAt: p.publishedAt,
+        updatedAt: p.updatedAt,
+        sitemapPriority: p.sitemapPriority,
+        changeFrequency: p.changeFrequency,
+      }));
 
     const pageRows = await db.select().from(pages);
     cmsPages = pageRows.map((p) => ({
@@ -213,12 +231,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const caseStudyEntries: MetadataRoute.Sitemap = caseStudyIds.map((p) => ({
-    url: `${siteConfig.url}/work/${p.id}`,
-    lastModified: toSitemapDate(portfolioUpdated) ?? now,
-    changeFrequency: "monthly",
-    priority: 0.8,
-  }));
+  const caseStudyEntries: MetadataRoute.Sitemap = caseStudyIds.map((p) => {
+    const published = toSitemapDate(p.publishedAt);
+    const updated = p.updatedAt ? toSitemapDate(p.updatedAt) : undefined;
+    const lastModified = updated && published && updated > published ? updated : published || portfolioUpdated || now;
+    const pageUrl = p.canonicalUrl || `${siteConfig.url}/work/${p.slug || p.id}`;
+
+    return {
+      url: pageUrl,
+      lastModified,
+      changeFrequency: (p.changeFrequency as MetadataRoute.Sitemap[0]["changeFrequency"]) || "monthly",
+      priority: p.sitemapPriority || 0.8,
+    };
+  });
 
   // Filter and map published CMS pages for the sitemap
   const cmsPageEntries: MetadataRoute.Sitemap = cmsPages
