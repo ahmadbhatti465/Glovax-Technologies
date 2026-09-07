@@ -51,7 +51,7 @@ export async function generateMetadata({
   const description = post.metaDescription || post.excerpt.slice(0, 160);
 
   const ogImageUrl = post.ogImage || post.featuredImage || siteConfig.ogImage;
-  const resolvedOgImage = ogImageUrl.startsWith("http")
+  const resolvedOgImage = ogImageUrl.startsWith("http") || ogImageUrl.startsWith("data:")
     ? ogImageUrl
     : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
 
@@ -323,7 +323,7 @@ export default async function BlogPostPage({
   const nextPost = currentIndex >= 0 && currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 
   const ogImageUrl = post.ogImage || post.featuredImage || siteConfig.ogImage;
-  const resolvedOgImage = ogImageUrl.startsWith("http")
+  const resolvedOgImage = ogImageUrl.startsWith("http") || ogImageUrl.startsWith("data:")
     ? ogImageUrl
     : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
 

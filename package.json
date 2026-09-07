@@ -17,7 +17,9 @@
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@libsql/client": "^0.17.4",
+    "@vercel/blob": "^2.8.0",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.11.0",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
     "framer-motion": "^12.34.3",
@@ -29,6 +31,7 @@
     "react-dom": "19.2.3",
     "react-hook-form": "^7.78.0",
     "resend": "^6.12.4",
+    "sharp": "^0.35.3",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.1",
     "zod": "^4.4.3"
@@ -44,7 +47,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "shadcn": "^3.8.5",
-    "sharp": "^0.35.3",
     "svgo": "^4.0.2",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",

@@ -40,6 +40,7 @@ function getImageSrc(val: unknown): string {
   if (typeof val !== "string") return "";
   if (val.startsWith("data:")) return val;
   if (val.startsWith("/")) return val;
+  if (val.startsWith("http://") || val.startsWith("https://")) return val;
   return "";
 }
 

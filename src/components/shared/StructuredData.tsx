@@ -12,7 +12,7 @@ interface BreadcrumbItem {
 }
 
 function absoluteUrl(path: string): string {
-  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) return path;
   return `${siteConfig.url}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 

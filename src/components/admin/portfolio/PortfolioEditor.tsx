@@ -180,7 +180,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
   const [imageAlt, setImageAlt] = useState(initialItem?.imageAlt || "");
   const [imageTitle, setImageTitle] = useState(initialItem?.imageTitle || "");
   const [imageCaption, setImageCaption] = useState(initialItem?.imageCaption || "");
-  const [imageDetails, setImageDetails] = useState<{ size?: number; fileName?: string } | null>(
+  const [imageDetails, setImageDetails] = useState<{ size?: number; fileName?: string; provider?: string } | null>(
     null
   );
   const [gallery, setGallery] = useState<PortfolioGalleryItem[]>(initialItem?.gallery || []);
@@ -379,7 +379,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
       const data = await res.json();
       if (res.ok && data.url) {
         setImage(data.url);
-        setImageDetails({ size: data.size, fileName: data.fileName });
+        setImageDetails({ size: data.size, fileName: data.fileName, provider: data.provider });
         if (!ogImage) setOgImage(data.url);
         if (!imageAlt) {
           const autoAlt = `${title || "Portfolio project"} for ${client || "client"} — ${category}`;
@@ -1457,7 +1457,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
                     <div className="relative rounded-xl overflow-hidden border border-white/10 bg-card p-2 flex flex-col sm:flex-row gap-4 items-center">
                       <div className="relative w-full sm:w-48 aspect-video rounded-lg overflow-hidden bg-black/40 border border-white/5 shrink-0">
                         <Image
-                          src={image.startsWith("/") || image.startsWith("http") ? image : `/${image}`}
+                          src={image.startsWith("/") || image.startsWith("http") || image.startsWith("data:") ? image : `/${image}`}
                           alt={imageAlt || "Project preview"}
                           fill
                           className="object-cover"
@@ -1466,7 +1466,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
                       <div className="flex-1 space-y-2 text-xs w-full">
                         <div className="flex items-center justify-between">
                           <span className="font-mono text-[11px] text-gray-300 truncate max-w-[200px]">
-                            {image}
+                            {image.startsWith("data:") ? "Embedded Data Image" : image}
                           </span>
                           <button
                             type="button"
@@ -1481,8 +1481,19 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                        <div className="text-[11px] text-gray-400">
-                          {imageDetails?.size ? `${Math.round(imageDetails.size / 1024)} KB` : "Stored in /uploads"}
+                        <div className="text-[11px] text-gray-400 flex items-center gap-2">
+                          {imageDetails?.size ? <span>{Math.round(imageDetails.size / 1024)} KB</span> : null}
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-300">
+                            {imageDetails?.provider === "cloudinary"
+                              ? "Cloudinary CDN"
+                              : imageDetails?.provider === "vercel-blob"
+                              ? "Vercel Blob"
+                              : image.startsWith("http")
+                              ? "Cloud Storage"
+                              : image.startsWith("data:")
+                              ? "Direct Embedded"
+                              : "Local /uploads"}
+                          </span>
                         </div>
                         <label className="cursor-pointer inline-flex items-center gap-1 text-[11px] text-[#1EDAC6] hover:underline">
                           <Upload className="w-3 h-3" /> Replace image
@@ -1637,7 +1648,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
                         >
                           <div className="relative aspect-video rounded-lg overflow-hidden bg-black/40 border border-white/5">
                             <Image
-                              src={item.url.startsWith("/") || item.url.startsWith("http") ? item.url : `/${item.url}`}
+                              src={item.url.startsWith("/") || item.url.startsWith("http") || item.url.startsWith("data:") ? item.url : `/${item.url}`}
                               alt={item.alt || `Screenshot ${idx + 1}`}
                               fill
                               className="object-cover"

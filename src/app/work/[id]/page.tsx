@@ -57,7 +57,7 @@ export async function generateMetadata({
     project.description.slice(0, 160);
 
   const rawImage = project.ogImage || project.image || defaultOgImage.url;
-  const resolvedOgImage = rawImage.startsWith("http")
+  const resolvedOgImage = rawImage.startsWith("http") || rawImage.startsWith("data:")
     ? rawImage
     : `${siteConfig.url}${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
 
@@ -156,7 +156,7 @@ export default async function CaseStudyPage({
     headline: project.title,
     description: project.metaDescription || project.shortDescription || project.description,
     image: project.image
-      ? project.image.startsWith("http")
+      ? project.image.startsWith("http") || project.image.startsWith("data:")
         ? project.image
         : `${siteConfig.url}${project.image.startsWith("/") ? "" : "/"}${project.image}`
       : undefined,

@@ -6,11 +6,12 @@ const nextConfig: NextConfig = {
 
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
-    // Add real production image domains here when needed.
-    // Example:
-    // remotePatterns: [
-    //   { protocol: 'https', hostname: 'cdn.example.com', pathname: '/**' },
-    // ],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
+      { protocol: 'https', hostname: '*.public.blob.vercel-storage.com' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: '**' },
+    ],
   },
 
   compress: true, // Enable compression

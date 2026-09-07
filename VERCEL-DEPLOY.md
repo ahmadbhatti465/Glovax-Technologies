@@ -90,14 +90,23 @@ After deploy, go to project Settings:
 
 Add these in **Settings > Environment Variables**:
 
-| Name | Value |
-|------|-------|
-| `DATABASE_URL` | `libsql://glovax-db-YOURNAME.turso.io` |
-| `DATABASE_AUTH_TOKEN` | `YOUR-TURSO-AUTH-TOKEN` |
-| `ADMIN_PASSWORD` | `glovax-admin-2026` (or your own) |
-| `JWT_SECRET` | Generate a random 32+ char string |
-| `RESEND_API_KEY` | `re_YOUR-RESEND-API-KEY` (from resend.com/api-keys) |
-| `OWNER_EMAIL` | `ahmad765rajput@gmail.com` |
+| Name | Value | Required |
+|------|-------|----------|
+| `DATABASE_URL` | `libsql://glovax-db-YOURNAME.turso.io` | Yes |
+| `DATABASE_AUTH_TOKEN` | `YOUR-TURSO-AUTH-TOKEN` | Yes |
+| `ADMIN_PASSWORD` | `glovax-admin-2026` (or your own) | Yes |
+| `JWT_SECRET` | Generate a random 32+ char string | Yes |
+| `RESEND_API_KEY` | `re_YOUR-RESEND-API-KEY` (from resend.com/api-keys) | Optional |
+| `OWNER_EMAIL` | `ahmad765rajput@gmail.com` | Optional |
+| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name | Optional (Recommended for image uploads) |
+| `CLOUDINARY_API_KEY` | Your Cloudinary API key | Optional |
+| `CLOUDINARY_API_SECRET` | Your Cloudinary API secret | Optional |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob store token | Optional (Alternative to Cloudinary) |
+
+> **Note on Image Uploads:** In online environments like Vercel (serverless `/var/task`), the file system is read-only. We support:
+> 1. **Cloudinary (Recommended, Free 25GB)**: Just add `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` to Vercel Environment Variables.
+> 2. **Vercel Blob**: Connect a Vercel Blob store under Storage tab (auto-injects `BLOB_READ_WRITE_TOKEN`).
+> 3. **Automatic Fallback**: If neither is set, uploads automatically convert to optimized embedded data URLs so uploads will **never crash** or throw `ENOENT` errors!
 
 **IMPORTANT**: Add the same variables in:
 - Production

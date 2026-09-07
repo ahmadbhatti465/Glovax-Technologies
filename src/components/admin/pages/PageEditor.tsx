@@ -903,7 +903,7 @@ export function PageEditor({ initialPage, isNew = false }: PageEditorProps) {
                     {featuredImage && (
                       <div className="rounded-xl overflow-hidden border border-[#1EDAC6]/20 w-full relative aspect-[16/9] bg-black/40 mb-3">
                         <Image
-                          src={featuredImage.startsWith("/") || featuredImage.startsWith("http") ? featuredImage : `/${featuredImage}`}
+                          src={featuredImage.startsWith("/") || featuredImage.startsWith("http") || featuredImage.startsWith("data:") ? featuredImage : `/${featuredImage}`}
                           alt={featuredImageAlt || "Preview"}
                           fill
                           sizes="400px"

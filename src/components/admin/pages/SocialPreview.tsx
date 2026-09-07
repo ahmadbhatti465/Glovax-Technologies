@@ -86,7 +86,7 @@ export function SocialPreview({
         <div className="w-full aspect-[1.91/1] bg-black/40 relative overflow-hidden flex items-center justify-center">
           {displayImage ? (
             <Image
-              src={displayImage.startsWith("/") || displayImage.startsWith("http") ? displayImage : `/${displayImage}`}
+              src={displayImage.startsWith("/") || displayImage.startsWith("http") || displayImage.startsWith("data:") ? displayImage : `/${displayImage}`}
               alt={displayTitle}
               fill
               sizes="500px"

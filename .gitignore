@@ -43,5 +43,9 @@ sqlite.db
 *.tsbuildinfo
 next-env.d.ts
 
+# uploads
+public/uploads/*
+!public/uploads/.gitkeep
+
 # recovery artifact (base64 image backup from image migration)
 tools/backup-portfolio-images.json

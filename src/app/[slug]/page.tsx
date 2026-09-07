@@ -50,7 +50,7 @@ export async function generateMetadata({
   const description = page.metaDescription || page.excerpt || siteConfig.description;
 
   const ogImageUrl = page.ogImage || page.featuredImage || siteConfig.ogImage;
-  const resolvedOgImage = ogImageUrl.startsWith("http") ? ogImageUrl : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
+  const resolvedOgImage = ogImageUrl.startsWith("http") || ogImageUrl.startsWith("data:") ? ogImageUrl : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
 
   // If published, index and follow
   const shouldIndex = page.status === "published" && page.robotsIndex;
