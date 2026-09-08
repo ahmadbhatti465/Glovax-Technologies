@@ -208,6 +208,73 @@ function AboutContentInner({
             ))}
           </div>
 
+          {/* Founder & Technical Leadership Section (E-E-A-T & Authority) */}
+          <section aria-labelledby="founder-leadership" className="mb-24">
+            <SectionHeader
+              eyebrow="Engineering Leadership"
+              title="Built by engineers, led by"
+              titleHighlight="craftsmanship"
+              subtitle="Direct access to senior full-stack & AI architecture with zero junior handoffs."
+              align="left"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="p-8 md:p-10 rounded-3xl bg-surface border border-border hover:border-accent/40 transition-all duration-500 shadow-2xl relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center md:items-start">
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-accent/10 border-2 border-accent/40 flex items-center justify-center text-accent font-bold text-2xl md:text-3xl flex-shrink-0 shadow-lg">
+                  MA
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <span className="text-xs uppercase tracking-widest text-accent font-semibold">
+                    Founder & Lead Systems Architect
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-bold mt-1 text-foreground">
+                    Muhammad Ahmad
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Full Stack Developer & AI/ML Engineer · Lahore, Pakistan (Serving UK & US Clients)
+                  </p>
+                  <p className="text-sm md:text-base text-muted mt-4 leading-relaxed">
+                    Muhammad Ahmad is the founder of Glovax Technologies, specializing in production-grade Next.js web applications, high-throughput FastAPI backends, and custom Retrieval-Augmented Generation (RAG) architectures. With extensive experience delivering scalable software platforms for international startups across the US, UK, and Middle East, Ahmad bridges the gap between deep AI/ML capabilities and modern cloud development.
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-6 text-sm">
+                    <a
+                      href="https://linkedin.com/in/ahmadbhatti465"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-accent font-medium hover:underline"
+                    >
+                      LinkedIn Profile &rarr;
+                    </a>
+                    <span className="text-border">·</span>
+                    <a
+                      href="https://github.com/ahmadbhatti465"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-accent font-medium hover:underline"
+                    >
+                      GitHub Projects &rarr;
+                    </a>
+                    <span className="text-border">·</span>
+                    <a
+                      href="https://www.upwork.com/freelancers/ahmadbhatti465"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-accent font-medium hover:underline"
+                    >
+                      Upwork Top Rated &rarr;
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </section>
+
           {/* Timeline */}
           <SectionHeader
             eyebrow="Our Journey"

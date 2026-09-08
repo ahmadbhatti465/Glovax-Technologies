@@ -19,89 +19,99 @@ function absoluteUrl(path: string): string {
 export function StructuredData() {
   const orgData = {
     "@context": "https://schema.org",
-    "@type": ["Organization", "ProfessionalService", "LocalBusiness"],
-    name: siteConfig.name,
-    url: siteConfig.url,
-    logo: absoluteUrl(siteConfig.logo),
-    image: absoluteUrl(siteConfig.ogImage),
-    email: siteConfig.email,
-    telephone: siteConfig.phone,
-    description: siteConfig.description,
-    slogan: siteConfig.tagline,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "31 K, DHA Phase 5",
-      addressLocality: "Lahore",
-      addressRegion: "Punjab",
-      postalCode: "54000",
-      addressCountry: "PK",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 31.4808,
-      longitude: 74.3758,
-    },
-    areaServed: "Worldwide",
-    knowsAbout: [
-      "Web Development",
-      "Mobile App Development",
-      "Artificial Intelligence",
-      "Machine Learning",
-      "Cloud Computing",
-      "DevOps",
-      "UI/UX Design",
-      "Digital Marketing",
-      "Search Engine Optimization",
-      "SaaS Development",
-    ],
-    sameAs: [
-      siteConfig.social.linkedin,
-      siteConfig.social.instagram,
-      siteConfig.social.upwork,
-    ],
-    contactPoint: {
-      "@type": "ContactPoint",
-      contactType: "customer support",
-      email: siteConfig.email,
-      telephone: siteConfig.phone,
-      availableLanguage: ["English"],
-    },
-  };
-
-  const websiteData = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteConfig.name,
-    url: siteConfig.url,
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      logo: {
-        "@type": "ImageObject",
-        url: absoluteUrl(siteConfig.logo),
+    "@graph": [
+      {
+        "@type": ["Organization", "ProfessionalService"],
+        "@id": `${siteConfig.url}/#organization`,
+        name: siteConfig.name,
+        url: siteConfig.url,
+        logo: absoluteUrl(siteConfig.logo),
+        image: absoluteUrl(siteConfig.ogImage),
+        email: siteConfig.email,
+        telephone: siteConfig.phone,
+        description: siteConfig.description,
+        slogan: siteConfig.tagline,
+        founder: {
+          "@type": "Person",
+          "@id": `${siteConfig.url}/#founder`,
+          name: siteConfig.founder.name,
+          jobTitle: siteConfig.founder.role,
+          sameAs: [
+            siteConfig.founder.linkedin,
+            siteConfig.founder.github,
+            siteConfig.founder.upwork,
+          ],
+        },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "31 K, DHA Phase 5",
+          addressLocality: "Lahore",
+          addressRegion: "Punjab",
+          postalCode: "54000",
+          addressCountry: "PK",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 31.4808,
+          longitude: 74.3758,
+        },
+        areaServed: [
+          { "@type": "Country", name: "United States" },
+          { "@type": "Country", name: "United Kingdom" },
+          { "@type": "Country", name: "Canada" },
+          { "@type": "Country", name: "Worldwide" },
+        ],
+        knowsAbout: [
+          "Retrieval-Augmented Generation (RAG)",
+          "LangChain & Multi-Agent AI Systems",
+          "Next.js App Router & React",
+          "MERN Stack Development",
+          "FastAPI & Python Backend Architecture",
+          "Docker & AWS Cloud Infrastructure",
+          "AI Chatbots & LLM Fine-Tuning",
+          "Search Engine Optimization (SEO)",
+          "Generative Engine Optimization (GEO)",
+          "Custom SaaS Development",
+        ],
+        sameAs: [
+          siteConfig.social.linkedin,
+          siteConfig.social.instagram,
+          siteConfig.social.upwork,
+          siteConfig.founder.github,
+        ],
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          email: siteConfig.email,
+          telephone: siteConfig.phone,
+          availableLanguage: ["English"],
+        },
       },
-    },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${siteConfig.url}/blog?q={search_term_string}`,
+      {
+        "@type": "WebSite",
+        "@id": `${siteConfig.url}/#website`,
+        name: siteConfig.name,
+        url: siteConfig.url,
+        publisher: {
+          "@id": `${siteConfig.url}/#organization`,
+        },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${siteConfig.url}/blog?q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
       },
-      "query-input": "required name=search_term_string",
-    },
+    ],
   };
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgData) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteData) }}
-      />
-    </>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(orgData) }}
+    />
   );
 }
 

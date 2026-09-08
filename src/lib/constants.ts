@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Glovax Technologies",
-  tagline: "Software House & Digital Agency",
+  tagline: "Software House & AI/ML Digital Agency",
   description:
-    "Glovax Technologies is a world-class software house and digital agency delivering AI-powered web development, mobile apps, cloud solutions, and digital marketing that drives real business growth.",
+    "Glovax Technologies is a premier software house and AI engineering agency. We build production-grade Next.js web applications, custom RAG AI systems, and scalable FastAPI backends for high-growth US & UK businesses.",
   url: "https://www.glovaxtechnologies.com",
   logo: "/images/glovax-logo.png",
   ogImage: "/images/glovax-og.png",
@@ -11,10 +11,17 @@ export const siteConfig = {
   address: "31 K, DHA Phase 5",
   calendarUrl: "https://calendly.com/glovaxtechnologies/30min",
   responseTime: "24 hours",
+  founder: {
+    name: "Muhammad Ahmad",
+    role: "Founder & Lead Full Stack / AI Engineer",
+    location: "Lahore, Pakistan",
+    linkedin: "https://linkedin.com/in/ahmadbhatti465",
+    github: "https://github.com/ahmadbhatti465",
+    upwork: "https://www.upwork.com/freelancers/ahmadbhatti465",
+  },
   social: {
     linkedin: "https://linkedin.com/company/glovaxtechnologies",
     instagram: "https://www.instagram.com/glovaxtechnologies/",
-    // TODO: replace with your real Upwork profile URL before launch.
     upwork: "https://www.upwork.com/freelancers/ahmadbhatti465",
     whatsapp: "https://wa.me/923254255480",
   },
