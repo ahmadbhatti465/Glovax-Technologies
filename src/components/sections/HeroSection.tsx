@@ -205,8 +205,18 @@ export function HeroSection() {
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
-            <p className="mt-2.5 text-xs text-muted-foreground">
-              Free, no obligation — we reply within {siteConfig.responseTime}.
+            <p className="mt-2.5 text-xs text-muted-foreground flex items-center justify-center gap-1.5 flex-wrap">
+              <span>Free, no obligation — we reply within {siteConfig.responseTime}.</span>
+              <span className="hidden sm:inline">•</span>
+              <span>
+                Or email directly:{" "}
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  className="text-accent hover:underline font-medium"
+                >
+                  {siteConfig.email}
+                </a>
+              </span>
             </p>
           </motion.div>
         </div>

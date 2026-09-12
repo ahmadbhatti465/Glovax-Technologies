@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Send, X } from "lucide-react";
+import { Bot, Send, X, Mail } from "lucide-react";
 import { getChatAnswer, findEmail, QUICK_REPLIES } from "@/lib/chat-concierge";
 import { siteConfig } from "@/lib/constants";
 
@@ -124,16 +124,26 @@ export function ChatWidget() {
             className="fixed bottom-36 lg:bottom-24 left-6 z-40 w-[360px] max-w-[calc(100vw-3rem)] h-[480px] max-h-[70vh] rounded-2xl bg-surface-raised border border-neutral-border shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-5 py-4 border-b border-neutral-border bg-card">
-              <div className="w-9 h-9 rounded-full bg-teal/15 border border-teal/30 flex items-center justify-center text-teal">
-                <Bot className="w-5 h-5" />
+            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-border bg-card">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-teal/15 border border-teal/30 flex items-center justify-center text-teal">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold leading-tight">Glovax Concierge</p>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-success" /> Online · replies instantly
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-semibold leading-tight">Glovax Concierge</p>
-                <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success" /> Online · replies instantly
-                </p>
-              </div>
+              <a
+                href={`mailto:${siteConfig.email}`}
+                title={`Email ${siteConfig.email}`}
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-accent transition-colors px-2 py-1 rounded-md hover:bg-surface-raised border border-transparent hover:border-neutral-border"
+              >
+                <Mail className="w-3.5 h-3.5 text-accent" />
+                <span className="text-[11px] font-medium hidden sm:inline">Email Us</span>
+              </a>
             </div>
 
             {/* Messages */}

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { navLinks, siteConfig } from "@/lib/constants";
-import { Menu, X, ArrowUpRight, Calendar, MessageCircle } from "lucide-react";
+import { Menu, X, ArrowUpRight, Calendar, MessageCircle, Mail } from "lucide-react";
 import Image from "next/image";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
 import { ChatWidget } from "@/components/chat/ChatWidget";
@@ -156,8 +156,16 @@ export function Navbar() {
                 })}
               </div>
 
-              {/* CTA Button */}
-              <div className="hidden lg:block">
+              {/* CTA & Email */}
+              <div className="hidden lg:flex items-center gap-3">
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  aria-label={`Email us at ${siteConfig.email}`}
+                  className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium text-muted-foreground hover:text-accent hover:bg-surface-raised border border-transparent hover:border-neutral-border transition-all duration-200"
+                >
+                  <Mail className="w-3.5 h-3.5 text-accent" />
+                  <span>{siteConfig.email}</span>
+                </a>
                 <a
                   href="/contact"
                   aria-label="Book a call with Glovax Technologies"
@@ -282,6 +290,14 @@ export function Navbar() {
                 >
                   <MessageCircle className="w-4 h-4" />
                   WhatsApp us
+                </a>
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  onClick={closeMobile}
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3.5 text-sm font-medium rounded-full bg-surface-raised border border-neutral-border text-foreground hover:border-teal/40 hover:text-accent transition-colors"
+                >
+                  <Mail className="w-4 h-4 text-accent" />
+                  <span>{siteConfig.email}</span>
                 </a>
               </div>
             </motion.div>

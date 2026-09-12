@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'standalone', // Critical: Creates optimized standalone build
+  staticPageGenerationTimeout: 180,
 
   images: {
     unoptimized: process.env.NODE_ENV === 'development',

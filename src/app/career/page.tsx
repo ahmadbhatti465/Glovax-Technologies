@@ -48,7 +48,7 @@ const careerFaqs = [
   {
     question: "How do I apply for a position?",
     answer:
-      "Click the 'Apply Now' button on any open position to reach our contact form, or email your resume and portfolio directly to glovaxtechnologies@gmail.com.",
+      "Click the 'Apply Now' button on any open position to reach our contact form, or email your resume and portfolio directly to info@glovaxtechnologies.com.",
   },
 ];
 

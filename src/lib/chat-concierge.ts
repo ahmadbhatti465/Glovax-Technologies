@@ -205,12 +205,12 @@ const greetingAnswer =
   "Hi there! 👋 Welcome to Glovax Technologies. I can answer questions about our services, pricing, process, NDAs, and more — or book you a free 30-minute call. What would you like to know?";
 
 const fallbackAnswer =
-  "I'm not sure I caught that. I can help with: pricing & costs, services, the process, NDAs & IP, payments, and booking a free call. Try one of the quick options below, or book a call directly: {calendar}";
+  "I'm not sure I caught that. I can help with: pricing & costs, services, the process, NDAs & IP, payments, and booking a free call. Try one of the quick options below, email us directly at {email}, or book a call: {calendar}";
 
 export const QUICK_REPLIES = [
   { label: "Pricing", message: "How much does a project cost?" },
   { label: "Book a call", message: "I'd like to book a free call" },
+  { label: "Email & Contact", message: "How can I contact or email you?" },
   { label: "NDAs", message: "Will you sign an NDA?" },
   { label: "Your process", message: "How do you work?" },
-  { label: "Timeline", message: "How long does a project take?" },
 ];

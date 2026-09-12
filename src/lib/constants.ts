@@ -6,7 +6,7 @@ export const siteConfig = {
   url: "https://www.glovaxtechnologies.com",
   logo: "/images/glovax-logo.png",
   ogImage: "/images/glovax-og.png",
-  email: "glovaxtechnologies@gmail.com",
+  email: "info@glovaxtechnologies.com",
   phone: "+923254255480",
   address: "31 K, DHA Phase 5",
   calendarUrl: "https://calendly.com/glovaxtechnologies/30min",

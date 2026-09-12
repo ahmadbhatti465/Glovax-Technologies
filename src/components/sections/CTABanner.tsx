@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { siteConfig } from "@/lib/constants";
-import { ShieldCheck, KeyRound, Timer, Check } from "lucide-react";
+import { ShieldCheck, KeyRound, Timer, Check, Mail } from "lucide-react";
 
 interface CTABannerProps {
   cta?: {
@@ -125,6 +125,21 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
                   {badge.label}
                 </span>
               ))}
+            </div>
+
+            <div className="mt-6 flex items-center justify-center">
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent transition-colors"
+              >
+                <Mail className="w-4 h-4 text-accent" />
+                <span>
+                  Prefer email? Reach us at{" "}
+                  <strong className="text-foreground hover:text-accent font-medium underline underline-offset-4 decoration-accent/40">
+                    {siteConfig.email}
+                  </strong>
+                </span>
+              </a>
             </div>
 
             {lastUpdated && (

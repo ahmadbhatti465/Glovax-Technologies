@@ -71,7 +71,7 @@ export default function ContactContent() {
             eyebrow="Contact"
             title="Let's work"
             titleHighlight="together"
-            subtitle="You can reach Glovax Technologies by email, phone, or the form below. We reply within 24 hours on business days and are happy to answer questions about quotes, timelines, and services."
+            subtitle={`You can reach Glovax Technologies directly at ${siteConfig.email}, by phone, or through the form below. We reply within 24 hours on business days and are happy to answer questions about quotes, timelines, and services.`}
             align="left"
           />
 

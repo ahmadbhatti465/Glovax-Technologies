@@ -97,7 +97,7 @@ Add these in **Settings > Environment Variables**:
 | `ADMIN_PASSWORD` | `glovax-admin-2026` (or your own) | Yes |
 | `JWT_SECRET` | Generate a random 32+ char string | Yes |
 | `RESEND_API_KEY` | `re_YOUR-RESEND-API-KEY` (from resend.com/api-keys) | Optional |
-| `OWNER_EMAIL` | `ahmad765rajput@gmail.com` | Optional |
+| `OWNER_EMAIL` | `info@glovaxtechnologies.com` | Optional |
 | `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name | Optional (Recommended for image uploads) |
 | `CLOUDINARY_API_KEY` | Your Cloudinary API key | Optional |
 | `CLOUDINARY_API_SECRET` | Your Cloudinary API secret | Optional |
