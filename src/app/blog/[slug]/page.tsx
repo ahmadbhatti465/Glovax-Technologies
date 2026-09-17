@@ -12,6 +12,7 @@ import { FaqAccordion } from "@/components/shared/FaqAccordion";
 import { ArrowLeft, ArrowRight, Clock, Calendar, RefreshCw, User, Lock, ChevronLeft, ChevronRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { FAQItem } from "@/types";
+import { normalizeCanonicalUrl } from "@/lib/utils";
 
 export const revalidate = 3600; // ISR: revalidate once an hour
 export const dynamicParams = true;
@@ -46,7 +47,7 @@ export async function generateMetadata({
     };
   }
 
-  const url = post.canonicalUrl || `${siteConfig.url}/blog/${post.slug}`;
+  const url = normalizeCanonicalUrl(post.canonicalUrl, `/blog/${post.slug}`);
   const title = post.seoTitle || `${post.title} | ${siteConfig.name}`;
   const description = post.metaDescription || post.excerpt.slice(0, 160);
 
@@ -309,7 +310,7 @@ export default async function BlogPostPage({
   const post = await getBlogPostBySlug(slug, isPreview);
   if (!post) notFound();
 
-  const url = post.canonicalUrl || `${siteConfig.url}/blog/${post.slug}`;
+  const url = normalizeCanonicalUrl(post.canonicalUrl, `/blog/${post.slug}`);
   const faqs = (post.faqs && post.faqs.length > 0) ? post.faqs : extractFaqsFromMarkdown(post.content);
   const relatedPosts = await getRelatedPosts(post.slug, post.category, 4);
 

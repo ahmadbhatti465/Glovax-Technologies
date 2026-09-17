@@ -4,6 +4,7 @@ import { getPortfolioItems, getPortfolioItemByIdOrSlug, getRedirect } from "@/li
 import { enrichWithCaseStudy } from "@/data/case-studies";
 import { siteConfig, ogImage as defaultOgImage } from "@/lib/constants";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
+import { normalizeCanonicalUrl } from "@/lib/utils";
 import CaseStudyContent from "./case-study-content";
 
 export const revalidate = 60;
@@ -49,7 +50,7 @@ export async function generateMetadata({
 
   const project = enrichWithCaseStudy(rawItem);
   const slug = project.slug || project.id;
-  const canonicalUrl = project.canonicalUrl || `${siteConfig.url}/work/${slug}`;
+  const canonicalUrl = normalizeCanonicalUrl(project.canonicalUrl, `/work/${slug}`);
   const title = project.seoTitle || `${project.title} | Case Study | ${siteConfig.name}`;
   const description =
     project.metaDescription ||
@@ -134,7 +135,7 @@ export default async function CaseStudyPage({
 
   const project = enrichWithCaseStudy(rawItem);
   const slug = project.slug || project.id;
-  const pageUrl = project.canonicalUrl || `${siteConfig.url}/work/${slug}`;
+  const pageUrl = normalizeCanonicalUrl(project.canonicalUrl, `/work/${slug}`);
 
   // Fetch related projects
   const allItems = await getPortfolioItems("published");

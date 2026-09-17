@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/constants";
+import { normalizeCanonicalUrl } from "@/lib/utils";
 import { db } from "@/db";
 import { blogPosts, portfolioItems, services, teamMembers, jobPositions, siteContent, businesses, pages } from "@/db/schema";
 
@@ -235,7 +236,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const published = toSitemapDate(p.publishedAt);
     const updated = p.updatedAt ? toSitemapDate(p.updatedAt) : undefined;
     const lastModified = updated && published && updated > published ? updated : published || portfolioUpdated || now;
-    const pageUrl = p.canonicalUrl || `${siteConfig.url}/work/${p.slug || p.id}`;
+    const pageUrl = normalizeCanonicalUrl(p.canonicalUrl, `/work/${p.slug || p.id}`);
 
     return {
       url: pageUrl,
@@ -258,7 +259,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const published = toSitemapDate(p.publishedAt);
       const updated = p.updatedAt ? toSitemapDate(p.updatedAt) : undefined;
       const lastModified = updated && published && updated > published ? updated : published || now;
-      const pageUrl = p.canonicalUrl || `${siteConfig.url}/${p.slug}`;
+      const pageUrl = normalizeCanonicalUrl(p.canonicalUrl, `/${p.slug}`);
 
       return {
         url: pageUrl,

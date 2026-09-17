@@ -602,7 +602,7 @@ async function optimizeAll() {
     }
 
     const featuredImage = "/images/glovax-og.png";
-    const canonicalUrl = `https://glovaxtechnologies.com/blog/${post.slug}`;
+    const canonicalUrl = `https://www.glovaxtechnologies.com/blog/${post.slug}`;
 
     const updatePayload = {
       seoTitle: opt.seoTitle,
