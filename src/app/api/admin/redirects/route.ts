@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { db } from "@/db";
 import { redirects } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -25,10 +26,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     const source = body.source?.startsWith("/") ? body.source : `/${body.source}`;
     const destination = body.destination?.startsWith("/") ? body.destination : `/${body.destination}`;
-    const statusCode = body.statusCode || 301;
+    const statusCode = body.statusCode ?? 301;
 
     if (!body.source || !body.destination) {
       return NextResponse.json({ error: "Source and destination are required" }, { status: 400 });
+    }
+    if (![301, 302, 303, 307, 308].includes(statusCode)) {
+      return NextResponse.json({ error: "Unsupported redirect status code" }, { status: 400 });
     }
 
     if (source === destination) {
@@ -41,6 +45,7 @@ export async function POST(request: Request) {
         .update(redirects)
         .set({ destination, statusCode })
         .where(eq(redirects.source, source));
+      revalidateTag("runtime-redirects", "max");
       return NextResponse.json({ success: true, updated: true });
     }
 
@@ -53,6 +58,7 @@ export async function POST(request: Request) {
       createdAt: new Date(),
     });
 
+    revalidateTag("runtime-redirects", "max");
     return NextResponse.json({ success: true, id });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to create redirect";
@@ -72,6 +78,7 @@ export async function DELETE(request: Request) {
     }
 
     await db.delete(redirects).where(eq(redirects.id, id));
+    revalidateTag("runtime-redirects", "max");
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to delete redirect";

@@ -4,6 +4,10 @@ import { db } from "@/db";
 import { blogPosts } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
 import { cleanSlug, validateSlug } from "@/lib/slug";
+import {
+  hasScheduledBlogPostCapacity,
+  MAX_SCHEDULED_BLOG_POSTS_PER_DAY,
+} from "@/lib/blog-publishing";
 import { eq, desc } from "drizzle-orm";
 
 export async function GET(request: Request) {
@@ -73,6 +77,33 @@ export async function POST(request: Request) {
 
     const id = body.id || `post_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const now = new Date();
+    const status = body.status ?? "draft";
+    const publishedAt = body.publishedAt || now.toISOString().slice(0, 10);
+
+    if (!["draft", "published", "scheduled", "archived"].includes(status)) {
+      return NextResponse.json({ error: "Invalid post status" }, { status: 400 });
+    }
+    const scheduledTimestamp = new Date(publishedAt).getTime();
+    if (
+      status === "scheduled" &&
+      (!Number.isFinite(scheduledTimestamp) || scheduledTimestamp <= now.getTime())
+    ) {
+      return NextResponse.json(
+        { error: "Choose a future publish date for scheduled articles" },
+        { status: 400 }
+      );
+    }
+    if (
+      status === "scheduled" &&
+      !(await hasScheduledBlogPostCapacity(publishedAt))
+    ) {
+      return NextResponse.json(
+        {
+          error: `Maximum of ${MAX_SCHEDULED_BLOG_POSTS_PER_DAY} posts can be scheduled for ${publishedAt}`,
+        },
+        { status: 409 }
+      );
+    }
 
     const plainText = (body.content || "").replace(/<[^>]*>/g, " ").trim();
     const wordCount = plainText.split(/\s+/).filter(Boolean).length;
@@ -87,7 +118,7 @@ export async function POST(request: Request) {
       author: body.author || "Glovax Team",
       category: body.category || "Technology",
       tags: Array.isArray(body.tags) ? body.tags : [],
-      publishedAt: body.publishedAt || now.toISOString().slice(0, 10),
+      publishedAt,
       readTime: typeof body.readTime === "number" ? body.readTime : readTime,
       featured: Boolean(body.featured),
       featuredImage: body.featuredImage || null,
@@ -109,7 +140,7 @@ export async function POST(request: Request) {
       twitterDescription: body.twitterDescription || null,
       twitterImage: body.twitterImage || null,
       faqs: Array.isArray(body.faqs) ? body.faqs : [],
-      status: body.status || "published",
+      status,
       createdAt: now,
       updatedAt: now,
       versionHistory: [
@@ -127,6 +158,9 @@ export async function POST(request: Request) {
 
     revalidatePath("/");
     revalidatePath("/blog");
+    revalidatePath("/blog/page/[page]", "page");
+    revalidatePath("/blog/category/[slug]", "page");
+    revalidatePath("/blog/tag/[slug]", "page");
     revalidatePath("/sitemap.xml");
     if (newPost.slug) revalidatePath(`/blog/${newPost.slug}`);
     revalidateTag("public-data", "max");

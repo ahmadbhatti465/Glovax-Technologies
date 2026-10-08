@@ -6,7 +6,7 @@ import {
   ServiceJsonLd,
 } from "@/components/shared/StructuredData";
 import ServicesContent from "./services-content";
-import { getServices, getLatestUpdatedAt } from "@/lib/data";
+import { getBlogPosts, getServices, getLatestUpdatedAt } from "@/lib/data";
 
 export const revalidate = 60;
 
@@ -78,6 +78,15 @@ const faqs = [
 
 export default async function ServicesPage() {
   const services = await getServices();
+  const blogPosts = (await getBlogPosts("published")).map(
+    ({ slug, title, excerpt, category, readTime }) => ({
+      slug,
+      title,
+      excerpt,
+      category,
+      readTime,
+    })
+  );
   const lastUpdated = await getLatestUpdatedAt(["services"]);
 
   return (
@@ -90,7 +99,12 @@ export default async function ServicesPage() {
       />
       <FAQJsonLD items={faqs} />
       <ServiceJsonLd services={services} />
-      <ServicesContent services={services} faqs={faqs} lastUpdated={lastUpdated} />
+      <ServicesContent
+        services={services}
+        faqs={faqs}
+        lastUpdated={lastUpdated}
+        blogPosts={blogPosts}
+      />
     </>
   );
 }

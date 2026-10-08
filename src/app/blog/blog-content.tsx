@@ -7,15 +7,33 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { motion } from "framer-motion";
 import { Clock, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { BlogPost } from "@/types";
+import { BlogPostSummary } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { toBlogTaxonomySlug } from "@/lib/blog-taxonomy";
 
 interface BlogContentProps {
-  posts?: BlogPost[];
+  posts?: BlogPostSummary[];
   lastUpdated?: Date | null;
+  currentPage?: number;
+  totalPages?: number;
+  heading?: string;
+  headingHighlight?: string;
+  subtitle?: string;
+  breadcrumbLabel?: string;
+  categoryList?: string[];
 }
 
-export default function BlogContent({ posts = [], lastUpdated }: BlogContentProps) {
+export default function BlogContent({
+  posts = [],
+  lastUpdated,
+  currentPage = 1,
+  totalPages = 1,
+  heading = "Insights &",
+  headingHighlight = "Perspectives",
+  subtitle = "Thoughts on technology, design, and building products that matter.",
+  breadcrumbLabel,
+  categoryList,
+}: BlogContentProps) {
   const [activeCategory, setActiveCategory] = useState<string>("All");
 
   const categories = useMemo(() => {
@@ -34,13 +52,18 @@ export default function BlogContent({ posts = [], lastUpdated }: BlogContentProp
       <Navbar />
       <main className="pt-28 pb-24">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
-          <Breadcrumbs items={[{ label: "Blog", href: "/blog" }]} />
+          <Breadcrumbs
+            items={[
+              { label: "Blog", href: "/blog" },
+              ...(breadcrumbLabel ? [{ label: breadcrumbLabel }] : []),
+            ]}
+          />
           <SectionHeader
             as="h1"
             eyebrow="Blog"
-            title="Insights &"
-            titleHighlight="Perspectives"
-            subtitle="Thoughts on technology, design, and building products that matter."
+            title={heading}
+            titleHighlight={headingHighlight}
+            subtitle={subtitle}
           />
 
           {lastUpdated && (
@@ -55,7 +78,7 @@ export default function BlogContent({ posts = [], lastUpdated }: BlogContentProp
           )}
 
           {/* Category filter */}
-          {categories.length > 1 && (
+          {(categoryList ?? categories).length > 0 && (
             <div
               className="flex flex-wrap items-center justify-center gap-2.5 mb-12"
               role="group"
@@ -80,6 +103,25 @@ export default function BlogContent({ posts = [], lastUpdated }: BlogContentProp
                 );
               })}
             </div>
+          )}
+
+          {categories.length > 1 && (
+            <nav
+              className="flex flex-wrap justify-center gap-2 mb-10"
+              aria-label="Browse blog categories"
+            >
+              {(categoryList ?? categories)
+                .filter((category) => category !== "All")
+                .map((category) => (
+                <Link
+                  key={category}
+                  href={`/blog/category/${toBlogTaxonomySlug(category)}`}
+                  className="text-xs text-muted-foreground hover:text-accent underline underline-offset-4"
+                >
+                  {category} articles
+                </Link>
+              ))}
+            </nav>
           )}
 
           {visiblePosts.length === 0 && (
@@ -130,6 +172,28 @@ export default function BlogContent({ posts = [], lastUpdated }: BlogContentProp
               </motion.article>
             ))}
           </div>
+
+          {totalPages > 1 && (
+            <nav
+              className="mt-12 flex flex-wrap items-center justify-center gap-2"
+              aria-label="Blog pagination"
+            >
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                <Link
+                  key={page}
+                  href={page === 1 ? "/blog" : `/blog/page/${page}`}
+                  aria-current={page === currentPage ? "page" : undefined}
+                  className={`min-w-10 rounded-lg border px-3 py-2 text-center text-sm ${
+                    page === currentPage
+                      ? "border-accent bg-accent/10 text-accent"
+                      : "border-border text-muted-foreground hover:border-accent/40 hover:text-accent"
+                  }`}
+                >
+                  {page}
+                </Link>
+              ))}
+            </nav>
+          )}
         </div>
       </main>
       <Footer />

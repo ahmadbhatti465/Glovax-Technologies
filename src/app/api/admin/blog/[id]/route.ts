@@ -4,6 +4,10 @@ import { db } from "@/db";
 import { blogPosts, redirects } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
 import { cleanSlug, validateSlug } from "@/lib/slug";
+import {
+  hasScheduledBlogPostCapacity,
+  MAX_SCHEDULED_BLOG_POSTS_PER_DAY,
+} from "@/lib/blog-publishing";
 import { eq, and, ne } from "drizzle-orm";
 
 type Params = Promise<{ id: string }>;
@@ -61,6 +65,33 @@ export async function PUT(request: Request, { params }: { params: Params }) {
     }
 
     const now = new Date();
+    const status = body.status !== undefined ? body.status : existing.status;
+    const publishedAt = body.publishedAt || existing.publishedAt;
+
+    if (!["draft", "published", "scheduled", "archived"].includes(status)) {
+      return NextResponse.json({ error: "Invalid post status" }, { status: 400 });
+    }
+    const scheduledTimestamp = new Date(publishedAt).getTime();
+    if (
+      status === "scheduled" &&
+      (!Number.isFinite(scheduledTimestamp) || scheduledTimestamp <= now.getTime())
+    ) {
+      return NextResponse.json(
+        { error: "Choose a future publish date for scheduled articles" },
+        { status: 400 }
+      );
+    }
+    if (
+      status === "scheduled" &&
+      !(await hasScheduledBlogPostCapacity(publishedAt, id))
+    ) {
+      return NextResponse.json(
+        {
+          error: `Maximum of ${MAX_SCHEDULED_BLOG_POSTS_PER_DAY} posts can be scheduled for ${publishedAt}`,
+        },
+        { status: 409 }
+      );
+    }
 
     // Check if slug changed and create 301 redirect if requested
     if (existing.slug !== newSlug) {
@@ -118,7 +149,7 @@ export async function PUT(request: Request, { params }: { params: Params }) {
       author: body.author !== undefined ? body.author : existing.author,
       category: body.category !== undefined ? body.category : existing.category,
       tags: Array.isArray(body.tags) ? body.tags : existing.tags,
-      publishedAt: body.publishedAt || existing.publishedAt,
+      publishedAt,
       readTime: typeof body.readTime === "number" ? body.readTime : calculatedReadTime,
       featured: body.featured !== undefined ? Boolean(body.featured) : existing.featured,
       featuredImage: body.featuredImage !== undefined ? body.featuredImage : existing.featuredImage,
@@ -140,7 +171,7 @@ export async function PUT(request: Request, { params }: { params: Params }) {
       twitterDescription: body.twitterDescription !== undefined ? body.twitterDescription : existing.twitterDescription,
       twitterImage: body.twitterImage !== undefined ? body.twitterImage : existing.twitterImage,
       faqs: Array.isArray(body.faqs) ? body.faqs : existing.faqs,
-      status: body.status !== undefined ? body.status : existing.status,
+      status,
       updatedAt: now,
       versionHistory: updatedHistory,
     };
@@ -149,10 +180,14 @@ export async function PUT(request: Request, { params }: { params: Params }) {
 
     revalidatePath("/");
     revalidatePath("/blog");
+    revalidatePath("/blog/page/[page]", "page");
+    revalidatePath("/blog/category/[slug]", "page");
+    revalidatePath("/blog/tag/[slug]", "page");
     revalidatePath("/sitemap.xml");
     revalidatePath(`/blog/${existing.slug}`);
     if (newSlug !== existing.slug) revalidatePath(`/blog/${newSlug}`);
     revalidateTag("public-data", "max");
+    revalidateTag("runtime-redirects", "max");
 
     return NextResponse.json({ success: true, post: { id, ...updatedPost } });
   } catch (err: unknown) {

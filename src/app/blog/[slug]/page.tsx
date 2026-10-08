@@ -12,17 +12,14 @@ import { FaqAccordion } from "@/components/shared/FaqAccordion";
 import { ArrowLeft, ArrowRight, Clock, Calendar, RefreshCw, User, Lock, ChevronLeft, ChevronRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { FAQItem } from "@/types";
+import { toBlogTaxonomySlug } from "@/lib/blog-taxonomy";
 
-export const revalidate = 3600; // ISR: revalidate once an hour
+export const revalidate = 60;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  try {
-    const slugs = await getAllBlogSlugs();
-    return slugs.map((s) => ({ slug: s.slug }));
-  } catch {
-    return [];
-  }
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({
@@ -46,7 +43,7 @@ export async function generateMetadata({
     };
   }
 
-  const url = post.canonicalUrl || `${siteConfig.url}/blog/${post.slug}`;
+  const url = `${siteConfig.url}/blog/${post.slug}`;
   const title = post.seoTitle || `${post.title} | ${siteConfig.name}`;
   const description = post.metaDescription || post.excerpt.slice(0, 160);
 
@@ -309,7 +306,7 @@ export default async function BlogPostPage({
   const post = await getBlogPostBySlug(slug, isPreview);
   if (!post) notFound();
 
-  const url = post.canonicalUrl || `${siteConfig.url}/blog/${post.slug}`;
+  const url = `${siteConfig.url}/blog/${post.slug}`;
   const faqs = (post.faqs && post.faqs.length > 0) ? post.faqs : extractFaqsFromMarkdown(post.content);
   const relatedPosts = await getRelatedPosts(post.slug, post.category, 4);
 
@@ -478,12 +475,13 @@ export default async function BlogPostPage({
           {post.tags.length > 0 && (
             <div className="mt-10 flex flex-wrap gap-2">
               {post.tags.map((tag) => (
-                <span
+                <Link
                   key={tag}
+                  href={`/blog/tag/${toBlogTaxonomySlug(tag)}`}
                   className="px-3 py-1 text-xs rounded-full bg-surface border border-border text-muted-foreground"
                 >
                   #{tag}
-                </span>
+                </Link>
               ))}
             </div>
           )}
@@ -565,6 +563,12 @@ export default async function BlogPostPage({
               Let&apos;s talk about your project. We respond within 24 hours.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/services"
+                className="text-sm text-accent underline underline-offset-4 hover:text-accent-hover"
+              >
+                Explore our services
+              </Link>
               <MagneticButton href="/contact" variant="primary" size="lg">
                 Start a Project
               </MagneticButton>

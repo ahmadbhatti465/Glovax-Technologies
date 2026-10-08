@@ -142,6 +142,11 @@ export interface BlogPost {
   versionHistory?: PageVersion[];
 }
 
+export type BlogPostSummary = Pick<
+  BlogPost,
+  "slug" | "title" | "excerpt" | "category" | "readTime"
+>;
+
 export interface JobPosition {
   id: string;
   title: string;

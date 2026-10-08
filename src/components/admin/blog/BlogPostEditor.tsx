@@ -73,7 +73,9 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
   );
   const [readTime, setReadTime] = useState<number>(initialPost?.readTime || 5);
   const [featured, setFeatured] = useState(Boolean(initialPost?.featured));
-  const [status, setStatus] = useState<PageStatus>(initialPost?.status || "published");
+  const [status, setStatus] = useState<PageStatus>(
+    initialPost?.status || (isNew ? "draft" : "published")
+  );
 
   // SEO & Media State
   const [featuredImage, setFeaturedImage] = useState(initialPost?.featuredImage || "");
@@ -211,6 +213,13 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
     }
 
     const currentStatus = overrideStatus || status;
+    if (
+      currentStatus === "scheduled" &&
+      (!publishedAt || publishedAt <= new Date().toISOString().slice(0, 10))
+    ) {
+      alert("Choose a future publish date before scheduling this article.");
+      return;
+    }
     setSaving(true);
     setSaveStatus("saving");
 
@@ -349,6 +358,15 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
               className="px-3.5 py-1.5 bg-card hover:bg-card-hover border border-white/15 text-white text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
             >
               Save Draft
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSave("scheduled")}
+              disabled={saving}
+              className="px-3.5 py-1.5 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-400/30 text-sky-300 text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
+            >
+              Schedule
             </button>
 
             {/* Publish / Update */}
@@ -640,7 +658,9 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
                   </div>
 
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">Publish Date</label>
+                    <label className="block text-xs text-gray-400 mb-1">
+                      Publish / Schedule Date
+                    </label>
                     <input
                       type="date"
                       value={publishedAt}
@@ -650,6 +670,9 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
                       }}
                       className="w-full px-3 py-2 bg-card border border-[#1EDAC6]/20 rounded-lg text-white text-xs focus:outline-none focus:border-[#1EDAC6]"
                     />
+                    <p className="mt-1 text-[10px] text-gray-500">
+                      Scheduled articles publish on this date. Limit: 5 scheduled posts per day.
+                    </p>
                   </div>
                 </div>
 

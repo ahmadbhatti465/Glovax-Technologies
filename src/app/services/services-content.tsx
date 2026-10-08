@@ -15,8 +15,9 @@ import {
   Palette,
   ArrowUpRight,
 } from "lucide-react";
-import { Service } from "@/types";
+import { BlogPostSummary, Service } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import Link from "next/link";
 
 const iconMap: Record<string, React.ReactNode> = {
   Code2: <Code2 className="w-8 h-8" />,
@@ -36,12 +37,23 @@ interface ServicesContentProps {
   services?: Service[];
   faqs?: FAQItem[];
   lastUpdated?: Date | null;
+  blogPosts?: BlogPostSummary[];
 }
+
+const blogCategoriesByService: Record<string, string[]> = {
+  "web-development": ["Web Development"],
+  "mobile-apps": ["Mobile Apps", "Mobile Development"],
+  "ai-solutions": ["AI & Machine Learning", "AI Solutions", "Artificial Intelligence"],
+  "cloud-devops": ["Cloud & DevOps", "Cloud Computing", "SaaS & Cloud"],
+  "digital-marketing": ["Digital Marketing", "SEO & Growth"],
+  "ui-ux-design": ["UI/UX Design"],
+};
 
 export default function ServicesContent({
   services: serverServices,
   faqs = [],
   lastUpdated,
+  blogPosts = [],
 }: ServicesContentProps) {
   const services = serverServices?.length ? serverServices : fallbackServices;
 
@@ -115,6 +127,33 @@ export default function ServicesContent({
                         </div>
                       ))}
                     </div>
+
+                    {blogPosts.filter((post) =>
+                      (blogCategoriesByService[service.id] || []).includes(post.category)
+                    ).length > 0 && (
+                      <div className="mt-6">
+                        <h3 className="text-sm font-semibold text-foreground">
+                          Related guides
+                        </h3>
+                        <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
+                          {blogPosts
+                            .filter((post) =>
+                              (blogCategoriesByService[service.id] || []).includes(post.category)
+                            )
+                            .slice(0, 2)
+                            .map((post) => (
+                              <li key={post.slug}>
+                                <Link
+                                  href={`/blog/${post.slug}`}
+                                  className="text-sm text-accent hover:text-accent-hover underline underline-offset-4"
+                                >
+                                  {post.title}
+                                </Link>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    )}
 
                     <div className="mt-6">
                       <MagneticButton

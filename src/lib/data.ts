@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import type {
@@ -37,6 +38,18 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
   }
   throw lastError;
 }
+
+const getCachedBlogRows = unstable_cache(
+  () => withRetry(() => db.select().from(schema.blogPosts)),
+  ["blog-posts"],
+  { revalidate: 3600, tags: ["public-data"] }
+);
+
+const getCachedRedirectRows = unstable_cache(
+  () => withRetry(() => db.select().from(schema.redirects)),
+  ["runtime-redirects"],
+  { revalidate: 300, tags: ["runtime-redirects"] }
+);
 
 function serializeDates<T extends { createdAt?: Date | null; updatedAt?: Date | null }>(
   row: T,
@@ -211,9 +224,12 @@ export const getTestimonials = cache(async (): Promise<Testimonial[]> => {
 });
 
 export const getBlogPosts = cache(async (status?: string): Promise<BlogPost[]> => {
-  try {
-    const rows = await withRetry(() => db.select().from(schema.blogPosts));
-    const items = rows.map((row) => ({
+  const rows = await getCachedBlogRows();
+  const now = Date.now();
+  const items = rows.map((row) => {
+    const isScheduledAndDue =
+      row.status === "scheduled" && new Date(row.publishedAt).getTime() <= now;
+    return {
       ...serializeDates(row, true),
       tags: row.tags ?? [],
       featured: Boolean(row.featured),
@@ -236,41 +252,36 @@ export const getBlogPosts = cache(async (status?: string): Promise<BlogPost[]> =
       twitterDescription: row.twitterDescription ?? undefined,
       twitterImage: row.twitterImage ?? undefined,
       faqs: row.faqs ?? [],
-      status: (row.status as BlogPost["status"]) || "published",
+      status: (isScheduledAndDue ? "published" : row.status || "published") as BlogPost["status"],
       versionHistory: row.versionHistory ?? [],
-    }));
+    };
+  });
 
-    if (status) {
-      return items.filter((p) => p.status === status);
-    }
-    return items;
-  } catch {
-    return [];
+  if (status === "published") {
+    return items
+      .filter((post) => post.status === "published" && post.robotsIndex !== false)
+      .sort(
+        (a, b) =>
+          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+      );
   }
+  return status ? items.filter((post) => post.status === status) : items;
 });
 
 export const getBlogPostBySlug = cache(
   async (slug: string, allowUnpublished = false): Promise<BlogPost | null> => {
-    try {
-      const posts = await getBlogPosts();
-      const found = posts.find((row) => row.slug === slug);
-      if (!found) return null;
-      if (!allowUnpublished && found.status !== "published") return null;
-      return found;
-    } catch {
-      return null;
-    }
+    const posts = await getBlogPosts();
+    const found = posts.find((row) => row.slug === slug);
+    if (!found) return null;
+    if (!allowUnpublished && found.status !== "published") return null;
+    return found;
   }
 );
 
 /** All blog slugs, used by generateStaticParams so builds pre-render every post. */
 export const getAllBlogSlugs = cache(async (): Promise<{ slug: string }[]> => {
-  try {
-    const posts = await getBlogPosts("published");
-    return posts.map((p) => ({ slug: p.slug }));
-  } catch {
-    return [];
-  }
+  const posts = await getBlogPosts("published");
+  return posts.map((p) => ({ slug: p.slug }));
 });
 
 /**
@@ -281,20 +292,16 @@ export const getAllBlogSlugs = cache(async (): Promise<{ slug: string }[]> => {
  */
 export const getRelatedPosts = cache(
   async (currentSlug: string, category?: string | null, limit = 3): Promise<BlogPost[]> => {
-    try {
-      const allPosts = await getBlogPosts("published");
-      const posts = allPosts
-        .filter((row) => row.slug !== currentSlug)
-        .sort(
-          (a, b) =>
-            new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-        );
-      const sameCategory = category ? posts.filter((p) => p.category === category) : [];
-      const related = [...sameCategory, ...posts.filter((p) => p.category !== category)];
-      return related.slice(0, limit);
-    } catch {
-      return [];
-    }
+    const allPosts = await getBlogPosts("published");
+    const posts = allPosts
+      .filter((row) => row.slug !== currentSlug)
+      .sort(
+        (a, b) =>
+          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+      );
+    const sameCategory = category ? posts.filter((p) => p.category === category) : [];
+    const related = [...sameCategory, ...posts.filter((p) => p.category !== category)];
+    return related.slice(0, limit);
   }
 );
 
@@ -450,20 +457,18 @@ export const getAllPageSlugs = cache(async (): Promise<{ slug: string }[]> => {
 });
 
 export const getRedirect = cache(async (source: string): Promise<Redirect | null> => {
-  try {
-    const normalizedSource = source.startsWith("/") ? source : `/${source}`;
-    const rows = await db.select().from(schema.redirects);
-    const found = rows.find(
-      (r) => r.source === normalizedSource || r.source === normalizedSource.replace(/^\//, "")
-    );
-    if (!found) return null;
-    return {
-      ...serializeDates(found),
-      statusCode: found.statusCode ?? 301,
-    };
-  } catch {
-    return null;
-  }
+  const normalizedSource = (source.startsWith("/") ? source : `/${source}`).replace(/\/+$/, "") || "/";
+  const rows = await getCachedRedirectRows();
+  const found = rows.find(
+    (r) =>
+      (r.source.startsWith("/") ? r.source : `/${r.source}`).replace(/\/+$/, "") ===
+      normalizedSource
+  );
+  if (!found) return null;
+  return {
+    ...serializeDates(found),
+    statusCode: found.statusCode ?? 301,
+  };
 });
 
 export const getInternalLinkTargets = cache(async (): Promise<InternalLinkTarget[]> => {
