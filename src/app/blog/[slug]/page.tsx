@@ -13,6 +13,7 @@ import { ArrowLeft, ArrowRight, Clock, Calendar, RefreshCw, User, Lock, ChevronL
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { FAQItem } from "@/types";
 import { toBlogTaxonomySlug } from "@/lib/blog-taxonomy";
+import { normalizeCanonicalUrl } from "@/lib/utils";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -43,7 +44,7 @@ export async function generateMetadata({
     };
   }
 
-  const url = `${siteConfig.url}/blog/${post.slug}`;
+  const url = normalizeCanonicalUrl(post.canonicalUrl, `/blog/${post.slug}`);
   const title = post.seoTitle || `${post.title} | ${siteConfig.name}`;
   const description = post.metaDescription || post.excerpt.slice(0, 160);
 
@@ -306,7 +307,7 @@ export default async function BlogPostPage({
   const post = await getBlogPostBySlug(slug, isPreview);
   if (!post) notFound();
 
-  const url = `${siteConfig.url}/blog/${post.slug}`;
+  const url = normalizeCanonicalUrl(post.canonicalUrl, `/blog/${post.slug}`);
   const faqs = (post.faqs && post.faqs.length > 0) ? post.faqs : extractFaqsFromMarkdown(post.content);
   const relatedPosts = await getRelatedPosts(post.slug, post.category, 4);
 

@@ -76,7 +76,9 @@ async function seed100Blogs() {
         metaDescription: blog.metaDescription || blog.excerpt.slice(0, 160),
         focusKeyword: blog.focusKeyword || null,
         secondaryKeywords: blog.secondaryKeywords || [],
-        canonicalUrl: blog.canonicalUrl || `https://glovaxtechnologies.com/blog/${blog.slug}`,
+        canonicalUrl: blog.canonicalUrl
+          ? blog.canonicalUrl.replace("https://glovaxtechnologies.com", "https://www.glovaxtechnologies.com")
+          : `https://www.glovaxtechnologies.com/blog/${blog.slug}`,
         robotsIndex: blog.robotsIndex !== false,
         robotsFollow: blog.robotsFollow !== false,
         ogTitle: blog.ogTitle || blog.seoTitle || blog.title,

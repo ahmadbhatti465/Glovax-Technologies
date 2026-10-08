@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config({ path: ".env" });
 
-const SITE_URL = "https://glovaxtechnologies.com";
+const SITE_URL = "https://www.glovaxtechnologies.com";
 const SITE_NAME = "Glovax Technologies";
 
 const url = process.env.DATABASE_URL || "file:./sqlite.db";

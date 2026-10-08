@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/constants";
+import { normalizeCanonicalUrl } from "@/lib/utils";
 import { db } from "@/db";
 import { blogPosts, portfolioItems, services, teamMembers, jobPositions, siteContent, businesses, pages, redirects } from "@/db/schema";
 import { BLOG_PAGE_SIZE } from "@/lib/blog-pagination";
@@ -254,7 +255,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const caseStudyEntries: MetadataRoute.Sitemap = caseStudyIds.flatMap((post) => {
     const path = `/work/${post.slug || post.id}`;
-    const pageUrl = post.canonicalUrl || `${siteConfig.url}${path}`;
+    const pageUrl = normalizeCanonicalUrl(post.canonicalUrl, path);
     const published = toSitemapDate(post.publishedAt);
     const updated = post.updatedAt ? toSitemapDate(post.updatedAt) : undefined;
     const lastModified = updated ?? published ?? toSitemapDate(post.createdAt);
@@ -288,7 +289,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const updated = p.updatedAt ? toSitemapDate(p.updatedAt) : undefined;
       const lastModified = updated ?? published;
       const path = `/${p.slug}`;
-      const pageUrl = p.canonicalUrl || `${siteConfig.url}${path}`;
+      const pageUrl = normalizeCanonicalUrl(p.canonicalUrl, path);
       if (
         !lastModified ||
         pageUrl.replace(/\/+$/, "") !== `${siteConfig.url}${path}`.replace(/\/+$/, "")

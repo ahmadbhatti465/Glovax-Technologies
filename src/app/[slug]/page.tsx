@@ -11,6 +11,7 @@ import { FAQJsonLD, BreadcrumbJsonLd } from "@/components/shared/StructuredData"
 import { FaqAccordion } from "@/components/shared/FaqAccordion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { Clock, Calendar, User, ArrowLeft, Lock } from "lucide-react";
+import { normalizeCanonicalUrl } from "@/lib/utils";
 
 export const revalidate = 3600; // ISR: revalidate once an hour
 export const dynamicParams = true;
@@ -45,7 +46,7 @@ export async function generateMetadata({
     };
   }
 
-  const url = page.canonicalUrl || `${siteConfig.url}/${page.slug}`;
+  const url = normalizeCanonicalUrl(page.canonicalUrl, `/${page.slug}`);
   const title = page.seoTitle || `${page.title} | ${siteConfig.name}`;
   const description = page.metaDescription || page.excerpt || siteConfig.description;
 
@@ -120,7 +121,7 @@ export default async function DynamicCmsPage({
     notFound();
   }
 
-  const pageUrl = page.canonicalUrl || `${siteConfig.url}/${page.slug}`;
+  const pageUrl = normalizeCanonicalUrl(page.canonicalUrl, `/${page.slug}`);
   const publishedDate = page.publishedAt ? new Date(page.publishedAt) : new Date(page.createdAt || Date.now());
   const modifiedDate = page.updatedAt ? new Date(page.updatedAt) : publishedDate;
 

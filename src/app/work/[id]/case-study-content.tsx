@@ -184,7 +184,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                 <div className="mx-auto flex-1 max-w-md">
                   <div className="h-5 rounded-full bg-background/60 border border-neutral-border flex items-center justify-center">
                     <span className="text-[10px] text-gray-400 font-mono">
-                      {project.link || `https://glovaxtechnologies.com/work/${project.slug || project.id}`}
+                      {project.link || `https://www.glovaxtechnologies.com/work/${project.slug || project.id}`}
                     </span>
                   </div>
                 </div>
