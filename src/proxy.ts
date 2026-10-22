@@ -2,9 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { getRedirect } from "@/lib/data";
 
 export async function proxy(request: NextRequest) {
+  const response = NextResponse.next();
+  const query = request.nextUrl.searchParams;
+  if (
+    request.nextUrl.pathname === "/blog" &&
+    ["page", "q", "sort"].some((key) => query.has(key))
+  ) {
+    response.headers.set("X-Robots-Tag", "noindex, follow");
+  }
+
   try {
     const redirect = await getRedirect(request.nextUrl.pathname);
-    if (!redirect) return NextResponse.next();
+    if (!redirect) return response;
 
     const destination = new URL(redirect.destination, request.url);
     switch (redirect.statusCode) {

@@ -7,7 +7,7 @@ import { BLOG_PAGE_SIZE } from "@/lib/blog-pagination";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
+const blogMetadata: Metadata = {
   title: "Tech Blog: AI, Web & Cloud",
   description:
     "Read insights on AI, web development, mobile apps, cloud computing, and digital marketing from the Glovax Technologies team.",
@@ -32,6 +32,8 @@ export const metadata: Metadata = {
     images: [ogImage],
   },
 };
+
+export const metadata: Metadata = blogMetadata;
 
 export default async function BlogPage() {
   const allPosts = await getBlogPosts("published");

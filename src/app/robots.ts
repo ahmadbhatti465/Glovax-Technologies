@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/api/admin/", "/api/auth/"],
+        disallow: ["/admin", "/api"],
       },
       {
         userAgent: [
@@ -23,6 +23,7 @@ export default function robots(): MetadataRoute.Robots {
           "CCBot",
         ],
         allow: "/",
+        disallow: ["/admin", "/api"],
       },
     ],
     sitemap: `${siteConfig.url}/sitemap.xml`,

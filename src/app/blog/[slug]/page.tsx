@@ -45,8 +45,8 @@ export async function generateMetadata({
   }
 
   const url = normalizeCanonicalUrl(post.canonicalUrl, `/blog/${post.slug}`);
-  const title = post.seoTitle || `${post.title} | ${siteConfig.name}`;
-  const description = post.metaDescription || post.excerpt.slice(0, 160);
+  const title = (post.seoTitle || `${post.title} | ${siteConfig.name}`).slice(0, 60);
+  const description = (post.metaDescription || post.excerpt).slice(0, 160);
 
   const ogImageUrl = post.ogImage || post.featuredImage || siteConfig.ogImage;
   const resolvedOgImage = ogImageUrl.startsWith("http") || ogImageUrl.startsWith("data:")
@@ -57,7 +57,7 @@ export async function generateMetadata({
   const shouldFollow = post.robotsFollow !== false;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: post.secondaryKeywords && post.secondaryKeywords.length > 0 ? post.secondaryKeywords : post.tags,
     alternates: { canonical: url },
@@ -289,14 +289,10 @@ function renderBold(text: string): React.ReactNode {
 
 export default async function BlogPostPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams?: Promise<{ preview?: string }>;
 }) {
   const { slug } = await params;
-  const searchParamsObj = searchParams ? await searchParams : {};
-  const isPreview = searchParamsObj.preview === "true";
 
   // Check 301 Permanent Redirect
   const redir = (await getRedirect(`blog/${slug}`)) || (await getRedirect(slug));
@@ -304,12 +300,26 @@ export default async function BlogPostPage({
     redirect(redir.destination, RedirectType.replace);
   }
 
-  const post = await getBlogPostBySlug(slug, isPreview);
+  const post = await getBlogPostBySlug(slug, false);
   if (!post) notFound();
 
   const url = normalizeCanonicalUrl(post.canonicalUrl, `/blog/${post.slug}`);
   const faqs = (post.faqs && post.faqs.length > 0) ? post.faqs : extractFaqsFromMarkdown(post.content);
   const relatedPosts = await getRelatedPosts(post.slug, post.category, 4);
+  const serviceByCategory: Record<string, string> = {
+    "AI & Machine Learning": "AI engineering and machine learning services",
+    "AI Solutions": "AI engineering and machine learning services",
+    "Web Development": "web development services",
+    "Mobile Apps": "mobile app development services",
+    "Mobile Development": "mobile app development services",
+    "Cloud & DevOps": "cloud and DevOps services",
+    "Cloud Computing": "cloud and DevOps services",
+    "SaaS & Cloud": "cloud and DevOps services",
+    "Digital Marketing": "digital marketing services",
+    "SEO & Growth": "digital marketing services",
+    "UI/UX Design": "UI/UX design services",
+  };
+  const relatedService = serviceByCategory[post.category];
 
   // Get all published posts to determine Previous and Next articles for continuous internal crawl graph
   const allPosts = await getBlogPosts("published");
@@ -340,7 +350,7 @@ export default async function BlogPostPage({
     },
     inLanguage: "en-US",
     author: {
-      "@type": "Organization",
+      "@type": "Person",
       name: post.author || siteConfig.name,
       url: siteConfig.url,
     },
@@ -381,6 +391,7 @@ export default async function BlogPostPage({
           <Breadcrumbs
             items={[
               { label: "Blog", href: "/blog" },
+              { label: post.category, href: `/blog/category/${toBlogTaxonomySlug(post.category)}` },
               { label: post.title },
             ]}
           />
@@ -392,6 +403,10 @@ export default async function BlogPostPage({
             items={[
               { name: "Home", url: siteConfig.url },
               { name: "Blog", url: `${siteConfig.url}/blog` },
+              {
+                name: post.category,
+                url: `${siteConfig.url}/blog/category/${toBlogTaxonomySlug(post.category)}`,
+              },
               { name: post.title, url },
             ]}
           />
@@ -426,6 +441,16 @@ export default async function BlogPostPage({
               {post.author || "Glovax Team"}
             </span>
           </div>
+          <p className="text-sm text-muted-foreground mb-6">
+            By {post.author || "Glovax Team"}, writing about {post.category} at {siteConfig.name}.
+            {post.updatedAt && new Date(post.updatedAt).getTime() > publishedDate.getTime() && (
+              <> Updated {new Date(post.updatedAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}.</>
+            )}
+          </p>
 
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6 text-foreground">
             {post.title}
@@ -469,6 +494,15 @@ export default async function BlogPostPage({
               renderMarkdown(post.content)
             )}
           </article>
+
+          {relatedService && (
+            <p className="mt-8 text-sm text-muted-foreground">
+              Need help applying these ideas? Explore our{" "}
+              <Link href="/services" className="text-accent underline underline-offset-4">
+                {relatedService}
+              </Link>.
+            </p>
+          )}
 
           {/* Interactive FAQs Accordion */}
           {faqs.length > 0 && <FaqAccordion items={faqs} />}
