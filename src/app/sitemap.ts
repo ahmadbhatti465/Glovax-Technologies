@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { db } from "@/db";
-import { blogPosts, redirects } from "@/db/schema";
+import { blogPosts, portfolioItems, redirects } from "@/db/schema";
 import { siteConfig } from "@/lib/constants";
 import { normalizeCanonicalUrl } from "@/lib/utils";
 
@@ -13,7 +13,7 @@ function toSitemapDate(date: Date | string | null | undefined): Date | undefined
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [posts, redirectRows] = await Promise.all([
+  const [posts, portfolios, redirectRows] = await Promise.all([
     db
       .select({
         slug: blogPosts.slug,
@@ -24,6 +24,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         updatedAt: blogPosts.updatedAt,
       })
       .from(blogPosts),
+    db
+      .select({
+        id: portfolioItems.id,
+        slug: portfolioItems.slug,
+        status: portfolioItems.status,
+        robotsIndex: portfolioItems.robotsIndex,
+        includeInSitemap: portfolioItems.includeInSitemap,
+        canonicalUrl: portfolioItems.canonicalUrl,
+        publishedAt: portfolioItems.publishedAt,
+        updatedAt: portfolioItems.updatedAt,
+        createdAt: portfolioItems.createdAt,
+        sitemapPriority: portfolioItems.sitemapPriority,
+        changeFrequency: portfolioItems.changeFrequency,
+      })
+      .from(portfolioItems),
     db.select({ source: redirects.source }).from(redirects),
   ]);
 
@@ -33,6 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = [
     "",
     "/services",
+    "/web-development-services",
     "/work",
     "/about",
     "/team",
@@ -71,5 +87,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [{ url: localUrl, lastModified, changeFrequency: "monthly", priority: 0.7 }];
   });
 
-  return [...staticEntries, ...blogEntries];
+  const portfolioEntries: MetadataRoute.Sitemap = portfolios.flatMap((project) => {
+    const slug = project.slug || project.id;
+    const path = `/work/${slug}`;
+    const localUrl = `${siteConfig.url}${path}`;
+    const canonicalUrl = normalizeCanonicalUrl(project.canonicalUrl, path);
+    const lastModified =
+      toSitemapDate(project.updatedAt) ??
+      toSitemapDate(project.publishedAt) ??
+      toSitemapDate(project.createdAt);
+
+    if (
+      project.status !== "published" ||
+      project.includeInSitemap === false ||
+      project.robotsIndex === false ||
+      !lastModified ||
+      canonicalUrl.replace(/\/+$/, "") !== localUrl.replace(/\/+$/, "") ||
+      redirectSources.has(path)
+    ) {
+      return [];
+    }
+
+    return [{
+      url: localUrl,
+      lastModified,
+      changeFrequency: (project.changeFrequency as MetadataRoute.Sitemap[number]["changeFrequency"]) || "monthly",
+      priority: project.sitemapPriority || 0.8,
+    }];
+  });
+
+  return [...staticEntries, ...portfolioEntries, ...blogEntries];
 }
