@@ -64,7 +64,7 @@ export function TrustBar() {
           </div>
 
           {/* Client logo marquee */}
-          <p className="text-xs tracking-[0.25em] uppercase text-muted-foreground font-medium mb-8">
+          <p className="text-xs font-mono tracking-[0.25em] uppercase text-muted-foreground font-medium mb-8">
             Trusted by innovative teams worldwide
           </p>
 
@@ -90,7 +90,7 @@ export function TrustBar() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto">
             {proofNumbers.map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold tracking-tight">
+                <div className="text-4xl md:text-5xl font-mono font-bold tracking-tight">
                   <span className="gradient-text">{stat.value}</span>
                   <span className="gradient-text">{stat.suffix}</span>
                 </div>
@@ -108,7 +108,7 @@ export function TrustBar() {
           viewport={{ once: true, margin: "-40px" }}
           className="mt-14 pt-10 border-t border-neutral-border/60 text-center"
         >
-          <p className="text-xs tracking-[0.25em] uppercase text-muted-foreground font-medium mb-8">
+          <p className="text-xs font-mono tracking-[0.25em] uppercase text-muted-foreground font-medium mb-8">
             The stack behind your product
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2.5">
@@ -116,7 +116,7 @@ export function TrustBar() {
               <motion.span
                 key={tech}
                 variants={item}
-                className="px-4 py-2 rounded-full bg-surface-raised border border-neutral-border text-sm font-medium text-muted-foreground hover:text-accent hover:border-teal/40 hover:shadow-glow transition-all duration-300"
+                className="px-4 py-2 rounded-full bg-surface-raised border border-neutral-border text-sm font-mono font-medium text-muted-foreground hover:text-accent hover:border-teal/40 hover:shadow-glow transition-all duration-300"
               >
                 {tech}
               </motion.span>

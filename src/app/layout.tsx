@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Sora, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { Toaster } from "sonner";
@@ -8,18 +8,25 @@ import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { CursorGlow } from "@/components/layout/CursorGlow";
 import { BackToTop } from "@/components/layout/BackToTop";
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-heading",
+const sora = Sora({
   subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-sora",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
 });
 
 const inter = Inter({
-  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-inter",
   display: "swap",
-  weight: ["300", "400", "500", "600"],
+});
+
+const mono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-geist-mono",
+  display: "swap",
 });
 
 export const viewport: Viewport = {
@@ -106,9 +113,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`${sora.variable} ${inter.variable} ${mono.variable} dark`}>
       <body
-        className={`${jakarta.variable} ${inter.variable} antialiased bg-background text-foreground min-h-screen`}
+        className="font-body antialiased bg-background text-foreground min-h-screen"
       >
         <ScrollProgress />
         <CursorGlow />

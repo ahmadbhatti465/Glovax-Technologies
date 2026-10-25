@@ -196,7 +196,7 @@ export default function ContactContent() {
                     }}
                   />
                   <div className="relative z-10">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-accent uppercase tracking-wider mb-3">
+                    <div className="flex items-center gap-2 text-xs font-mono font-semibold text-accent uppercase tracking-wider mb-3">
                       <Calendar className="w-4 h-4" />
                       Prefer to talk?
                     </div>
@@ -218,7 +218,7 @@ export default function ContactContent() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                     Contact Info
                   </h3>
                   <div className="space-y-4">
@@ -250,7 +250,7 @@ export default function ContactContent() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                     Response Time
                   </h3>
                   <p className="text-sm text-muted">

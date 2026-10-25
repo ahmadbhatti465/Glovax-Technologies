@@ -69,7 +69,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
               ))}
             </div>
             {testimonial.projectType && (
-              <span className="px-2.5 py-1 text-[10px] font-medium bg-card border border-neutral-border rounded-full text-muted-foreground">
+              <span className="px-2.5 py-1 text-[10px] font-mono font-medium bg-card border border-neutral-border rounded-full text-muted-foreground">
                 {testimonial.projectType}
               </span>
             )}

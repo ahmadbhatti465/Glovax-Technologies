@@ -273,7 +273,7 @@ export function PageEditor({ initialPage, isNew = false }: PageEditorProps) {
                   {title || (isNew ? "New Page" : "Edit Page")}
                 </span>
                 <span
-                  className={`px-2 py-0.5 text-[10px] font-semibold uppercase rounded-full border ${
+                  className={`px-2 py-0.5 text-[10px] font-mono font-semibold uppercase rounded-full border ${
                     status === "published"
                       ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                       : status === "scheduled"

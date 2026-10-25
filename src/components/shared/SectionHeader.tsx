@@ -36,7 +36,7 @@ export function SectionHeader({
       className={`flex flex-col ${alignClasses[align]} max-w-4xl mx-auto mb-16 md:mb-24 ${className}`}
     >
       {eyebrow && (
-        <span className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-6 inline-flex items-center gap-3">
+        <span className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-6 inline-flex items-center gap-3">
           <span className="w-8 h-px bg-gradient-to-r from-transparent to-accent/40 hidden md:inline-block" />
           {eyebrow}
           <span className="w-8 h-px bg-gradient-to-l from-transparent to-accent/40 hidden md:inline-block" />

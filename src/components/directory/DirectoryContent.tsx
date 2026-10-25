@@ -190,7 +190,7 @@ function Stat({ value, label }: { value: number; label: string }) {
       <div className="text-3xl md:text-4xl font-bold tracking-tight text-accent">
         {value}
       </div>
-      <div className="text-xs md:text-sm text-muted-foreground mt-1 uppercase tracking-wider">
+      <div className="text-xs md:text-sm font-mono text-muted-foreground mt-1 uppercase tracking-wider">
         {label}
       </div>
     </div>

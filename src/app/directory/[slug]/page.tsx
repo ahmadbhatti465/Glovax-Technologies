@@ -138,16 +138,16 @@ export default async function ListingPage({
 
           {/* Header */}
           <div className="flex flex-wrap items-center gap-2 mb-5">
-            <span className="px-3 py-1 text-xs font-medium bg-surface-raised border border-neutral-border rounded-full text-muted-foreground">
+            <span className="px-3 py-1 text-xs font-mono font-medium bg-surface-raised border border-neutral-border rounded-full text-muted-foreground">
               {business.category}
             </span>
             {business.featured && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold bg-teal text-accent-foreground rounded-full">
+              <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-mono font-semibold bg-teal text-accent-foreground rounded-full">
                 <BadgeCheck className="w-3 h-3" /> Featured
               </span>
             )}
             {business.isRemote && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium border border-teal/40 text-teal rounded-full">
+              <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-mono font-medium border border-teal/40 text-teal rounded-full">
                 <Globe className="w-3 h-3" /> Remote / Online
               </span>
             )}
@@ -182,7 +182,7 @@ export default async function ListingPage({
               {business.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-3 py-1 text-xs rounded-full bg-surface border border-neutral-border text-muted-foreground"
+                  className="px-3 py-1 text-xs font-mono rounded-full bg-surface border border-neutral-border text-muted-foreground"
                 >
                   #{tag}
                 </span>
@@ -193,7 +193,7 @@ export default async function ListingPage({
           {/* Contact + hours */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             <div className="p-6 rounded-2xl bg-surface-raised border border-neutral-border">
-              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+              <h2 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                 Contact
               </h2>
               <ul className="space-y-3.5 text-sm">
@@ -236,7 +236,7 @@ export default async function ListingPage({
             </div>
 
             <div className="p-6 rounded-2xl bg-surface-raised border border-neutral-border">
-              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+              <h2 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                 Opening Hours
               </h2>
               <ul className="space-y-3 text-sm">

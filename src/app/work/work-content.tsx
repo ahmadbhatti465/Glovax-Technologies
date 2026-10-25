@@ -160,7 +160,7 @@ function WorkCard({
       </p>
 
       <div className="mb-4">
-        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+        <h3 className="text-xs font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-2">
           Results
         </h3>
         <ul className="space-y-1">

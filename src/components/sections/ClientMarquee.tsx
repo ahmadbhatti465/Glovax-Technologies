@@ -23,7 +23,7 @@ export function ClientMarquee({ clientLogos }: ClientMarqueeProps) {
         viewport={{ once: true }}
         transition={{ duration: 1 }}
       >
-        <p className="text-center text-xs tracking-[0.25em] uppercase text-muted-foreground mb-10 font-medium">
+        <p className="text-center text-xs font-mono tracking-[0.25em] uppercase text-muted-foreground mb-10 font-medium">
           Trusted by innovative companies worldwide
         </p>
 

@@ -149,7 +149,7 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
                         {iconMap[step.icon] || <Search className="w-6 h-6" />}
                       </span>
                       {/* number chip */}
-                      <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-accent text-accent-foreground text-[10px] font-bold tracking-wide">
+                      <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-accent text-accent-foreground text-[10px] font-mono font-bold tracking-wide">
                         {step.number}
                       </span>
                     </div>

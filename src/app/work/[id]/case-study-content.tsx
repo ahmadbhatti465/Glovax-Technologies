@@ -110,7 +110,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {/* ===== Hero Section ===== */}
           <Reveal className="mt-8">
             <div className="max-w-3xl">
-              <p className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-4">
+              <p className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-4">
                 Case Study · {project.category}
               </p>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold tracking-tight leading-[1.06]">
@@ -249,7 +249,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {keyFeatures.length > 0 && (
             <Reveal className="mt-16 lg:mt-20">
               <div className="mb-8">
-                <p className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-3">
+                <p className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-3">
                   Key Capabilities
                 </p>
                 <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Core Features & Architecture</h2>
@@ -274,7 +274,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {steps.length > 0 && (
             <Reveal className="mt-16 lg:mt-20">
               <div className="mb-10">
-                <p className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-3">
+                <p className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-3">
                   Development process
                 </p>
                 <h2 className="text-2xl md:text-3xl font-bold tracking-tight">How we shipped it</h2>
@@ -305,7 +305,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {/* ===== Tech Stack & Services ===== */}
           <Reveal className="mt-16 lg:mt-20">
             <div className="mb-8">
-              <p className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-3">
+              <p className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-3">
                 Technology & Services
               </p>
               <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Stack & Capabilities</h2>
@@ -340,7 +340,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {results.length > 0 && (
             <Reveal className="mt-16 lg:mt-20">
               <div className="mb-8">
-                <p className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-3">
+                <p className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-3">
                   Outcomes & Metrics
                 </p>
                 <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Measurable Impact Delivered</h2>
@@ -369,7 +369,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {gallery.length > 0 && (
             <Reveal className="mt-16 lg:mt-20">
               <div className="mb-8">
-                <p className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-3">
+                <p className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-3">
                   Interface Gallery
                 </p>
                 <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Screenshots & Walkthrough</h2>
@@ -439,7 +439,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {related.length > 0 && (
             <Reveal className="mt-20">
               <div className="mb-10">
-                <p className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-3">
+                <p className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-3">
                   More work
                 </p>
                 <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Related case studies</h2>

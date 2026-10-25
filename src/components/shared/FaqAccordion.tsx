@@ -11,7 +11,7 @@ export function FaqAccordion({ items }: { items: FAQItem[] }) {
 
   return (
     <section className="mt-16 pt-12 border-t border-border" aria-label="Frequently Asked Questions">
-      <div className="flex items-center gap-2 text-accent text-xs font-semibold uppercase tracking-widest mb-3">
+      <div className="flex items-center gap-2 text-accent text-xs font-mono font-semibold uppercase tracking-widest mb-3">
         <HelpCircle className="w-4 h-4" />
         <span>Frequently Asked Questions</span>
       </div>

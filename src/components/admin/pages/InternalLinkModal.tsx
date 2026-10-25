@@ -194,7 +194,7 @@ export function InternalLinkModal({
                         <span className="ml-2 text-gray-500 text-[11px] font-mono">{item.url}</span>
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0">
-                        <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-gray-400 border border-white/10">
+                        <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-gray-400 border border-white/10">
                           {item.category}
                         </span>
                         {isSelected && <Check className="w-3.5 h-3.5 text-[#1EDAC6]" />}

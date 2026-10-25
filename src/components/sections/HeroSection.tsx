@@ -102,7 +102,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mb-8 flex justify-center"
           >
-            <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass text-xs md:text-sm font-medium text-muted tracking-wide">
+            <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass text-xs md:text-sm font-mono font-medium text-muted tracking-wide">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
@@ -178,7 +178,7 @@ export function HeroSection() {
           >
             <label
               htmlFor="hero-email"
-              className="block text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-2"
+              className="block text-[11px] font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-2"
             >
               Get a free, no-obligation estimate
             </label>
@@ -243,7 +243,7 @@ export function HeroSection() {
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           className="flex flex-col items-center gap-3 text-muted-foreground"
         >
-          <span className="text-xs tracking-[0.25em] uppercase font-medium">Scroll</span>
+          <span className="text-xs font-mono tracking-[0.25em] uppercase font-medium">Scroll</span>
           <div className="w-px h-10 bg-gradient-to-b from-muted-foreground/50 to-transparent" />
         </motion.div>
       </motion.div>

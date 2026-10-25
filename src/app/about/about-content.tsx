@@ -139,7 +139,7 @@ function AboutContentInner({
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-4xl mb-20"
           >
-            <span className="text-accent text-xs md:text-sm font-medium tracking-[0.2em] uppercase mb-4 block">
+            <span className="text-accent text-xs md:text-sm font-mono font-medium tracking-[0.2em] uppercase mb-4 block">
               {heroEyebrow}
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
@@ -230,7 +230,7 @@ function AboutContentInner({
                   MA
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <span className="text-xs uppercase tracking-widest text-accent font-semibold">
+                  <span className="text-xs font-mono uppercase tracking-widest text-accent font-semibold">
                     Founder & Lead Systems Architect
                   </span>
                   <h3 className="text-2xl md:text-3xl font-bold mt-1 text-foreground">

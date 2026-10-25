@@ -136,7 +136,7 @@ export default function CareerContent({
           )}
 
           <div className="mb-20">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
+            <h2 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-6">
               Why work here
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -159,7 +159,7 @@ export default function CareerContent({
             </div>
           </div>
 
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">
+          <h2 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-6">
             Open Positions ({positions.length})
           </h2>
 
@@ -181,7 +181,7 @@ export default function CareerContent({
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-semibold">{position.title}</h3>
-                      <span className="px-2.5 py-0.5 text-xs font-medium bg-accent/10 text-accent rounded-full">
+                      <span className="px-2.5 py-0.5 text-xs font-mono font-medium bg-accent/10 text-accent rounded-full">
                         {position.type}
                       </span>
                     </div>

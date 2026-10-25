@@ -250,7 +250,7 @@ export default async function DynamicCmsPage({
           {/* Page Header */}
           <div className="mt-8 mb-10 space-y-4">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-surface-raised border border-border rounded-full text-accent">
+              <span className="px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider bg-surface-raised border border-border rounded-full text-accent">
                 {page.pageType.replace(/_/g, " ")}
               </span>
 

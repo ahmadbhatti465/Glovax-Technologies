@@ -63,7 +63,7 @@ export function GooglePreview({
 
       {/* Google SERP Simulated Card */}
       <div
-        className={`bg-[#202124] rounded-xl p-4 border border-white/10 text-left font-sans transition-all ${
+        className={`bg-[#202124] rounded-xl p-4 border border-white/10 text-left font-body transition-all ${
           device === "mobile" ? "max-w-xs mx-auto text-xs" : "w-full text-sm"
         }`}
       >

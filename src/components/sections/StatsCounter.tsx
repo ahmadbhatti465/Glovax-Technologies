@@ -53,7 +53,7 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
                 />
               )}
 
-              <div className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight drop-shadow-[0_0_20px_var(--teal-glow)]">
+              <div className="text-5xl md:text-6xl lg:text-7xl font-mono font-bold tracking-tight drop-shadow-[0_0_20px_var(--teal-glow)]">
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}

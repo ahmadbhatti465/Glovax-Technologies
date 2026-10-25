@@ -158,14 +158,14 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
 
           {/* industry badge */}
           <div className="absolute top-3 left-3 md:top-4 md:left-4">
-            <span className="px-3.5 py-1.5 text-[11px] md:text-xs font-medium glass rounded-full text-muted">
+            <span className="px-3.5 py-1.5 text-[11px] md:text-xs font-mono font-medium glass rounded-full text-muted">
               {project.category}
             </span>
           </div>
 
           {/* hover action chip */}
           <div className="absolute bottom-3 right-3 md:bottom-4 md:right-4">
-            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass-strong text-xs font-semibold text-accent opacity-0 translate-y-3 group-hover/shot:opacity-100 group-hover/shot:translate-y-0 transition-all duration-500 shadow-glow">
+            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass-strong text-xs font-mono font-semibold text-accent opacity-0 translate-y-3 group-hover/shot:opacity-100 group-hover/shot:translate-y-0 transition-all duration-500 shadow-glow">
               {hasLink ? "Visit website" : "Open case study"}
               {hasLink ? <ExternalLink className="w-3.5 h-3.5" /> : <ArrowUpRight className="w-3.5 h-3.5" />}
             </span>
@@ -206,7 +206,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
 
         {(project.results?.length ?? 0) > 0 && (
           <div className="mt-5">
-            <div className="text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground mb-3">
+            <div className="text-xs font-mono font-semibold tracking-[0.15em] uppercase text-muted-foreground mb-3">
               Results
             </div>
             <ul className="space-y-2.5">
@@ -227,7 +227,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
           {(project.technologies || []).slice(0, 5).map((tech) => (
             <span
               key={tech}
-              className="px-3 py-1 text-xs font-medium bg-card border border-teal/15 rounded-full text-muted-foreground"
+              className="px-3 py-1 text-xs font-mono font-medium bg-card border border-teal/15 rounded-full text-muted-foreground"
             >
               {tech}
             </span>

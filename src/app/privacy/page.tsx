@@ -66,7 +66,7 @@ export default function PrivacyPage() {
           <Breadcrumbs items={[{ label: "Privacy Policy", href: "/privacy" }]} />
 
           <div className="mt-6 mb-14">
-            <p className="text-accent text-xs md:text-sm font-semibold tracking-[0.28em] uppercase mb-5">
+            <p className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-5">
               Legal
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.06]">

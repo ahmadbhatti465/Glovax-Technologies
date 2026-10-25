@@ -374,7 +374,7 @@ export function SeoScoreCard(props: SeoScoreCardProps) {
       <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
         {result.improvements.length > 0 && (
           <div className="space-y-1.5">
-            <span className="text-[11px] font-semibold text-amber-400 uppercase tracking-wider block">
+            <span className="text-[11px] font-mono font-semibold text-amber-400 uppercase tracking-wider block">
               Needs Improvement ({result.improvements.length})
             </span>
             {result.improvements.map((tip, idx) => (
@@ -391,7 +391,7 @@ export function SeoScoreCard(props: SeoScoreCardProps) {
 
         {result.passed.length > 0 && (
           <div className="space-y-1.5 pt-1">
-            <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider block">
+            <span className="text-[11px] font-mono font-semibold text-emerald-400 uppercase tracking-wider block">
               Optimized ({result.passed.length})
             </span>
             {result.passed.map((item, idx) => (

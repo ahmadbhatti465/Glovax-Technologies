@@ -191,7 +191,7 @@ export function Pricing() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="mt-12 md:mt-16"
         >
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">
+          <p className="text-center text-xs font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">
             Every engagement includes
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2.5">
