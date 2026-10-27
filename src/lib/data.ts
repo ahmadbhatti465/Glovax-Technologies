@@ -252,6 +252,9 @@ function toBlogListItem(row: BlogListRow, now: number): BlogPostListItem {
     row.status === "scheduled" && new Date(row.publishedAt).getTime() <= now;
   return {
     ...serializeDates(row, true),
+    // unstable_cache round-trips through JSON, so a cache hit yields an ISO
+    // string here; revive it so callers can rely on a real Date.
+    ...(row.updatedAt ? { updatedAt: new Date(row.updatedAt) } : {}),
     tags: row.tags ?? [],
     featured: Boolean(row.featured),
     featuredImage: row.featuredImage ?? undefined,
