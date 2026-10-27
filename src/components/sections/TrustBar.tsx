@@ -56,7 +56,7 @@ export function TrustBar() {
           <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-surface-raised border border-neutral-border mb-10 shadow-card">
             <span className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-accent text-accent drop-shadow-[0_0_4px_var(--teal-glow)]" />
+                <Star key={i} className="w-3.5 h-3.5 fill-accent text-accent" />
               ))}
             </span>
             <span className="text-sm font-semibold">Top Rated</span>
@@ -90,7 +90,7 @@ export function TrustBar() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto">
             {proofNumbers.map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-4xl md:text-5xl font-mono font-bold tracking-tight">
+                <div className="text-4xl md:text-5xl font-heading font-semibold tracking-[-0.04em]">
                   <span className="gradient-text">{stat.value}</span>
                   <span className="gradient-text">{stat.suffix}</span>
                 </div>
@@ -116,7 +116,7 @@ export function TrustBar() {
               <motion.span
                 key={tech}
                 variants={item}
-                className="px-4 py-2 rounded-full bg-surface-raised border border-neutral-border text-sm font-mono font-medium text-muted-foreground hover:text-accent hover:border-teal/40 hover:shadow-glow transition-all duration-300"
+                className="px-4 py-2 rounded-full bg-surface-raised border border-neutral-border text-sm font-mono font-medium text-muted-foreground hover:text-accent hover:border-white/[0.14] hover:shadow-glow transition-all duration-300"
               >
                 {tech}
               </motion.span>

@@ -21,7 +21,7 @@ export function FAQ() {
   }, [query]);
 
   return (
-    <section className="py-28 md:py-36 lg:py-44 bg-section-alt relative overflow-hidden">
+    <section className="py-24 md:py-32 lg:py-40 bg-section-alt relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="FAQ"
@@ -42,7 +42,7 @@ export function FAQ() {
             }}
             placeholder="Search questions…"
             aria-label="Search frequently asked questions"
-            className="w-full pl-11 pr-4 py-3 rounded-full bg-card border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-teal/40 transition-colors"
+            className="w-full pl-11 pr-4 py-3 rounded-full bg-card border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent-electricBright/60 transition-colors"
           />
         </div>
 
@@ -72,7 +72,7 @@ export function FAQ() {
                   className={`rounded-2xl border transition-colors duration-300 overflow-hidden ${
                     isOpen
                       ? "border-teal/30 bg-surface-raised shadow-glow"
-                      : "border-neutral-border bg-surface-raised hover:border-teal/20"
+                      : "border-neutral-border bg-surface-raised hover:border-white/[0.14]"
                   }`}
                 >
                   <button

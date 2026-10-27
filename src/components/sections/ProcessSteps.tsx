@@ -96,7 +96,7 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
   });
 
   return (
-    <section className="py-28 md:py-36 lg:py-44 relative">
+    <section className="py-24 md:py-32 lg:py-40 relative">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="Our Process"
@@ -144,7 +144,7 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
                     }}
                     className="absolute left-6 md:left-1/2 top-0 z-10 -translate-x-1/2"
                   >
-                    <div className="group/node relative w-12 h-12 md:w-14 md:h-14 rounded-2xl glass-strong border border-teal/25 flex items-center justify-center text-accent shadow-glow transition-all duration-500 group-hover:shadow-glow-strong">
+                    <div className="group/node relative w-12 h-12 md:w-14 md:h-14 rounded-2xl glass-strong border border-white/[0.08] flex items-center justify-center text-accent shadow-glow transition-all duration-500 group-hover:shadow-glow-strong">
                       <span className="transition-transform duration-500 group-hover:scale-110">
                         {iconMap[step.icon] || <Search className="w-6 h-6" />}
                       </span>
@@ -172,7 +172,7 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
                         : "md:col-start-1 md:text-right",
                     ].join(" ")}
                   >
-                    <div className="group inline-block w-full md:w-auto rounded-2xl border border-neutral-border bg-surface-raised p-6 md:p-7 hover:border-teal/25 hover:shadow-card transition-all duration-500 text-left">
+                    <div className="group inline-block w-full md:w-auto rounded-2xl border border-neutral-border bg-surface-raised p-6 md:p-7 hover:border-white/[0.14] hover:shadow-card transition-all duration-500 text-left">
                       <h3 className="text-xl md:text-2xl font-semibold tracking-tight">
                         {step.title}
                       </h3>

@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { services as fallbackServices } from "@/data/services";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import {
   Code2,
   Smartphone,
@@ -11,104 +13,89 @@ import {
   TrendingUp,
   Palette,
   ArrowUpRight,
+  type LucideIcon,
 } from "lucide-react";
-import { useRef, MouseEvent } from "react";
 import { Service } from "@/types";
+import { cn } from "@/lib/utils";
 
-const iconMap: Record<string, React.ReactNode> = {
-  Code2: <Code2 className="w-7 h-7" />,
-  Smartphone: <Smartphone className="w-7 h-7" />,
-  Brain: <Brain className="w-7 h-7" />,
-  Cloud: <Cloud className="w-7 h-7" />,
-  TrendingUp: <TrendingUp className="w-7 h-7" />,
-  Palette: <Palette className="w-7 h-7" />,
+const iconMap: Record<string, LucideIcon> = {
+  Code2,
+  Smartphone,
+  Brain,
+  Cloud,
+  TrendingUp,
+  Palette,
 };
 
-// Per-service accent colors (brand palette): AI/ML → mint, Digital Marketing → amber,
-// everything else → teal.
-const serviceAccent: Record<string, string> = {
-  Brain: "bg-success/10 border-success/30 text-success",
-  TrendingUp: "bg-warning/10 border-warning/30 text-warning",
-};
+// Bento rhythm on a 3-column grid: wide, narrow / narrow, wide / wide, narrow.
+const WIDE = new Set([0, 3, 4]);
 
-function ServiceCard({
-  service,
-  index,
-}: {
-  service: Service;
-  index: number;
-}) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    card.style.setProperty("--mouse-x", `${x}%`);
-    card.style.setProperty("--mouse-y", `${y}%`);
-  };
+function ServiceCard({ service, index }: { service: Service; index: number }) {
+  const Icon = iconMap[service.icon] ?? Code2;
+  const wide = WIDE.has(index);
+  const isAI = service.icon === "Brain";
 
   return (
     <motion.div
-      key={service.id}
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -8 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.7,
-        delay: index * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="group relative p-8 md:p-10 rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/25 hover:shadow-card transition-all duration-500 spotlight-card card-shine gradient-border overflow-hidden"
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      className={cn(wide && "lg:col-span-2")}
     >
-      {/* Watermark index */}
-      <span
-        aria-hidden
-        className="absolute top-6 right-7 text-5xl font-bold select-none opacity-[0.06] group-hover:opacity-10 transition-opacity duration-500"
-      >
-        {String(index + 1).padStart(2, "0")}
-      </span>
-
-      {/* Cursor-tracked glow */}
-      <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-        style={{
-          background: "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--teal-glow), transparent 40%)",
-        }}
-      />
-
-      <div className="relative z-10">
-        <div className={`mb-8 inline-flex items-center justify-center w-16 h-16 rounded-2xl ${serviceAccent[service.icon] || "bg-teal/10 border-teal/25 text-accent"} shadow-glow group-hover:shadow-glow-strong group-hover:scale-105 transition-all duration-500`}>
-          {iconMap[service.icon] || <Code2 className="w-7 h-7" />}
-        </div>
-
-        <h3 className="text-xl md:text-2xl font-semibold mb-4 tracking-tight">{service.title}</h3>
-
-        <p className="text-muted text-sm md:text-base leading-relaxed mb-8">
-          {service.description}
-        </p>
-
-        <ul className="space-y-3 mb-8">
-          {service.features.slice(0, 3).map((feature) => (
-            <li
-              key={feature}
-              className="text-sm text-muted-foreground flex items-center gap-3"
+      <SpotlightCard className="group h-full">
+        <Link
+          href="/services"
+          className="relative flex h-full flex-col p-7 md:p-8 outline-none"
+          aria-label={`${service.title} — learn more`}
+        >
+          <div className="flex items-start justify-between">
+            <span
+              className={cn(
+                "inline-flex h-11 w-11 items-center justify-center rounded-xl border bg-canvas-elevated",
+                "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-colors duration-300",
+                isAI
+                  ? "border-accent-neon/30 text-accent-neon"
+                  : "border-white/[0.08] text-brand-textPrimary group-hover:border-accent-electricBright/40 group-hover:text-accent-electricBright"
+              )}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_var(--teal-glow)] flex-shrink-0" />
-              {feature}
-            </li>
-          ))}
-        </ul>
+              <Icon className="h-5 w-5" aria-hidden />
+            </span>
+            <span className="font-mono text-xs text-brand-textMuted">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+          </div>
 
-        <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground group-hover:text-accent transition-colors duration-500">
-          Learn More
-          <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </div>
-      </div>
+          <h3 className="mt-8 text-lg md:text-xl font-semibold tracking-tight text-brand-textPrimary">
+            {service.title}
+            {isAI && (
+              <span className="ml-2 align-middle rounded-full border border-accent-neon/30 bg-accent-neon/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-accent-neon">
+                Core
+              </span>
+            )}
+          </h3>
+          <p className="mt-3 max-w-xl text-sm md:text-[0.9375rem] leading-relaxed text-brand-textSecondary">
+            {service.description}
+          </p>
+
+          <ul className={cn("mt-6 grid gap-2.5", wide && "sm:grid-cols-2")}>
+            {service.features.slice(0, wide ? 4 : 3).map((feature) => (
+              <li key={feature} className="flex items-center gap-2.5 text-sm text-brand-textSecondary">
+                <span className="h-1 w-1 shrink-0 rounded-full bg-brand-textMuted transition-colors duration-300 group-hover:bg-accent-electricBright" />
+                {feature}
+              </li>
+            ))}
+          </ul>
+
+          <span className="mt-auto inline-flex items-center gap-1.5 pt-8 text-sm font-medium text-brand-textSecondary transition-colors duration-300 group-hover:text-brand-textPrimary">
+            Learn more
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              aria-hidden
+            />
+          </span>
+        </Link>
+      </SpotlightCard>
     </motion.div>
   );
 }
@@ -121,22 +108,18 @@ export function ServicesGrid({ services: serverServices }: ServicesGridProps) {
   const services = serverServices?.length ? serverServices : fallbackServices;
 
   return (
-    <section id="services" className="py-28 md:py-36 lg:py-44 relative">
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
+    <section id="services" className="relative py-24 md:py-32 lg:py-40">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
         <SectionHeader
-          eyebrow="What We Do"
+          eyebrow="What we do"
           title="Services that drive"
           titleHighlight="growth"
           subtitle="From concept to deployment, we deliver end-to-end solutions that transform your business and delight your users."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => (
-            <ServiceCard
-              key={service.id}
-              service={service}
-              index={index}
-            />
+            <ServiceCard key={service.id} service={service} index={index} />
           ))}
         </div>
       </div>

@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -61,7 +62,8 @@ export default function PrivacyPage() {
         ]}
       />
       <Navbar />
-      <main className="pt-32 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-32 pb-24">
+        <PageBackdrop />
         <div className="max-w-3xl mx-auto px-6 md:px-8">
           <Breadcrumbs items={[{ label: "Privacy Policy", href: "/privacy" }]} />
 

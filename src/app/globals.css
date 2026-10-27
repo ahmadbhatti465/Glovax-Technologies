@@ -4,22 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   GLOVAX BRAND — PREMIUM DEEP TEAL SYSTEM
+   GLOVAX — "WORLD-CLASS DARK PREMIUM" DESIGN TOKENS
    ------------------------------------------------------------
-   Single source of truth. Components must reference these tokens
-   (via Tailwind utilities) — never hardcode hex values inline.
+   Single source of truth. Components reference these tokens via
+   Tailwind utilities — never hardcode hex values inline.
 
-   USAGE RULES
-   • Teal   — primary CTAs, highlights, links, active states,
-              key stats/numbers. CTA fills carry dark text.
-   • Cream/White — headlines & body text on deep-green backgrounds.
-   • Azure  — reserved accent (AI badge, rare highlights). Use
-              sparingly — the brand is teal, not blue.
-   • Mint/success — success indicators, AI/ML service accent.
-   • Teal is never used at full saturation over large fills —
-              separate with deep-green space or reduced opacity.
+   SURFACES   canvas-base (#030303) → canvas-surface (#09090b)
+              → canvas-elevated (#141417). Depth comes from layering
+              and hairline borders, not heavy shadows.
+   TEXT       brand-textPrimary / brand-textSecondary / brand-textMuted
+   ACCENTS    accent-electric (#2563eb) and accent-neon (#a855f7) are
+              signals, used sparingly: CTAs, active states, glows.
+              accent-electricBright (#3b82f6) is the AA-safe variant
+              for small accent text on canvas-base (~5.4:1).
+   BORDERS    border-white/[0.06] or border-hairline.
+
+   Legacy names (teal, surface-raised, neutral-border, ...) are kept
+   as aliases onto the new tokens so older components inherit the
+   system automatically. Prefer the new names in new code.
    ============================================================ */
 @theme inline {
+  /* ---------- Core design tokens ---------- */
+  --color-canvas-base: var(--canvas-base);
+  --color-canvas-surface: var(--canvas-surface);
+  --color-canvas-elevated: var(--canvas-elevated);
+  --color-brand-textPrimary: var(--brand-text-primary);
+  --color-brand-textSecondary: var(--brand-text-secondary);
+  --color-brand-textMuted: var(--brand-text-muted);
+  --color-accent-electric: var(--accent-electric);
+  --color-accent-electricBright: var(--accent-electric-bright);
+  --color-accent-neon: var(--accent-neon);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+
+  /* ---------- Semantic + legacy aliases ---------- */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -29,6 +47,7 @@
   --color-section-alt: var(--section-alt);
   --color-brand-bg: var(--brand-bg);
   --color-brand-bg-raise: var(--brand-bg-raise);
+  --color-brand-bg-hi: var(--brand-bg-hi);
   --color-teal: var(--teal);
   --color-teal-bright: var(--teal-bright);
   --color-teal-deep: var(--teal-deep);
@@ -57,7 +76,7 @@
   --color-neutral-border: var(--neutral-border);
   --color-whatsapp: var(--brand-whatsapp);
 
-  --font-heading: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
@@ -66,121 +85,105 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Soft premium shadows */
-  --shadow-card: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
-  --shadow-card-lg: 0 40px 90px -30px rgba(0, 0, 0, 0.65);
-  --shadow-glow: 0 0 40px rgba(30, 218, 198, 0.10);
-  --shadow-glow-strong: 0 0 60px rgba(30, 218, 198, 0.18);
-  --shadow-glow-azure: 0 0 40px rgba(57, 167, 255, 0.14);
+  /* Shadows — soft and layered; accent-tinted only where earned */
+  --shadow-card: inset 0 1px 0 0 rgba(255, 255, 255, 0.03), 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+  --shadow-card-lg: inset 0 1px 0 0 rgba(255, 255, 255, 0.04), 0 40px 90px -30px rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 8px 24px -12px rgba(37, 99, 235, 0.35);
+  --shadow-glow-strong: 0 0 0 1px rgba(59, 130, 246, 0.3), 0 12px 36px -10px rgba(37, 99, 235, 0.5);
+  --shadow-glow-azure: 0 0 40px rgba(168, 85, 247, 0.18);
+  --shadow-glow-neon: 0 0 40px rgba(168, 85, 247, 0.22);
 }
 
 :root {
   --radius: 0.75rem;
-  --font-heading: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* ==================== RAW TOKENS ==================== */
+  /* ==================== RAW DESIGN TOKENS ==================== */
 
-  /* Backgrounds — near-black teal-tinted scale (premium system) */
-  --brand-bg:        #08110F;
-  --brand-bg-raise:  #0F1A18;
-  --brand-bg-hi:     #142320;
+  /* Surface layering */
+  --canvas-base:      #030303;
+  --canvas-surface:   #09090b;
+  --canvas-elevated:  #141417;
 
-  /* Accent — Teal (CTAs, highlights) */
-  --teal:            #1EDAC6;
-  --teal-bright:     #34F5E2;
-  --teal-deep:       #0FA79B;
-  --teal-muted:      rgba(30, 218, 198, 0.14); /* subtle borders/dividers ONLY */
-  --teal-glow:       rgba(30, 218, 198, 0.12); /* hover glows / radial accents */
+  /* Typography */
+  --brand-text-primary:   #f4f4f5;
+  --brand-text-secondary: #a1a1aa;
+  --brand-text-muted:     #52525b;
 
-  /* Reserved accent — Azure (AI badge, sparse highlights) */
-  --azure:           #39A7FF;
+  /* Accents */
+  --accent-electric:        #2563eb;
+  --accent-electric-bright: #3b82f6;
+  --accent-neon:            #a855f7;
 
-  /* Text */
-  --text-primary:    #FFFFFF;   /* pure white — headlines, body copy */
-  --text-muted:      #AAB8B4;   /* sage secondary text */
-  --text-muted-dim:  #6D7C78;   /* faintest text — meta, placeholders */
-  --text-on-teal:    #05211B;   /* dark text on teal buttons/backgrounds */
-
-  /* Neutrals */
-  --neutral-light:   #F7F8F3;   /* light cream surface — sparingly on dark site */
-  --neutral-border:  #1D3935;   /* card/border on deep green */
+  /* Hairlines */
+  --hairline:        rgba(255, 255, 255, 0.06);
+  --hairline-strong: rgba(255, 255, 255, 0.10);
 
   /* Status */
   --status-success:  #34D399;
   --status-warning:  #F59E0B;
   --status-error:    #EF4444;
 
-  /* Brand (recognizability overrides — WhatsApp green) */
+  /* Brand (recognizability override — WhatsApp green) */
   --brand-whatsapp:  #25D366;
 
-  /* Brand gradient — near-black → teal (hero, banners) */
-  --gradient-brand:  linear-gradient(135deg, #08110F 0%, #0FA79B 100%);
-  --gradient-cta:    linear-gradient(135deg, #0FA79B 0%, #1EDAC6 100%);
+  /* Gradients */
+  --gradient-brand:  linear-gradient(135deg, var(--canvas-base) 0%, color-mix(in srgb, var(--accent-electric) 45%, var(--canvas-base)) 60%, color-mix(in srgb, var(--accent-neon) 35%, var(--canvas-base)) 100%);
+  --gradient-cta:    linear-gradient(180deg, var(--accent-electric-bright) 0%, var(--accent-electric) 100%);
+  --gradient-signal: linear-gradient(90deg, var(--accent-electric-bright) 0%, var(--accent-neon) 100%);
+
+  /* ==================== LEGACY ALIASES ==================== */
+  --brand-bg:        var(--canvas-base);
+  --brand-bg-raise:  var(--canvas-surface);
+  --brand-bg-hi:     var(--canvas-elevated);
+
+  --teal:            var(--accent-electric);
+  --teal-bright:     var(--accent-electric-bright);
+  --teal-deep:       var(--accent-electric);
+  --teal-muted:      var(--hairline-strong);
+  --teal-glow:       rgba(37, 99, 235, 0.14);
+  --azure:           var(--accent-neon);
+
+  --text-primary:    var(--brand-text-primary);
+  --text-muted:      var(--brand-text-secondary);
+  --text-muted-dim:  var(--brand-text-muted);
+  --text-on-teal:    #ffffff;
+
+  --neutral-light:   var(--brand-text-primary);
+  --neutral-border:  var(--hairline-strong);
 
   /* ==================== SEMANTIC MAPPINGS ==================== */
+  --background:       var(--canvas-base);
+  --foreground:       var(--brand-text-primary);
+  --surface:          var(--canvas-base);
+  --surface-raised:   var(--canvas-surface);
+  --section-alt:      var(--canvas-surface);
+  --bg-card:          var(--canvas-surface);
+  --bg-card-hover:    var(--canvas-elevated);
+  --bg-overlay:       var(--canvas-elevated);
+  --bg-input:         var(--canvas-elevated);
 
-  /* Backgrounds */
-  --background:       var(--brand-bg);
-  --foreground:       var(--text-primary);
-  --surface:          var(--brand-bg);
-  --surface-raised:   var(--brand-bg-raise);
-  --section-alt:      var(--brand-bg-raise);
-  --bg-card:          var(--brand-bg-raise);
-  --bg-card-hover:    var(--brand-bg-hi);
-  --bg-overlay:       var(--brand-bg-hi);
-  --bg-input:         var(--brand-bg-hi);
+  --accent:             var(--accent-electric-bright);
+  --accent-hover:       #60a5fa;
+  --accent-foreground:  #ffffff;
 
-  /* Accent — Teal */
-  --accent:             var(--teal);
-  --accent-hover:       var(--teal-bright);
-  --accent-foreground:  var(--text-on-teal);
+  --primary:            var(--accent-electric);
+  --primary-foreground: #ffffff;
 
-  /* Primary (CTA) */
-  --primary:            var(--teal);
-  --primary-foreground: var(--text-on-teal);
+  --secondary:            var(--canvas-elevated);
+  --secondary-foreground: var(--brand-text-primary);
 
-  /* Secondary (muted surface) */
-  --secondary:            var(--brand-bg-raise);
-  --secondary-foreground: var(--text-primary);
+  --border-default:   var(--hairline-strong);
+  --border-focus:     var(--accent-electric-bright);
 
-  /* Text aliases */
-  --text-teal:        var(--teal);
-  --text-teal-hover:  var(--teal-bright);
-
-  /* Borders */
-  --border-default:   var(--neutral-border);
-  --border-teal:      var(--teal-deep);
-  --border-focus:     var(--teal);
-
-  /* States */
-  --state-success:    var(--status-success);
-  --state-warning:    var(--status-warning);
-  --state-error:      var(--status-error);
-
-  /* ==================== THEME MAPPINGS ==================== */
-  --muted:                var(--text-muted);
-  --muted-foreground:     var(--text-muted);
-  --muted-dim:            var(--text-muted-dim);
-  --border:               var(--border-default);
-  --input:                var(--border-default);
-  --ring:                 var(--teal);
+  --muted:                var(--brand-text-secondary);
+  --muted-foreground:     var(--brand-text-secondary);
+  --muted-dim:            var(--brand-text-muted);
+  --border:               var(--hairline-strong);
+  --input:                var(--hairline-strong);
+  --ring:                 var(--accent-electric-bright);
   --destructive:          var(--status-error);
   --success:              var(--status-success);
   --warning:              var(--status-warning);
-
-  /* === TYPE SCALE (fluid where it matters) === */
-  --text-xs:   0.75rem;    /* 12px — labels, tags */
-  --text-sm:   0.875rem;   /* 14px — captions, meta */
-  --text-base: 1rem;       /* 16px — body text */
-  --text-lg:   1.125rem;   /* 18px — lead paragraphs */
-  --text-xl:   1.25rem;    /* 20px — card headings */
-  --text-2xl:  1.5rem;     /* 24px — section subheadings */
-  --text-3xl:  1.875rem;   /* 30px — section headings */
-  --text-4xl:  2.25rem;    /* 36px — page headings */
-  --text-5xl:  3rem;       /* 48px — hero headings */
-  --text-6xl:  3.75rem;    /* 60px — hero display */
 }
 
 html {
@@ -213,8 +216,8 @@ p {
 }
 
 ::selection {
-  background-color: color-mix(in srgb, var(--teal) 32%, transparent);
-  color: #ffffff;
+  background-color: color-mix(in srgb, var(--accent-electric) 45%, transparent);
+  color: var(--brand-text-primary);
 }
 
 /* ========== BRAND SCROLLBAR ========== */
@@ -295,32 +298,42 @@ p {
 
 /* ========== GRADIENT TEXT ========== */
 .gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, var(--teal-bright) 50%, var(--teal-deep) 100%);
+  background: linear-gradient(180deg, var(--brand-text-primary) 0%, color-mix(in srgb, var(--brand-text-primary) 55%, var(--brand-text-secondary)) 55%, var(--brand-text-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ========== TEAL SHIMMER TEXT ========== */
+/* ========== SIGNAL SHIMMER TEXT (electric → neon highlight words) ========== */
+/* Legacy class name kept: `.teal-shimmer` is the accent-word highlight. */
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
 }
 
-.teal-shimmer {
+.teal-shimmer,
+.text-signal {
   background: linear-gradient(
     90deg,
-    var(--teal) 0%,
-    var(--teal-bright) 25%,
-    #ffffff 50%,
-    var(--teal-bright) 75%,
-    var(--teal) 100%
+    var(--accent-electric-bright) 0%,
+    color-mix(in srgb, var(--accent-electric-bright) 50%, var(--accent-neon)) 25%,
+    var(--accent-neon) 50%,
+    color-mix(in srgb, var(--accent-electric-bright) 50%, var(--accent-neon)) 75%,
+    var(--accent-electric-bright) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 5s linear infinite;
+  animation: shimmer 8s linear infinite;
+}
+
+/* ========== PREMIUM HEADLINE TEXT (off-white → zinc fade) ========== */
+.text-premium {
+  background: linear-gradient(180deg, var(--brand-text-primary) 30%, color-mix(in srgb, var(--brand-text-primary) 60%, var(--brand-text-muted)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ========== AMBIENT GLOW ORB ========== */
@@ -344,11 +357,11 @@ p {
 .mesh-gradient {
   background: conic-gradient(
     from 0deg at 50% 50%,
-    rgba(30, 218, 198, 0.12) 0deg,
-    rgba(57, 167, 255, 0.06) 90deg,
-    rgba(30, 218, 198, 0.02) 180deg,
-    rgba(57, 167, 255, 0.10) 270deg,
-    rgba(30, 218, 198, 0.12) 360deg
+    rgba(255, 255, 255, 0.07) 0deg,
+    rgba(168, 85, 247, 0.06) 90deg,
+    rgba(37, 99, 235, 0.02) 180deg,
+    rgba(168, 85, 247, 0.08) 270deg,
+    rgba(255, 255, 255, 0.07) 360deg
   );
   animation: mesh-rotate 22s ease-in-out infinite;
 }
@@ -370,17 +383,17 @@ p {
 
 /* ========== GLASS MORPHISM ========== */
 .glass {
-  background: rgba(30, 218, 198, 0.05);
+  background: rgba(255, 255, 255, 0.025);
   backdrop-filter: blur(20px) saturate(1.2);
   -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border: 1px solid rgba(30, 218, 198, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .glass-strong {
-  background: rgba(30, 218, 198, 0.08);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(40px) saturate(1.5);
   -webkit-backdrop-filter: blur(40px) saturate(1.5);
-  border: 1px solid rgba(30, 218, 198, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 /* ========== SPOTLIGHT HOVER CARD ========== */
@@ -421,9 +434,9 @@ p {
   padding: 1px;
   background: linear-gradient(
     135deg,
-    rgba(30, 218, 198, 0.55) 0%,
-    rgba(30, 218, 198, 0.06) 42%,
-    rgba(57, 167, 255, 0.25) 100%
+    rgba(59, 130, 246, 0.6) 0%,
+    rgba(255, 255, 255, 0.04) 42%,
+    rgba(168, 85, 247, 0.4) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -476,8 +489,8 @@ p {
 /* ========== SUBTLE GRID PATTERN ========== */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(30, 218, 198, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(30, 218, 198, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 56px 56px;
   -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, black 30%, transparent 75%);
   mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, black 30%, transparent 75%);
@@ -542,8 +555,8 @@ p {
   border-radius: 9999px;
   background: radial-gradient(
     circle,
-    rgba(30, 218, 198, 0.055) 0%,
-    rgba(57, 167, 255, 0.035) 35%,
+    rgba(37, 99, 235, 0.06) 0%,
+    rgba(168, 85, 247, 0.03) 35%,
     transparent 70%
   );
   filter: blur(20px);
@@ -563,7 +576,7 @@ p {
   z-index: 60;
   transform-origin: 0 50%;
   background: linear-gradient(90deg, var(--teal-deep), var(--teal), var(--teal-bright));
-  box-shadow: 0 0 12px rgba(30, 218, 198, 0.5);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
 }
 
 /* ========== NO SCROLLBAR ========== */
@@ -601,6 +614,172 @@ p {
   border-radius: 4px;
 }
 
+/* ========== ENTER (CSS-only entrance, no hydration needed) ========== */
+@keyframes enter-up {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+.enter {
+  animation: enter-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* ========== TECH GRID (masked hairline grid background) ========== */
+.tech-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 20%, transparent 75%);
+}
+
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* ========== SPOTLIGHT SURFACE ==========
+   Driven by --spot-x / --spot-y (px), written by <SpotlightCard> through
+   requestAnimationFrame — pointer movement never triggers a React render.
+   ::before = interior backlight, ::after = border glow (masked to the 1px ring). */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight::before,
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.spotlight::before {
+  z-index: -1;
+  background: radial-gradient(
+    520px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(37, 99, 235, 0.10),
+    rgba(168, 85, 247, 0.04) 35%,
+    transparent 65%
+  );
+}
+
+.spotlight::after {
+  z-index: 2;
+  padding: 1px;
+  background: radial-gradient(
+    360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(59, 130, 246, 0.7),
+    rgba(168, 85, 247, 0.35) 40%,
+    transparent 70%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.spotlight[data-active="true"]::before,
+.spotlight[data-active="true"]::after,
+.spotlight:focus-within::after {
+  opacity: 1;
+}
+
+/* ========== BORDER BEAM (rotating conic ring for featured elements) ========== */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes beam-spin {
+  to { --beam-angle: 360deg; }
+}
+
+.border-beam {
+  position: relative;
+}
+
+.border-beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0deg,
+    transparent 250deg,
+    var(--accent-electric-bright) 300deg,
+    var(--accent-neon) 340deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: beam-spin 6s linear infinite;
+  pointer-events: none;
+}
+
+/* ========== AURORA (hero top light wash) ========== */
+.aurora {
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 0%, rgba(37, 99, 235, 0.22), transparent 70%),
+    radial-gradient(ellipse 30% 30% at 70% 10%, rgba(168, 85, 247, 0.14), transparent 70%),
+    radial-gradient(ellipse 30% 30% at 30% 8%, rgba(59, 130, 246, 0.12), transparent 70%);
+}
+
+/* ========== HAIRLINE DIVIDER with lit centre ========== */
+.hairline-lit {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14) 50%, transparent);
+}
+
+/* ========== KBD ========== */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.3rem;
+  border-radius: 0.3rem;
+  border: 1px solid var(--hairline-strong);
+  background: var(--canvas-elevated);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  color: var(--brand-text-secondary);
+}
+
+/* ========== SKIP LINK ========== */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--accent-electric);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 /* ========== REDUCED MOTION ========== */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -615,7 +794,8 @@ p {
   .animate-marquee { animation: none; }
   .mesh-blob { animation: none; }
   .ambient-orb { animation: none; }
-  .teal-shimmer { animation: none; }
+  .teal-shimmer, .text-signal { animation: none; }
+  .border-beam::before { animation: none; }
   .teal-border-glow { animation: none; }
   .pulse-glow { animation: none; }
   .float-y, .float-y-delay { animation: none; }

@@ -25,6 +25,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortfolioItem } from "@/types";
 import { isValidExternalUrl } from "@/lib/utils";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 interface CaseStudyContentProps {
   project: PortfolioItem;
@@ -88,7 +89,8 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           {/* Draft Preview Warning Banner */}
           {(isPreview || project.status !== "published") && (
@@ -222,7 +224,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {/* ===== Challenge & Solution ===== */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-16 lg:mt-20">
             <Reveal>
-              <div className="h-full rounded-3xl border border-neutral-border bg-surface-raised p-8 md:p-10 hover:border-teal/25 hover:shadow-card transition-all duration-500">
+              <div className="h-full rounded-2xl border border-neutral-border bg-surface-raised p-8 md:p-10 hover:border-white/[0.14] hover:shadow-card transition-all duration-500">
                 <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-warning/10 border border-warning/30 text-warning shadow-glow">
                   <Target className="w-6 h-6" />
                 </div>
@@ -233,8 +235,8 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
               </div>
             </Reveal>
             <Reveal delay={0.1}>
-              <div className="h-full rounded-3xl border border-neutral-border bg-surface-raised p-8 md:p-10 hover:border-teal/25 hover:shadow-card transition-all duration-500">
-                <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-teal/10 border border-teal/25 text-accent shadow-glow">
+              <div className="h-full rounded-2xl border border-neutral-border bg-surface-raised p-8 md:p-10 hover:border-white/[0.14] hover:shadow-card transition-all duration-500">
+                <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-canvas-elevated border border-white/[0.08] text-accent shadow-glow">
                   <Lightbulb className="w-6 h-6" />
                 </div>
                 <h2 className="text-xl md:text-2xl font-semibold tracking-tight mb-4">Our solution</h2>
@@ -258,9 +260,9 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                 {keyFeatures.map((feat, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-3 rounded-2xl border border-neutral-border bg-surface-raised p-5 hover:border-teal/25 transition-colors"
+                    className="flex items-start gap-3 rounded-2xl border border-neutral-border bg-surface-raised p-5 hover:border-white/[0.14] transition-colors"
                   >
-                    <span className="mt-1 w-5 h-5 rounded-full bg-teal/10 border border-teal/25 flex items-center justify-center text-accent shrink-0">
+                    <span className="mt-1 w-5 h-5 rounded-full bg-canvas-elevated border border-white/[0.08] flex items-center justify-center text-accent shrink-0">
                       <Sparkles className="w-3 h-3" />
                     </span>
                     <p className="text-sm md:text-base text-muted leading-relaxed">{feat}</p>
@@ -291,7 +293,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                       transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                       className="relative flex items-start gap-5"
                     >
-                      <span className="relative z-10 mt-1 w-12 h-12 rounded-full bg-surface-raised border border-teal/25 flex items-center justify-center text-sm font-bold text-accent shadow-glow shrink-0">
+                      <span className="relative z-10 mt-1 w-12 h-12 rounded-full bg-surface-raised border border-white/[0.08] flex items-center justify-center text-sm font-bold text-accent shadow-glow shrink-0">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <p className="pt-3 text-muted leading-relaxed">{step}</p>
@@ -316,7 +318,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                   {project.services.map((srv) => (
                     <span
                       key={srv}
-                      className="px-3.5 py-1.5 rounded-full bg-[#1EDAC6]/10 border border-[#1EDAC6]/25 text-xs font-semibold text-[#1EDAC6]"
+                      className="px-3.5 py-1.5 rounded-full bg-accent-electric/10 border border-accent-electricBright/25 text-xs font-semibold text-accent-electricBright"
                     >
                       {srv}
                     </span>
@@ -327,7 +329,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                 {(project.technologies || []).map((tech) => (
                   <span
                     key={tech}
-                    className="px-4 py-2 rounded-full bg-surface-raised border border-neutral-border text-sm font-medium text-muted hover:text-accent hover:border-teal/40 transition-all duration-300"
+                    className="px-4 py-2 rounded-full bg-surface-raised border border-neutral-border text-sm font-medium text-muted hover:text-accent hover:border-white/[0.14] transition-all duration-300"
                   >
                     {tech}
                   </span>
@@ -353,9 +355,9 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ duration: 0.5, delay: i * 0.06 }}
-                    className="flex items-start gap-3.5 rounded-2xl border border-neutral-border bg-surface-raised p-5 hover:border-teal/25 transition-colors duration-300"
+                    className="flex items-start gap-3.5 rounded-2xl border border-neutral-border bg-surface-raised p-5 hover:border-white/[0.14] transition-colors duration-300"
                   >
-                    <span className="mt-0.5 w-6 h-6 rounded-full bg-teal/10 border border-teal/25 flex items-center justify-center shrink-0">
+                    <span className="mt-0.5 w-6 h-6 rounded-full bg-canvas-elevated border border-white/[0.08] flex items-center justify-center shrink-0">
                       <Check className="w-3.5 h-3.5 text-accent" />
                     </span>
                     <p className="text-sm md:text-base text-muted leading-relaxed">{result}</p>
@@ -403,7 +405,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
           {/* ===== Testimonial Section ===== */}
           {testimonial && testimonial.quote && (
             <Reveal className="mt-16 lg:mt-20">
-              <div className="relative rounded-3xl border border-teal/20 bg-surface-raised p-8 md:p-12 overflow-hidden">
+              <div className="relative rounded-2xl border border-white/[0.08] bg-surface-raised p-8 md:p-12 overflow-hidden">
                 <div
                   aria-hidden
                   className="absolute inset-0 opacity-60 pointer-events-none"
@@ -449,7 +451,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                   <Link
                     key={item.id}
                     href={`/work/${item.slug || item.id}`}
-                    className="group rounded-3xl border border-neutral-border bg-surface-raised overflow-hidden hover:border-teal/25 hover:shadow-card transition-all duration-500"
+                    className="group rounded-2xl border border-neutral-border bg-surface-raised overflow-hidden hover:border-white/[0.14] hover:shadow-card transition-all duration-500"
                   >
                     <div className="relative aspect-[16/9] overflow-hidden">
                       <Image

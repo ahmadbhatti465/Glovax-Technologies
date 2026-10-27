@@ -179,7 +179,7 @@ export function ChatWidget() {
                   <button
                     key={qr.label}
                     onClick={() => send(qr.message)}
-                    className="px-3 py-1.5 rounded-full text-xs bg-card border border-neutral-border text-muted-foreground hover:text-teal hover:border-teal/40 transition-colors"
+                    className="px-3 py-1.5 rounded-full text-xs bg-card border border-neutral-border text-muted-foreground hover:text-teal hover:border-white/[0.14] transition-colors"
                   >
                     {qr.label}
                   </button>
@@ -199,7 +199,7 @@ export function ChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about pricing, services, NDAs…"
-                className="flex-1 px-4 py-2.5 rounded-full bg-card border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-teal/40 transition-colors"
+                className="flex-1 px-4 py-2.5 rounded-full bg-card border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent-electricBright/60 transition-colors"
               />
               <button
                 type="submit"

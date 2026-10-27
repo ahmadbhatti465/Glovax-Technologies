@@ -10,9 +10,10 @@ import { z } from "zod";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { siteConfig } from "@/lib/constants";
-import { Mail, Phone, MapPin, Calendar, ArrowUpRight, Loader2 } from "lucide-react";
+import { Mail, Phone, MapPin, Calendar, ArrowUpRight, Loader2, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -23,6 +24,41 @@ const contactSchema = z.object({
 });
 
 type ContactForm = z.infer<typeof contactSchema>;
+
+const fieldClass =
+  "w-full rounded-xl border border-white/[0.08] bg-canvas-base px-4 py-3 text-sm text-brand-textPrimary " +
+  "placeholder:text-brand-textMuted outline-none transition-[border-color,box-shadow] duration-200 " +
+  "hover:border-white/[0.14] focus:border-accent-electricBright/60 focus:shadow-[0_0_0_4px_rgba(37,99,235,0.15)] " +
+  "aria-[invalid=true]:border-destructive/60";
+
+function Field({
+  id,
+  label,
+  required,
+  error,
+  children,
+}: {
+  id: string;
+  label: string;
+  required?: boolean;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-brand-textPrimary">
+        {label}
+        {required && <span className="ml-0.5 text-brand-textMuted" aria-hidden>*</span>}
+      </label>
+      {children}
+      {error && (
+        <p id={`${id}-error`} role="alert" className="mt-1.5 text-xs text-destructive">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export default function ContactContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,7 +99,8 @@ export default function ContactContent() {
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <Breadcrumbs items={[{ label: "Contact", href: "/contact" }]} />
           <SectionHeader
@@ -78,106 +115,93 @@ export default function ContactContent() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
             {/* Form */}
             <div className="lg:col-span-3">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Name *
-                    </label>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+                className="space-y-5 rounded-2xl border border-white/[0.06] bg-canvas-surface p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)] md:p-8"
+              >
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                  <Field id="contact-name" label="Name" required error={errors.name?.message}>
                     <input
                       {...register("name")}
+                      id="contact-name"
                       type="text"
-                      placeholder="Enter Your Name"
-                      className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
+                      autoComplete="name"
+                      placeholder="Jane Cooper"
+                      aria-invalid={!!errors.name}
+                      aria-describedby={errors.name ? "contact-name-error" : undefined}
+                      className={fieldClass}
                     />
-                    {errors.name && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {errors.name.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Email *
-                    </label>
+                  </Field>
+                  <Field id="contact-email" label="Work email" required error={errors.email?.message}>
                     <input
                       {...register("email")}
+                      id="contact-email"
                       type="email"
-                      placeholder="Enter Your Email"
-                      className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
+                      autoComplete="email"
+                      placeholder="jane@company.com"
+                      aria-invalid={!!errors.email}
+                      aria-describedby={errors.email ? "contact-email-error" : undefined}
+                      className={fieldClass}
                     />
-                    {errors.email && (
-                      <p className="mt-1 text-xs text-destructive">
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
+                  </Field>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Company
-                  </label>
+                <Field id="contact-company" label="Company">
                   <input
                     {...register("company")}
+                    id="contact-company"
                     type="text"
-                    placeholder="Enter Your Company Name"
-                    className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
+                    autoComplete="organization"
+                    placeholder="Acme Inc."
+                    className={fieldClass}
                   />
-                </div>
+                </Field>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Service Interest *
-                  </label>
-                  <select
-                    {...register("service")}
-                    className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-foreground focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer"
-                  >
-                    <option value="">Select a service</option>
-                    <option value="web">Web Development</option>
-                    <option value="mobile">Mobile Apps</option>
-                    <option value="ai">AI & Machine Learning</option>
-                    <option value="cloud">Cloud & DevOps</option>
-                    <option value="marketing">Digital Marketing</option>
-                    <option value="design">UI/UX Design</option>
-                    <option value="other">Other</option>
-                  </select>
-                  {errors.service && (
-                    <p className="mt-1 text-xs text-destructive">
-                      {errors.service.message}
-                    </p>
-                  )}
-                </div>
+                <Field id="contact-service" label="Service interest" required error={errors.service?.message}>
+                  <div className="relative">
+                    <select
+                      {...register("service")}
+                      id="contact-service"
+                      aria-invalid={!!errors.service}
+                      aria-describedby={errors.service ? "contact-service-error" : undefined}
+                      className={`${fieldClass} cursor-pointer appearance-none pr-10 [&>option]:bg-canvas-surface`}
+                    >
+                      <option value="">Select a service</option>
+                      <option value="web">Web Development</option>
+                      <option value="mobile">Mobile Apps</option>
+                      <option value="ai">AI & Machine Learning</option>
+                      <option value="cloud">Cloud & DevOps</option>
+                      <option value="marketing">Digital Marketing</option>
+                      <option value="design">UI/UX Design</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <ChevronDown
+                      className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-textMuted"
+                      aria-hidden
+                    />
+                  </div>
+                </Field>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Message *
-                  </label>
+                <Field id="contact-message" label="Message" required error={errors.message?.message}>
                   <textarea
                     {...register("message")}
+                    id="contact-message"
                     rows={5}
-                    placeholder="Tell us about your project, goals, and timeline..."
-                    className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors resize-none"
+                    placeholder="Tell us about your project, goals, and timeline…"
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? "contact-message-error" : undefined}
+                    className={`${fieldClass} resize-none`}
                   />
-                  {errors.message && (
-                    <p className="mt-1 text-xs text-destructive">
-                      {errors.message.message}
-                    </p>
-                  )}
-                </div>
+                </Field>
 
-                <div className="flex items-center gap-4">
-                  <MagneticButton
-                    type="submit"
-                    variant="primary"
-                    size="lg"
-                    className={isSubmitting ? "opacity-70 cursor-not-allowed" : ""}
-                  >
-                    {isSubmitting && (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    )}
-                    {isSubmitting ? "Sending..." : "Send Message"}
+                <div className="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs text-brand-textMuted">
+                    We reply within {siteConfig.responseTime}. NDA available on request.
+                  </p>
+                  <MagneticButton type="submit" variant="primary" size="lg" disabled={isSubmitting}>
+                    {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
+                    {isSubmitting ? "Sending…" : "Send message"}
                   </MagneticButton>
                 </div>
               </form>
@@ -187,7 +211,7 @@ export default function ContactContent() {
             <div className="lg:col-span-2">
               <div className="space-y-8">
                 {/* Book a Call */}
-                <div className="relative rounded-2xl overflow-hidden border border-teal/20 p-6 bg-surface-raised">
+                <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] p-6 bg-surface-raised">
                   <div
                     className="absolute inset-0 pointer-events-none opacity-60"
                     style={{

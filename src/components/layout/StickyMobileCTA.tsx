@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/constants";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
@@ -14,24 +15,18 @@ export function StickyMobileCTA() {
       transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="fixed bottom-0 inset-x-0 z-30 lg:hidden"
     >
-      {/* Teal hairline */}
+      <div aria-hidden className="hairline-lit absolute inset-x-0 top-0" />
       <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--teal) 40%, transparent), transparent)",
-        }}
-      />
-      <div
-        className="bg-background/80 backdrop-blur-2xl border-t border-neutral-border"
+        className="bg-canvas-base/80 backdrop-blur-xl border-t border-white/[0.06]"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="flex items-center gap-3 px-4 pt-3 pb-3">
-          <a
+          <Link
             href="/contact"
-            className="flex-1 inline-flex items-center justify-center h-12 rounded-full bg-gradient-to-r from-teal-deep to-teal text-accent-foreground text-sm font-semibold hover:brightness-110 transition-all"
+            className="flex-1 inline-flex items-center justify-center h-12 rounded-full bg-accent-electric text-white text-sm font-medium shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_0_0_1px_rgba(37,99,235,0.6)] hover:bg-accent-electricBright transition-colors"
           >
-            Book a Free Call
-          </a>
+            Book a free call
+          </Link>
           <a
             href={siteConfig.social.whatsapp}
             target="_blank"

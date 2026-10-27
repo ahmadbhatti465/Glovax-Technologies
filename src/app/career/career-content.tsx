@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { MapPin, Clock, Briefcase, ArrowUpRight } from "lucide-react";
 import { JobPosition } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 interface FAQItem {
   question: string;
@@ -113,7 +114,8 @@ export default function CareerContent({
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <Breadcrumbs items={[{ label: "Careers", href: "/career" }]} />
           <SectionHeader

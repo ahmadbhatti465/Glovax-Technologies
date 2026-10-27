@@ -10,6 +10,7 @@ import Link from "next/link";
 import { BlogPostSummary } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { toBlogTaxonomySlug } from "@/lib/blog-taxonomy";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 interface BlogContentProps {
   posts?: BlogPostSummary[];
@@ -50,7 +51,8 @@ export default function BlogContent({
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <Breadcrumbs
             items={[
@@ -95,7 +97,7 @@ export default function BlogContent({
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 active:scale-[0.97] ${
                       isActive
                         ? "gradient-cta text-accent-foreground shadow-glow"
-                        : "bg-surface-raised border border-neutral-border text-muted-foreground hover:text-accent hover:border-teal/40"
+                        : "bg-surface-raised border border-neutral-border text-muted-foreground hover:text-accent hover:border-white/[0.14]"
                     }`}
                   >
                     {category}

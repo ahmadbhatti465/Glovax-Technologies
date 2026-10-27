@@ -55,7 +55,6 @@ export default function DirectoryContent({
             style={{
               background:
                 "radial-gradient(circle, color-mix(in srgb, var(--teal) 15%, transparent) 0%, transparent 70%)",
-              filter: "blur(80px)",
             }}
           />
 
@@ -106,7 +105,7 @@ export default function DirectoryContent({
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search businesses, tags, or cities…"
               aria-label="Search the directory"
-              className="w-full pl-11 pr-4 py-3 rounded-full bg-surface-raised border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-teal/40 transition-colors"
+              className="w-full pl-11 pr-4 py-3 rounded-full bg-surface-raised border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent-electricBright/60 transition-colors"
             />
           </div>
 
@@ -121,7 +120,7 @@ export default function DirectoryContent({
                   className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-300 ${
                     isActive
                       ? "bg-gradient-to-r from-teal-deep to-teal text-accent-foreground border-transparent shadow-[0_0_20px_var(--teal-glow)]"
-                      : "bg-surface-raised border-neutral-border text-muted-foreground hover:text-teal hover:border-teal/40"
+                      : "bg-surface-raised border-neutral-border text-muted-foreground hover:text-teal hover:border-white/[0.14]"
                   }`}
                 >
                   {category}

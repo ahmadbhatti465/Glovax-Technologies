@@ -166,7 +166,7 @@ export function HeroDashboardMockup() {
       {/* subtle animated mesh gradient — slow, calm, never distracting */}
       <div
         aria-hidden
-        className="mesh-gradient absolute -inset-x-6 -top-10 bottom-0 blur-3xl opacity-70 pointer-events-none"
+        className="mesh-gradient absolute -inset-x-6 -top-10 bottom-0 blur-3xl opacity-40 pointer-events-none"
       />
 
       <motion.div
@@ -174,7 +174,7 @@ export function HeroDashboardMockup() {
         className="relative"
       >
         {/* ===== Browser window ===== */}
-        <div className="relative mx-auto max-w-5xl rounded-2xl md:rounded-[1.75rem] border border-neutral-border bg-brand-bg-raise/80 backdrop-blur-xl shadow-card-lg overflow-hidden">
+        <div className="border-beam relative mx-auto max-w-5xl rounded-2xl md:rounded-[1.75rem] border border-white/[0.08] bg-canvas-surface/90 backdrop-blur-xl shadow-card-lg overflow-hidden">
           {/* chrome bar */}
           <div className="relative flex items-center gap-3 px-4 md:px-5 py-3 border-b border-neutral-border bg-brand-bg-hi/70">
             <div className="flex gap-1.5" aria-hidden>
@@ -203,7 +203,7 @@ export function HeroDashboardMockup() {
                   key={item.label}
                   className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
                     item.active
-                      ? "bg-teal/[0.09] text-accent border border-teal/20"
+                      ? "bg-white/[0.04] text-accent border border-white/[0.08]"
                       : "text-muted-foreground border border-transparent"
                   }`}
                 >
@@ -303,7 +303,7 @@ export function HeroDashboardMockup() {
 
         <div className="absolute -bottom-5 left-2 md:-left-5 float-y-delay z-10">
           <div className="flex items-center gap-3 rounded-2xl glass-strong shadow-card px-4 py-3">
-            <div className="w-9 h-9 rounded-xl bg-teal/10 border border-teal/30 text-accent flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-canvas-elevated border border-teal/30 text-accent flex items-center justify-center">
               <Zap className="w-4 h-4" />
             </div>
             <div>
@@ -342,7 +342,7 @@ export function HeroDashboardMockup() {
 
       {/* floating action chip — CTA hint */}
       <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 z-10">
-        <div className="inline-flex items-center gap-2 rounded-full border border-teal/25 bg-surface-raised/90 backdrop-blur-xl shadow-glow px-4 py-2 text-xs font-medium text-muted">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-surface-raised/90 backdrop-blur-xl shadow-glow px-4 py-2 text-xs font-medium text-muted">
           <ArrowUpRight className="w-3.5 h-3.5 text-accent" />
           Built by the Glovax team
         </div>

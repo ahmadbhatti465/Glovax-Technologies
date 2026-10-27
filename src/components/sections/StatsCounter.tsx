@@ -18,14 +18,12 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
         className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none"
         style={{
           background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 70%)",
-          filter: "blur(60px)",
         }}
       />
       <div
         className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-15 pointer-events-none"
         style={{
           background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 70%)",
-          filter: "blur(50px)",
         }}
       />
 
@@ -53,7 +51,7 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
                 />
               )}
 
-              <div className="text-5xl md:text-6xl lg:text-7xl font-mono font-bold tracking-tight drop-shadow-[0_0_20px_var(--teal-glow)]">
+              <div className="text-5xl md:text-6xl lg:text-7xl font-heading font-semibold tracking-[-0.04em]">
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}

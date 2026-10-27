@@ -7,6 +7,7 @@ import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 import { motion } from "framer-motion";
 import { Target, Shield, Zap, Users, Globe, Heart } from "lucide-react";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 const iconMap: Record<string, React.ReactNode> = {
   Target: <Target className="w-5 h-5" />,
@@ -128,25 +129,22 @@ function AboutContentInner({
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <Breadcrumbs items={[{ label: "About Us", href: "/about" }]} />
 
           {/* Hero */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl mb-20"
-          >
-            <span className="text-accent text-xs md:text-sm font-mono font-medium tracking-[0.2em] uppercase mb-4 block">
+          <div className="enter mb-20 max-w-4xl">
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs font-mono font-medium uppercase tracking-[0.18em] text-brand-textSecondary">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-electricBright shadow-[0_0_8px_var(--accent-electric-bright)]" />
               {heroEyebrow}
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
-              {heroTitle}
-              <span className="gradient-text"> {heroTitleHighlight}</span>
+            <h1 className="mb-6 text-[2.5rem] font-semibold leading-[1.05] tracking-[-0.045em] text-balance sm:text-5xl md:text-6xl lg:text-[4.25rem]">
+              <span className="text-premium">{heroTitle}</span>
+              <span className="text-signal"> {heroTitleHighlight}</span>
             </h1>
-            <p className="text-muted text-lg leading-relaxed">
+            <p className="max-w-2xl text-lg leading-relaxed text-brand-textSecondary">
               {heroSubtitle}
             </p>
             {lastUpdated && (
@@ -159,7 +157,7 @@ function AboutContentInner({
                 })}
               </p>
             )}
-          </motion.div>
+          </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 border-y border-border mb-20">
@@ -222,7 +220,7 @@ function AboutContentInner({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="p-8 md:p-10 rounded-3xl bg-surface border border-border hover:border-accent/40 transition-all duration-500 shadow-2xl relative overflow-hidden"
+              className="p-8 md:p-10 rounded-2xl bg-surface border border-border hover:border-accent/40 transition-all duration-500 shadow-2xl relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
               <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center md:items-start">

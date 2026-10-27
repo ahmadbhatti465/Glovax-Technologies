@@ -1,17 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Sora, Inter, Geist_Mono } from "next/font/google";
+import { Geist, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { Toaster } from "sonner";
 import { StructuredData } from "@/components/shared/StructuredData";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
-import { CursorGlow } from "@/components/layout/CursorGlow";
 import { BackToTop } from "@/components/layout/BackToTop";
 
-const sora = Sora({
+const display = Geist({
   subsets: ["latin"],
-  weight: ["600", "700"],
-  variable: "--font-sora",
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -34,8 +33,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#08110F" },
-    { media: "(prefers-color-scheme: light)", color: "#08110F" },
+    { media: "(prefers-color-scheme: dark)", color: "#030303" },
+    { media: "(prefers-color-scheme: light)", color: "#030303" },
   ],
   colorScheme: "dark",
 };
@@ -113,12 +112,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sora.variable} ${inter.variable} ${mono.variable} dark`}>
+    <html lang="en" className={`${display.variable} ${inter.variable} ${mono.variable} dark`}>
       <body
         className="font-body antialiased bg-background text-foreground min-h-screen"
       >
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <ScrollProgress />
-        <CursorGlow />
         <StructuredData />
         {children}
         <BackToTop />
@@ -128,7 +129,7 @@ export default function RootLayout({
             style: {
               background: "var(--surface-raised)",
               color: "var(--foreground)",
-              border: "1px solid var(--border-default)",
+              border: "1px solid var(--hairline-strong)",
             },
           }}
         />

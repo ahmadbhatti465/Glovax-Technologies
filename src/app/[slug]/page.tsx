@@ -12,6 +12,7 @@ import { FaqAccordion } from "@/components/shared/FaqAccordion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { Clock, Calendar, User, ArrowLeft, Lock } from "lucide-react";
 import { normalizeCanonicalUrl } from "@/lib/utils";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 export const revalidate = 3600; // ISR: revalidate once an hour
 export const dynamicParams = true;
@@ -227,7 +228,8 @@ export default async function DynamicCmsPage({
 
       <Navbar />
 
-      <main className="pt-32 pb-24 min-h-screen">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-32 pb-24 min-h-screen">
+        <PageBackdrop />
         <div className="max-w-4xl mx-auto px-6 md:px-8">
           {/* Draft Preview Warning Banner */}
           {page.status !== "published" && (
@@ -322,7 +324,7 @@ export default async function DynamicCmsPage({
           {page.faqs && page.faqs.length > 0 && <FaqAccordion items={page.faqs} />}
 
           {/* Call To Action Banner */}
-          <div className="mt-20 p-8 sm:p-12 rounded-3xl bg-surface border border-border text-center relative overflow-hidden">
+          <div className="mt-20 p-8 sm:p-12 rounded-2xl bg-surface border border-border text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-teal/[0.04] to-transparent pointer-events-none" />
             <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
               Ready to accelerate your technology initiatives?

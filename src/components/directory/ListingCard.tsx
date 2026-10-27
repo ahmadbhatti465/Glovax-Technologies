@@ -20,7 +20,7 @@ export function ListingCard({ business, index = 0 }: ListingCardProps) {
         delay: (index % 3) * 0.08,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/40 transition-all duration-500 overflow-hidden"
+      className="group relative rounded-2xl bg-surface-raised border border-neutral-border hover:border-white/[0.14] transition-all duration-500 overflow-hidden"
     >
       <Link href={`/directory/${business.slug}`} className="block p-6 md:p-7">
         {/* Header: image or monogram tile */}

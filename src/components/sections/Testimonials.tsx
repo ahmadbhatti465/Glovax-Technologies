@@ -20,13 +20,13 @@ function flagFor(code?: string): string {
 function Avatar({ testimonial }: { testimonial: Testimonial }) {
   if (testimonial.avatar) {
     return (
-      <div className="relative w-12 h-12 rounded-full overflow-hidden border border-teal/25 shadow-glow flex-shrink-0">
+      <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/[0.08] shadow-glow flex-shrink-0">
         <Image src={testimonial.avatar} alt={testimonial.author} fill sizes="48px" className="object-cover" />
       </div>
     );
   }
   return (
-    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal/25 to-teal-deep/25 flex items-center justify-center border border-teal/25 shadow-glow flex-shrink-0">
+    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal/25 to-teal-deep/25 flex items-center justify-center border border-white/[0.08] shadow-glow flex-shrink-0">
       <span className="text-base font-bold text-accent">
         {testimonial.author.charAt(0)}
       </span>
@@ -47,10 +47,10 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
         delay: index * 0.12,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative flex flex-col h-full p-8 md:p-10 rounded-3xl bg-surface-raised border border-neutral-border hover:border-teal/30 hover:shadow-card transition-all duration-500 card-shine"
+      className="group relative flex flex-col h-full p-8 md:p-10 rounded-2xl bg-surface-raised border border-neutral-border hover:border-white/[0.14] hover:shadow-card transition-all duration-500 card-shine"
     >
       {/* Subtle glow on hover */}
-      <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
         style={{
           background: "radial-gradient(400px circle at 20% 20%, var(--teal-glow), transparent 60%)",
         }}
@@ -64,7 +64,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
               {[...Array(testimonial.rating)].map((_, i) => (
                 <Star
                   key={i}
-                  className="w-4 h-4 fill-accent text-accent drop-shadow-[0_0_4px_var(--teal-glow)]"
+                  className="w-4 h-4 fill-accent text-accent"
                 />
               ))}
             </div>
@@ -109,7 +109,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${testimonial.author} on LinkedIn`}
-              className="w-9 h-9 rounded-full border border-neutral-border bg-card flex items-center justify-center text-muted-foreground hover:text-accent hover:border-teal/30 hover:shadow-glow transition-all duration-300"
+              className="w-9 h-9 rounded-full border border-neutral-border bg-card flex items-center justify-center text-muted-foreground hover:text-accent hover:border-white/[0.14] hover:shadow-glow transition-all duration-300"
             >
               <Linkedin className="w-4 h-4" />
             </a>
@@ -126,13 +126,12 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
   if (!testimonials || testimonials.length === 0) return null;
 
   return (
-    <section className="py-28 md:py-36 lg:py-44 relative overflow-hidden">
+    <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
       {/* Ambient glow */}
       <div
         className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-20 pointer-events-none"
         style={{
           background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 70%)",
-          filter: "blur(80px)",
         }}
       />
 
@@ -158,7 +157,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
           transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="mt-8"
         >
-          <div className="group relative aspect-[16/5] md:aspect-[21/7] rounded-3xl overflow-hidden border border-neutral-border">
+          <div className="group relative aspect-[16/5] md:aspect-[21/7] rounded-2xl overflow-hidden border border-neutral-border">
             <div
               className="absolute inset-0"
               style={{

@@ -83,7 +83,7 @@ const sharedFeatures = [
 
 export function Pricing() {
   return (
-    <section id="pricing" className="py-28 md:py-36 lg:py-44 relative">
+    <section id="pricing" className="py-24 md:py-32 lg:py-40 relative">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="Engagements"
@@ -105,10 +105,10 @@ export function Pricing() {
                 delay: index * 0.12,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className={`relative flex flex-col p-8 md:p-10 rounded-3xl transition-all duration-500 overflow-hidden ${
+              className={`relative flex flex-col p-8 md:p-10 rounded-2xl transition-all duration-500 overflow-hidden ${
                 tier.highlighted
                   ? "bg-surface-raised border border-teal/40 shadow-glow-strong lg:-translate-y-3 gradient-border card-shine"
-                  : "bg-surface-raised border border-neutral-border hover:border-teal/25 hover:shadow-card"
+                  : "bg-surface-raised border border-neutral-border hover:border-white/[0.14] hover:shadow-card"
               }`}
             >
               {tier.highlighted && (
@@ -138,7 +138,7 @@ export function Pricing() {
               <ul className="space-y-3.5 mb-8 flex-1">
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3 text-sm text-muted">
-                    <span className="mt-0.5 w-5 h-5 rounded-full bg-teal/10 border border-teal/25 flex items-center justify-center flex-shrink-0">
+                    <span className="mt-0.5 w-5 h-5 rounded-full bg-canvas-elevated border border-white/[0.08] flex items-center justify-center flex-shrink-0">
                       <Check className="w-3 h-3 text-accent" />
                     </span>
                     {feature}
@@ -172,7 +172,7 @@ export function Pricing() {
               key={g.title}
               className="flex items-start gap-4 rounded-2xl border border-neutral-border bg-surface-raised/60 p-5"
             >
-              <div className="w-11 h-11 rounded-xl bg-teal/10 border border-teal/20 text-accent flex items-center justify-center flex-shrink-0 shadow-glow">
+              <div className="w-11 h-11 rounded-xl bg-canvas-elevated border border-white/[0.08] text-accent flex items-center justify-center flex-shrink-0 shadow-glow">
                 <g.icon className="w-5 h-5" />
               </div>
               <div>

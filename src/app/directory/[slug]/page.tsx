@@ -21,6 +21,7 @@ import {
   BadgeCheck,
   ExternalLink,
 } from "lucide-react";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 export const dynamic = "force-static";
 
@@ -108,7 +109,8 @@ export default async function ListingPage({
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-4xl mx-auto px-6 md:px-8">
           <Breadcrumbs
             items={[
@@ -259,13 +261,12 @@ export default async function ListingPage({
           </div>
 
           {/* CTA panel */}
-          <div className="p-8 md:p-10 rounded-3xl bg-surface border border-neutral-border text-center relative overflow-hidden">
+          <div className="p-8 md:p-10 rounded-2xl bg-surface border border-neutral-border text-center relative overflow-hidden">
             <div
               className="absolute -top-20 left-1/2 -translate-x-1/2 w-[400px] h-[200px] rounded-full opacity-20 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, var(--teal) 0%, transparent 70%)",
-                filter: "blur(60px)",
               }}
             />
             <div className="relative">

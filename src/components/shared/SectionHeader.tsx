@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
   eyebrow?: string;
@@ -12,6 +13,12 @@ interface SectionHeaderProps {
   as?: "h1" | "h2";
 }
 
+const alignClasses = {
+  left: "text-left items-start",
+  center: "text-center items-center mx-auto",
+  right: "text-right items-end ml-auto",
+};
+
 export function SectionHeader({
   eyebrow,
   title,
@@ -21,50 +28,52 @@ export function SectionHeader({
   className = "",
   as: Tag = "h2",
 }: SectionHeaderProps) {
-  const alignClasses = {
-    left: "text-left items-start",
-    center: "text-center items-center",
-    right: "text-right items-end",
-  };
+  const isPageTitle = Tag === "h1";
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className={`flex flex-col ${alignClasses[align]} max-w-4xl mx-auto mb-16 md:mb-24 ${className}`}
-    >
+  const content = (
+    <>
       {eyebrow && (
-        <span className="text-accent text-xs md:text-sm font-mono font-semibold tracking-[0.28em] uppercase mb-6 inline-flex items-center gap-3">
-          <span className="w-8 h-px bg-gradient-to-r from-transparent to-accent/40 hidden md:inline-block" />
+        <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs font-mono font-medium uppercase tracking-[0.18em] text-brand-textSecondary">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent-electricBright shadow-[0_0_8px_var(--accent-electric-bright)]" />
           {eyebrow}
-          <span className="w-8 h-px bg-gradient-to-l from-transparent to-accent/40 hidden md:inline-block" />
         </span>
       )}
-      <Tag className="text-3xl sm:text-4xl md:text-[3.25rem] lg:text-[3.75rem] font-bold tracking-tight leading-[1.05] text-balance">
-        {title}
-        {titleHighlight && (
-          <span className="teal-shimmer"> {titleHighlight}</span>
+      <Tag
+        className={cn(
+          "font-semibold leading-[1.05] text-balance",
+          isPageTitle
+            ? "text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] tracking-[-0.045em]"
+            : "text-[2rem] sm:text-4xl md:text-5xl lg:text-[3.5rem] tracking-[-0.035em]"
         )}
+      >
+        <span className="text-premium">{title}</span>
+        {titleHighlight && <span className="text-signal"> {titleHighlight}</span>}
       </Tag>
       {subtitle && (
-        <p className="mt-5 md:mt-6 text-muted text-base md:text-lg leading-relaxed max-w-2xl">
+        <p className="mt-5 text-base md:text-lg leading-relaxed text-brand-textSecondary max-w-2xl">
           {subtitle}
         </p>
       )}
+    </>
+  );
 
-      {/* Teal accent line */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className={`mt-7 w-16 h-px origin-${align === "center" ? "center" : align}`}
-        style={{
-          background: `linear-gradient(${align === "right" ? "270deg" : "90deg"}, var(--teal), transparent)`,
-        }}
-      />
+  const classes = cn("flex flex-col max-w-3xl mb-14 md:mb-20", alignClasses[align], className);
+
+  // Page titles are the LCP element: render them visible immediately with a
+  // CSS-only entrance instead of waiting for hydration + an in-view trigger.
+  if (isPageTitle) {
+    return <div className={cn("enter", classes)}>{content}</div>;
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className={classes}
+    >
+      {content}
     </motion.div>
   );
 }

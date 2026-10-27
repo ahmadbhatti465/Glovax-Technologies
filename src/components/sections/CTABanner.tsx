@@ -39,64 +39,39 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
   const data = cta || fallbackCTA;
 
   return (
-    <section className="py-28 md:py-36 lg:py-44 relative overflow-hidden">
+    <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative rounded-[2rem] overflow-hidden"
+          className="border-beam relative overflow-hidden rounded-[2rem] border border-white/[0.06] bg-canvas-surface"
         >
-          {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-surface-raised via-background to-surface-raised border border-neutral-border rounded-[2rem]" />
-
-          {/* Brand gradient (deep green → teal) */}
-          <div className="absolute inset-0 gradient-brand opacity-30 rounded-[2rem]" />
-
-          {/* Radial glow */}
+          {/* Aurora wash rising from the bottom edge */}
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
+            aria-hidden
+            className="absolute inset-0"
             style={{
-              background: "radial-gradient(circle, var(--teal-glow) 0%, transparent 60%)",
-              filter: "blur(60px)",
+              background:
+                "radial-gradient(ellipse 60% 55% at 50% 100%, rgba(37, 99, 235, 0.22), transparent 70%), radial-gradient(ellipse 35% 35% at 75% 100%, rgba(168, 85, 247, 0.16), transparent 70%)",
             }}
           />
-
-          {/* Mesh blobs */}
-          <div className="absolute inset-0 mesh-blob opacity-40">
-            <div
-              className="absolute top-0 left-1/4 w-96 h-96 rounded-full"
-              style={{
-                background: "radial-gradient(circle, var(--teal-glow), transparent 70%)",
-                filter: "blur(80px)",
-              }}
-            />
-            <div
-              className="absolute bottom-0 right-1/4 w-72 h-72 rounded-full"
-              style={{
-                background: "radial-gradient(circle, var(--teal-muted), transparent 70%)",
-                filter: "blur(80px)",
-              }}
-            />
-          </div>
-
-          {/* Subtle grid texture */}
-          <div className="absolute inset-0 grid-pattern opacity-50" />
+          <div aria-hidden className="tech-grid absolute inset-0 rotate-180 opacity-70" />
 
           <div className="relative z-10 px-8 py-20 md:px-16 md:py-28 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs md:text-sm font-medium text-muted tracking-wide mb-8">
-              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs font-mono font-medium uppercase tracking-[0.18em] text-brand-textSecondary">
+              <span className="h-1.5 w-1.5 rounded-full bg-success shadow-[0_0_8px_var(--status-success)]" />
               {data.eyebrow}
             </div>
 
-            <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-              {data.title}
+            <h2 className="mb-6 text-[2.25rem] md:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-[-0.04em]">
+              <span className="text-premium">{data.title}</span>
               <br />
-              <span className="teal-shimmer">{data.titleHighlight}</span>
+              <span className="text-signal">{data.titleHighlight}</span>
             </h2>
 
-            <p className="text-muted text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+            <p className="mx-auto mb-10 max-w-xl text-base md:text-lg leading-relaxed text-brand-textSecondary">
               {data.subtitle}
             </p>
 

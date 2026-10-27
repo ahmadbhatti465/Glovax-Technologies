@@ -18,6 +18,7 @@ import {
 import { BlogPostSummary, Service } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import Link from "next/link";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 const iconMap: Record<string, React.ReactNode> = {
   Code2: <Code2 className="w-8 h-8" />,
@@ -60,7 +61,8 @@ export default function ServicesContent({
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <Breadcrumbs items={[{ label: "Services", href: "/services" }]} />
           <SectionHeader

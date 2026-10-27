@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
@@ -11,22 +9,27 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="Breadcrumb" className="py-4">
-      <ol className="max-w-7xl mx-auto px-6 md:px-8 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-        <li className="flex items-center gap-2">
-          <Link href="/" className="link-underline hover:text-accent transition-colors">
+    <nav aria-label="Breadcrumb" className="enter mb-10 md:mb-14">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-brand-textMuted">
+        <li className="flex items-center">
+          <Link href="/" className="transition-colors hover:text-brand-textPrimary">
             Home
           </Link>
         </li>
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
-            <li key={item.label} className="flex items-center gap-2">
-              <ChevronRight className="w-4 h-4 text-muted-foreground/50" />
+            <li key={item.label} className="flex items-center gap-1.5">
+              <ChevronRight className="h-3.5 w-3.5 text-brand-textMuted/70" aria-hidden />
               {isLast || !item.href ? (
-                <span className={isLast ? "text-foreground" : ""}>{item.label}</span>
+                <span
+                  aria-current={isLast ? "page" : undefined}
+                  className={isLast ? "text-brand-textSecondary" : undefined}
+                >
+                  {item.label}
+                </span>
               ) : (
-                <Link href={item.href} className="link-underline hover:text-accent transition-colors">
+                <Link href={item.href} className="transition-colors hover:text-brand-textPrimary">
                   {item.label}
                 </Link>
               )}

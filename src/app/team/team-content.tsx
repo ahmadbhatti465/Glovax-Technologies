@@ -6,6 +6,7 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { motion } from "framer-motion";
 import { TeamMember } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 const fallbackTeam: TeamMember[] = [
   {
@@ -69,7 +70,8 @@ export default function TeamContent({ team: serverTeam, lastUpdated }: TeamConte
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <Breadcrumbs items={[{ label: "Team", href: "/team" }]} />
           <SectionHeader

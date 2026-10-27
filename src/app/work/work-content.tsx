@@ -11,6 +11,7 @@ import { PortfolioItem } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { enrichWithCaseStudy } from "@/data/case-studies";
 import { isValidExternalUrl } from "@/lib/utils";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 interface FAQItem {
   question: string;
@@ -31,7 +32,8 @@ export default function WorkContent({
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24">
+        <PageBackdrop />
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <Breadcrumbs items={[{ label: "Portfolio", href: "/work" }]} />
           <SectionHeader
@@ -222,7 +224,7 @@ function WorkCard({
       }}
       className="h-full"
     >
-      <div className="group h-full rounded-2xl bg-surface-raised border border-neutral-border p-3 md:p-4 hover:border-teal/25 hover:shadow-card transition-all duration-500">
+      <div className="group h-full rounded-2xl bg-surface-raised border border-neutral-border p-3 md:p-4 hover:border-white/[0.14] hover:shadow-card transition-all duration-500">
         {cardBody}
       </div>
     </motion.div>

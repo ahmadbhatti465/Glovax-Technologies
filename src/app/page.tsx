@@ -111,7 +111,7 @@ export default async function Home() {
     <>
       <Navbar />
       <FAQJsonLD items={homeFaqs} />
-      <main>
+      <main id="main-content" tabIndex={-1} className="outline-none">
         <HeroSection />
         <TrustBar />
         <ServicesGrid services={services} />

@@ -14,6 +14,7 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { FAQItem } from "@/types";
 import { toBlogTaxonomySlug } from "@/lib/blog-taxonomy";
 import { normalizeCanonicalUrl } from "@/lib/utils";
+import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -376,7 +377,8 @@ export default async function BlogPostPage({
   return (
     <>
       <Navbar />
-      <main className="pt-28 pb-24 min-h-screen">
+      <main id="main-content" tabIndex={-1} className="relative isolate outline-none pt-28 pb-24 min-h-screen">
+        <PageBackdrop />
         <div className="max-w-4xl mx-auto px-6 md:px-8">
           {/* Draft Preview Warning Banner */}
           {post.status && post.status !== "published" && (

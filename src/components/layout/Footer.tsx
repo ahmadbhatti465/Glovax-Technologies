@@ -1,259 +1,148 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
-import { toast } from "sonner";
-import { siteConfig, footerLinks } from "@/lib/constants";
-import {
-  ArrowUpRight,
-  Linkedin,
-  Instagram,
-  Briefcase,
-  MessageCircle,
-  Send,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
-} from "lucide-react";
 import Image from "next/image";
+import { siteConfig, footerLinks } from "@/lib/constants";
+import { Linkedin, Instagram, Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
+import { NewsletterForm } from "@/components/layout/NewsletterForm";
 
-const socialIcons: Record<string, React.ReactNode> = {
-  linkedin: <Linkedin className="w-4 h-4" />,
-  instagram: <Instagram className="w-4 h-4" />,
-  upwork: <Briefcase className="w-4 h-4" />,
-  whatsapp: <WhatsAppIcon className="w-4 h-4" />,
-};
-
-// The socials we surface in the footer (in display order).
-const footerSocials: (keyof typeof siteConfig.social)[] = [
-  "linkedin",
-  "instagram",
-  "whatsapp",
+const socials = [
+  { label: "LinkedIn", href: siteConfig.social.linkedin, icon: Linkedin },
+  { label: "Instagram", href: siteConfig.social.instagram, icon: Instagram },
+  { label: "WhatsApp", href: siteConfig.social.whatsapp, icon: WhatsAppIcon },
 ];
 
-function NewsletterBand() {
-  const [email, setEmail] = useState("");
+const columns = [
+  { title: "Company", links: footerLinks.company },
+  { title: "Services", links: footerLinks.services },
+  { title: "Resources", links: footerLinks.resources },
+];
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email) return;
-    // TODO: wire to a real newsletter backend (e.g. Resend Audiences) before
-    // launch. Front-end only for now — intentionally does not send anywhere.
-    toast.success("Thanks for subscribing! We'll be in touch.");
-    setEmail("");
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.7, delay: 0.2 }}
-      className="py-12 md:py-14 border-t border-neutral-border"
-    >
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-        <div className="text-center lg:text-left">
-          <h3 className="text-xl font-semibold tracking-tight">Product &amp; AI insights, monthly</h3>
-          <p className="text-sm text-muted-foreground mt-1.5">
-            One useful email a month on AI, SaaS, and shipping. No spam.
-          </p>
-        </div>
-        <form onSubmit={handleSubmit} className="flex w-full lg:w-auto gap-3">
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@company.com"
-            aria-label="Email address"
-            className="w-full lg:w-72 px-4 py-3 rounded-full bg-card border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-teal/40 transition-colors"
-          />
-          <button
-            type="submit"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full gradient-cta text-accent-foreground text-sm font-semibold hover:shadow-glow transition-all duration-300 flex-shrink-0 active:scale-[0.98]"
-          >
-            Subscribe <Send className="w-4 h-4" />
-          </button>
-        </form>
-      </div>
-    </motion.div>
-  );
-}
-
-function FooterColumn({
-  title,
-  links,
-  delay = 0,
-}: {
-  title: string;
-  links: { label: string; href: string }[];
-  delay?: number;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.7, delay }}
-    >
-      <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">{title}</h3>
-      <ul className="space-y-3.5">
-        {links.map((link) => (
-          <li key={link.label}>
-            <Link
-              href={link.href}
-              className="link-underline text-sm text-muted-foreground hover:text-accent transition-colors duration-300 inline-flex items-center gap-1 group"
-            >
-              {link.label}
-              <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-0.5 group-hover:translate-y-0" />
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </motion.div>
-  );
-}
-
+/** Server component — static markup, only the newsletter form hydrates. */
 export function Footer() {
   return (
-    <footer className="relative border-t border-neutral-border">
-      {/* Teal gradient top line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--teal) 40%, transparent) 30%, color-mix(in srgb, var(--teal-bright) 50%, transparent) 50%, color-mix(in srgb, var(--teal) 40%, transparent) 70%, transparent 100%)",
-        }}
-      />
+    <footer className="relative overflow-hidden border-t border-white/[0.06] bg-canvas-base">
+      <div aria-hidden className="hairline-lit absolute inset-x-0 top-0" />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
-        {/* Main Footer Content */}
-        <div className="py-16 md:py-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12">
-          {/* Brand Column */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="lg:col-span-3"
-          >
-            <Link href="/" className="flex items-center group">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 py-16 md:py-20 lg:grid-cols-12">
+          {/* Brand */}
+          <div className="col-span-2 lg:col-span-4">
+            <Link href="/" className="inline-flex" aria-label="Glovax Technologies — home">
               <Image
                 src="/images/glovax-logo.png"
                 alt="Glovax Technologies"
-                width={184}
-                height={56}
-                className="h-10 w-auto transition-all duration-500 group-hover:drop-shadow-[0_0_8px_var(--teal-glow)]"
+                width={161}
+                height={49}
+                className="h-9 w-auto"
               />
             </Link>
-            <p className="mt-5 text-muted text-sm leading-relaxed max-w-xs">
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-brand-textSecondary">
               {siteConfig.description}
             </p>
-            <div className="mt-8 flex items-center gap-2.5">
-              {footerSocials.map((key) => {
-                const url = siteConfig.social[key];
-                if (!url) return null;
-                return (
-                  <a
-                    key={key}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-card border border-neutral-border flex items-center justify-center text-muted-foreground hover:text-accent hover:border-teal/20 hover:shadow-glow hover:-translate-y-0.5 transition-all duration-300"
-                    aria-label={`Follow us on ${key}`}
-                  >
-                    {socialIcons[key] || key}
-                  </a>
-                );
-              })}
-            </div>
-          </motion.div>
 
-          {/* Link Columns */}
-          <div className="lg:col-span-2">
-            <FooterColumn title="Company" links={footerLinks.company} delay={0.1} />
+            <div className="mt-8">
+              <p className="mb-3 text-sm font-medium text-brand-textPrimary">Product &amp; AI insights, monthly</p>
+              <NewsletterForm />
+            </div>
           </div>
-          <div className="lg:col-span-3">
-            <FooterColumn title="Services" links={footerLinks.services} delay={0.2} />
-          </div>
-          <div className="lg:col-span-2">
-            <FooterColumn title="Resources" links={footerLinks.resources} delay={0.3} />
-          </div>
+
+          {/* Link columns */}
+          {columns.map((col) => (
+            <nav key={col.title} aria-label={col.title} className="lg:col-span-2">
+              <h3 className="mb-4 text-sm font-medium text-brand-textPrimary">{col.title}</h3>
+              <ul className="space-y-3">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-brand-textSecondary transition-colors duration-200 hover:text-brand-textPrimary"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
 
           {/* Contact */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="lg:col-span-2"
-          >
-            <h3 className="text-sm font-semibold text-foreground mb-5 tracking-wide">Contact</h3>
-            <div className="space-y-3.5 text-sm">
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="flex items-center gap-2.5 text-muted-foreground hover:text-accent transition-colors duration-300"
-              >
-                <Mail className="w-4 h-4 text-accent/70 flex-shrink-0" />
-                <span className="truncate">{siteConfig.email}</span>
-              </a>
-              <a
-                href={`tel:${siteConfig.phone}`}
-                className="flex items-center gap-2.5 text-muted-foreground hover:text-accent transition-colors duration-300"
-              >
-                <Phone className="w-4 h-4 text-accent/70 flex-shrink-0" />
-                {siteConfig.phone}
-              </a>
-              <a
-                href={siteConfig.social.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-muted-foreground hover:text-accent transition-colors duration-300"
-              >
-                <MessageCircle className="w-4 h-4 text-accent/70 flex-shrink-0" />
-                WhatsApp us
-              </a>
-              <p className="flex items-start gap-2.5 text-muted-foreground leading-relaxed">
-                <MapPin className="w-4 h-4 text-accent/70 flex-shrink-0 mt-0.5" />
+          <div className="col-span-2 sm:col-span-1 lg:col-span-2">
+            <h3 className="mb-4 text-sm font-medium text-brand-textPrimary">Contact</h3>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  className="flex items-center gap-2 text-brand-textSecondary transition-colors hover:text-brand-textPrimary"
+                >
+                  <Mail className="h-3.5 w-3.5 shrink-0 text-brand-textMuted" aria-hidden />
+                  <span className="truncate">{siteConfig.email}</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`tel:${siteConfig.phone}`}
+                  className="flex items-center gap-2 text-brand-textSecondary transition-colors hover:text-brand-textPrimary"
+                >
+                  <Phone className="h-3.5 w-3.5 shrink-0 text-brand-textMuted" aria-hidden />
+                  {siteConfig.phone}
+                </a>
+              </li>
+              <li className="flex items-start gap-2 text-brand-textSecondary">
+                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-textMuted" aria-hidden />
                 {siteConfig.address}
-              </p>
-              <a
-                href="/contact"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-muted text-accent hover:border-teal/40 hover:shadow-glow transition-all duration-300"
-              >
-                <Calendar className="w-4 h-4" />
-                Book a call
-              </a>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Newsletter */}
-        <NewsletterBand />
-
-        {/* Bottom Bar */}
-        <div className="py-6 border-t border-neutral-border flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/privacy"
-              className="text-xs text-muted-foreground hover:text-accent transition-colors duration-300"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms"
-              className="text-xs text-muted-foreground hover:text-accent transition-colors duration-300"
-            >
-              Terms of Service
-            </Link>
+              </li>
+              <li className="pt-1">
+                <Link
+                  href="/contact"
+                  className="group inline-flex items-center gap-1 font-medium text-brand-textPrimary"
+                >
+                  Book a call
+                  <ArrowUpRight
+                    className="h-3.5 w-3.5 text-accent-electricBright transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden
+                  />
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
+
+        {/* Bottom bar */}
+        <div className="flex flex-col-reverse items-center justify-between gap-5 border-t border-white/[0.06] py-6 md:flex-row">
+          <p className="text-xs text-brand-textMuted">
+            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+          </p>
+          <div className="flex items-center gap-5">
+            <Link href="/privacy" className="text-xs text-brand-textMuted transition-colors hover:text-brand-textSecondary">
+              Privacy
+            </Link>
+            <Link href="/terms" className="text-xs text-brand-textMuted transition-colors hover:text-brand-textSecondary">
+              Terms
+            </Link>
+            <span aria-hidden className="h-3 w-px bg-white/[0.08]" />
+            <div className="flex items-center gap-1">
+              {socials.map(({ label, href, icon: Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${siteConfig.name} on ${label}`}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full text-brand-textMuted transition-colors hover:bg-white/[0.04] hover:text-brand-textPrimary"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Oversized wordmark — fades into the canvas */}
+      <div aria-hidden className="pointer-events-none select-none overflow-hidden">
+        <p className="-mb-[0.22em] text-center font-heading text-[22vw] font-semibold leading-none tracking-[-0.06em] lg:text-[17rem] bg-gradient-to-b from-white/[0.07] to-transparent bg-clip-text text-transparent">
+          GLOVAX
+        </p>
       </div>
 
       {/* Reserve space on mobile so the sticky bottom CTA bar never covers the footer */}
