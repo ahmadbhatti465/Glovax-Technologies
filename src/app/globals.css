@@ -608,10 +608,14 @@ p {
 }
 
 /* ========== FOCUS VISIBLE ========== */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 4px;
+/* In the base layer so component utilities (e.g. focus-visible:outline-none on
+   an input inside an already-focused surface) can override it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
 }
 
 /* ========== ENTER (CSS-only entrance, no hydration needed) ========== */

@@ -58,7 +58,7 @@ const trustPoints = [
 
 export function TrustSection() {
   return (
-    <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
+    <section className="py-20 md:py-28 relative overflow-hidden">
       <div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-20 pointer-events-none"
         style={{

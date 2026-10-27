@@ -301,7 +301,7 @@ export function HeroDashboardMockup() {
           </div>
         </div>
 
-        <div className="absolute -bottom-5 left-2 md:-left-5 float-y-delay z-10">
+        <div className="absolute -bottom-5 left-2 md:-left-5 float-y-delay z-10 hidden md:block">
           <div className="flex items-center gap-3 rounded-2xl glass-strong shadow-card px-4 py-3">
             <div className="w-9 h-9 rounded-xl bg-canvas-elevated border border-teal/30 text-accent flex items-center justify-center">
               <Zap className="w-4 h-4" />

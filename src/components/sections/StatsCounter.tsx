@@ -12,7 +12,7 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
   const stats = serverStats?.length ? serverStats : fallbackStats;
 
   return (
-    <section className="py-24 md:py-32 lg:py-36 border-y border-neutral-border bg-section-alt relative overflow-hidden">
+    <section className="py-16 md:py-24 border-y border-neutral-border bg-section-alt relative overflow-hidden">
       {/* Ambient glow */}
       <div
         className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none"

@@ -83,7 +83,7 @@ const sharedFeatures = [
 
 export function Pricing() {
   return (
-    <section id="pricing" className="py-24 md:py-32 lg:py-40 relative">
+    <section id="pricing" className="py-20 md:py-28 relative">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="Engagements"

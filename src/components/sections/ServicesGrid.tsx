@@ -27,12 +27,18 @@ const iconMap: Record<string, LucideIcon> = {
   Palette,
 };
 
-// Bento rhythm on a 3-column grid: wide, narrow / narrow, wide / wide, narrow.
-const WIDE = new Set([0, 3, 4]);
+// Bento rhythm on a 3-column grid, repeating every 4 cards:
+// wide + narrow, then narrow + wide. Every pair fills a row exactly; an odd
+// trailing card spans the full row so the grid never leaves a hole.
+function spanFor(index: number, total: number): "wide" | "narrow" | "full" {
+  if (total % 2 === 1 && index === total - 1) return "full";
+  return index % 4 === 0 || index % 4 === 3 ? "wide" : "narrow";
+}
 
-function ServiceCard({ service, index }: { service: Service; index: number }) {
+function ServiceCard({ service, index, total }: { service: Service; index: number; total: number }) {
   const Icon = iconMap[service.icon] ?? Code2;
-  const wide = WIDE.has(index);
+  const span = spanFor(index, total);
+  const wide = span !== "narrow";
   const isAI = service.icon === "Brain";
 
   return (
@@ -41,12 +47,15 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(wide && "lg:col-span-2")}
+      className={cn(
+        span === "wide" && "lg:col-span-2",
+        span === "full" && "md:col-span-2 lg:col-span-3"
+      )}
     >
       <SpotlightCard className="group h-full">
         <Link
           href="/services"
-          className="relative flex h-full flex-col p-7 md:p-8 outline-none"
+          className="relative flex h-full flex-col rounded-2xl p-7 md:p-8"
           aria-label={`${service.title} — learn more`}
         >
           <div className="flex items-start justify-between">
@@ -108,7 +117,7 @@ export function ServicesGrid({ services: serverServices }: ServicesGridProps) {
   const services = serverServices?.length ? serverServices : fallbackServices;
 
   return (
-    <section id="services" className="relative py-24 md:py-32 lg:py-40">
+    <section id="services" className="relative py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <SectionHeader
           eyebrow="What we do"
@@ -119,7 +128,7 @@ export function ServicesGrid({ services: serverServices }: ServicesGridProps) {
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => (
-            <ServiceCard key={service.id} service={service} index={index} />
+            <ServiceCard key={service.id} service={service} index={index} total={services.length} />
           ))}
         </div>
       </div>

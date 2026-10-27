@@ -46,7 +46,7 @@ const differentiators = [
 
 export function WhyGlovax() {
   return (
-    <section className="relative overflow-hidden border-y border-white/[0.06] bg-canvas-surface/40 py-24 md:py-32 lg:py-40">
+    <section className="relative overflow-hidden border-y border-white/[0.06] bg-canvas-surface/40 py-20 md:py-28">
       <div aria-hidden className="dot-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000,transparent_70%)]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">

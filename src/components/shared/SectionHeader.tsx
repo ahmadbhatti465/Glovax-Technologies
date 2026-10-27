@@ -57,7 +57,7 @@ export function SectionHeader({
     </>
   );
 
-  const classes = cn("flex flex-col max-w-3xl mb-14 md:mb-20", alignClasses[align], className);
+  const classes = cn("flex flex-col max-w-3xl mb-12 md:mb-16", alignClasses[align], className);
 
   // Page titles are the LCP element: render them visible immediately with a
   // CSS-only entrance instead of waiting for hydration + an in-view trigger.

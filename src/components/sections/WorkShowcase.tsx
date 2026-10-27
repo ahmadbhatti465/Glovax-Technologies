@@ -18,7 +18,7 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
   const featured = projects.filter((item) => item.featured).map(enrichWithCaseStudy);
 
   return (
-    <section id="work" className="relative overflow-hidden py-24 md:py-32 lg:py-40">
+    <section id="work" className="relative overflow-hidden py-20 md:py-28">
       <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
         <div className="mb-14 flex flex-col gap-8 md:mb-20 md:flex-row md:items-end md:justify-between">
           <SectionHeader
@@ -58,6 +58,42 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
   );
 }
 
+/** Generated cover for projects without a screenshot: grid, glow, monogram, stack. */
+function ProjectCover({ project }: { project: PortfolioItem }) {
+  const monogram = project.title
+    .split(/[\s&-]+/)
+    .filter((w) => /^[A-Za-z]/.test(w))
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("");
+
+  return (
+    <div aria-hidden className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-canvas-surface">
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 50% at 50% 45%, rgba(37, 99, 235, 0.22), transparent 70%), radial-gradient(ellipse 35% 35% at 65% 60%, rgba(168, 85, 247, 0.16), transparent 70%)",
+        }}
+      />
+      <div className="dot-grid absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000,transparent_75%)]" />
+      <span className="relative flex h-20 w-20 items-center justify-center rounded-2xl border border-white/[0.1] bg-canvas-elevated/80 text-2xl font-semibold tracking-tight text-brand-textPrimary shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_20px_40px_-12px_rgba(37,99,235,0.45)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-105">
+        {monogram || "G"}
+      </span>
+      <div className="relative flex flex-wrap justify-center gap-1.5 px-6">
+        {(project.technologies || []).slice(0, 3).map((tech) => (
+          <span
+            key={tech}
+            className="rounded-md border border-white/[0.08] bg-canvas-base/60 px-2 py-0.5 font-mono text-[11px] text-brand-textSecondary backdrop-blur-sm"
+          >
+            {tech}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ProjectCard({ project }: { project: PortfolioItem }) {
   const hasLink = isValidExternalUrl(project.link);
   const hasImage = Boolean(project.image);
@@ -85,7 +121,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             />
           ) : (
-            <div aria-hidden className="aurora absolute inset-0" />
+            <ProjectCover project={project} />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-canvas-base/70 via-transparent to-transparent" />
           <span className="absolute left-3 top-3 rounded-full border border-white/[0.08] bg-canvas-base/70 px-2.5 py-1 font-mono text-[11px] text-brand-textSecondary backdrop-blur-md">

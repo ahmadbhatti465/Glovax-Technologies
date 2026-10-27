@@ -126,7 +126,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
   if (!testimonials || testimonials.length === 0) return null;
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
+    <section className="py-20 md:py-28 relative overflow-hidden">
       {/* Ambient glow */}
       <div
         className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-20 pointer-events-none"

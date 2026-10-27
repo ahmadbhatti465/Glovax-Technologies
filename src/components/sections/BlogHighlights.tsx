@@ -19,7 +19,7 @@ export function BlogHighlights({ posts }: BlogHighlightsProps) {
   if (!posts.length) return null;
 
   return (
-    <section className="py-24 md:py-32">
+    <section className="py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="Insights"

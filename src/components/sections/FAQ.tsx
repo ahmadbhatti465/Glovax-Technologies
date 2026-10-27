@@ -21,7 +21,7 @@ export function FAQ() {
   }, [query]);
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 bg-section-alt relative overflow-hidden">
+    <section className="py-20 md:py-28 bg-section-alt relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 md:px-8">
         <SectionHeader
           eyebrow="FAQ"

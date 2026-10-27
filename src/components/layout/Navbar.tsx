@@ -64,40 +64,38 @@ export function Navbar() {
   );
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 16);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Scroll-spy: watch any hash-link targets (e.g. #pricing) on the home page.
-  // Stale hashes are harmless: isLinkActive only honours them on "/".
+  // Scroll state + scroll-spy for hash links (e.g. "/#pricing"), one rAF-batched
+  // listener. Targets are looked up by id on every check rather than observed,
+  // because home sections load as separate chunks and can be re-created during
+  // hydration — an IntersectionObserver would keep watching the detached node.
   useEffect(() => {
     const targets = navLinks
       .map((l) => getHashId(l.href))
       .filter(Boolean) as string[];
 
-    const observers: IntersectionObserver[] = [];
-    targets.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              setActiveHash(id);
-              return;
-            }
-          }
-        },
-        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setIsScrolled(window.scrollY > 16);
+      const line = window.innerHeight * 0.45;
+      const hit = targets.find((id) => {
+        const rect = document.getElementById(id)?.getBoundingClientRect();
+        return rect ? rect.top <= line && rect.bottom >= line : false;
+      });
+      setActiveHash(hit ?? null);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
 
-    return () => observers.forEach((o) => o.disconnect());
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -111,7 +109,10 @@ export function Navbar() {
 
   const isLinkActive = (href: string) => {
     const hash = getHashId(href);
-    return hash ? pathname === "/" && activeHash === hash : pathname === href;
+    if (hash) return pathname === "/" && activeHash === hash;
+    // Home yields to an in-view home-page section link.
+    if (href === "/" && activeHash) return false;
+    return pathname === href;
   };
 
   return (

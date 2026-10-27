@@ -70,6 +70,26 @@ const commands: Command[] = [
   },
 ];
 
+const GROUPS: Command["group"][] = ["Pages", "Services", "Contact"];
+
+const words = (text: string) => text.toLowerCase().split(/[^a-z0-9+#.]+/).filter(Boolean);
+
+/**
+ * Every query token must prefix-match a word ("ai" hits "AI & ML", not
+ * "maintenance"). Label hits outrank keyword hits. 0 means no match.
+ */
+function scoreCommand(cmd: Command, tokens: string[]): number {
+  const label = words(cmd.label);
+  const extra = words(`${cmd.group} ${cmd.keywords ?? ""}`);
+  let score = 0;
+  for (const token of tokens) {
+    if (label.some((w) => w.startsWith(token))) score += 2;
+    else if (extra.some((w) => w.startsWith(token))) score += 1;
+    else return 0;
+  }
+  return score;
+}
+
 const OPEN_EVENT = "glovax:command-menu";
 
 /** Open the command menu from anywhere (e.g. a navbar button). */
@@ -126,9 +146,14 @@ export function CommandMenu() {
   }, [isOpen]);
 
   const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return commands;
-    return commands.filter((c) => `${c.label} ${c.group} ${c.keywords ?? ""}`.toLowerCase().includes(q));
+    const tokens = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (!tokens.length) return commands;
+    return commands
+      .map((cmd, order) => ({ cmd, order, score: scoreCommand(cmd, tokens) }))
+      .filter((r) => r.score > 0)
+      // Groups stay contiguous (headers render on group change); best matches lead within a group.
+      .sort((a, b) => GROUPS.indexOf(a.cmd.group) - GROUPS.indexOf(b.cmd.group) || b.score - a.score || a.order - b.order)
+      .map((r) => r.cmd);
   }, [query]);
 
   useEffect(() => {
@@ -189,7 +214,7 @@ export function CommandMenu() {
             aria-expanded="true"
             aria-controls="command-menu-list"
             aria-activedescendant={results[active] ? `cmd-${results[active].id}` : undefined}
-            className="h-14 flex-1 bg-transparent text-[0.9375rem] text-brand-textPrimary placeholder:text-brand-textMuted outline-none"
+            className="h-14 flex-1 bg-transparent text-[0.9375rem] text-brand-textPrimary placeholder:text-brand-textMuted outline-none focus-visible:outline-none"
           />
           <kbd className="kbd">esc</kbd>
         </div>

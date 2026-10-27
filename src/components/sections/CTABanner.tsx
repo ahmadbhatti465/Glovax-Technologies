@@ -39,7 +39,7 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
   const data = cta || fallbackCTA;
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 relative overflow-hidden">
+    <section className="py-20 md:py-28 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
