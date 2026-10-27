@@ -147,6 +147,13 @@ export type BlogPostSummary = Pick<
   "slug" | "title" | "excerpt" | "category" | "readTime"
 >;
 
+/**
+ * A blog post as returned by list queries: everything except the article body
+ * and version history. Keeping those out keeps the shared list cache well under
+ * Next.js's 2 MB data-cache limit. Use getBlogPostBySlug for the full post.
+ */
+export type BlogPostListItem = Omit<BlogPost, "content" | "versionHistory">;
+
 export interface JobPosition {
   id: string;
   title: string;

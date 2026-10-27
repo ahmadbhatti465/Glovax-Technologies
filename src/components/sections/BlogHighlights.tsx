@@ -4,10 +4,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Clock, ArrowUpRight } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { BlogPost } from "@/types";
+import { BlogPostListItem } from "@/types";
 
 interface BlogHighlightsProps {
-  posts: BlogPost[];
+  posts: BlogPostListItem[];
 }
 
 /**

@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
+import { eq, getTableColumns } from "drizzle-orm";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import type {
@@ -8,6 +9,7 @@ import type {
   Testimonial,
   TeamMember,
   BlogPost,
+  BlogPostListItem,
   JobPosition,
   Business,
   Page,
@@ -39,9 +41,28 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
   throw lastError;
 }
 
-const getCachedBlogRows = unstable_cache(
-  () => withRetry(() => db.select().from(schema.blogPosts)),
-  ["blog-posts"],
+// The list cache deliberately omits the heavy columns (article body and version
+// history). With them, the full table exceeded Next.js's 2 MB data-cache limit,
+// so the cache write failed and every list call — once per pre-rendered blog
+// page at build time — went back to Turso, which then timed out under load.
+const { content: _content, versionHistory: _versionHistory, ...blogListColumns } =
+  getTableColumns(schema.blogPosts);
+
+const getCachedBlogListRows = unstable_cache(
+  () => withRetry(() => db.select(blogListColumns).from(schema.blogPosts)),
+  ["blog-posts-list"],
+  { revalidate: 3600, tags: ["public-data"] }
+);
+
+// Full row for a single post; unstable_cache keys each entry by its slug.
+const getCachedBlogPostRow = unstable_cache(
+  async (slug: string) => {
+    const rows = await withRetry(() =>
+      db.select().from(schema.blogPosts).where(eq(schema.blogPosts.slug, slug)).limit(1)
+    );
+    return rows[0] ?? null;
+  },
+  ["blog-post-by-slug"],
   { revalidate: 3600, tags: ["public-data"] }
 );
 
@@ -223,39 +244,43 @@ export const getTestimonials = cache(async (): Promise<Testimonial[]> => {
   }
 });
 
-export const getBlogPosts = cache(async (status?: string): Promise<BlogPost[]> => {
-  const rows = await getCachedBlogRows();
+type BlogListRow = Awaited<ReturnType<typeof getCachedBlogListRows>>[number];
+
+/** Normalize a DB row's nullable columns; scheduled posts past their date count as published. */
+function toBlogListItem(row: BlogListRow, now: number): BlogPostListItem {
+  const isScheduledAndDue =
+    row.status === "scheduled" && new Date(row.publishedAt).getTime() <= now;
+  return {
+    ...serializeDates(row, true),
+    tags: row.tags ?? [],
+    featured: Boolean(row.featured),
+    featuredImage: row.featuredImage ?? undefined,
+    featuredImageAlt: row.featuredImageAlt ?? undefined,
+    featuredImageTitle: row.featuredImageTitle ?? undefined,
+    featuredImageCaption: row.featuredImageCaption ?? undefined,
+    seoTitle: row.seoTitle ?? undefined,
+    metaDescription: row.metaDescription ?? undefined,
+    focusKeyword: row.focusKeyword ?? undefined,
+    secondaryKeywords: row.secondaryKeywords ?? [],
+    canonicalUrl: row.canonicalUrl ?? undefined,
+    robotsIndex: row.robotsIndex !== undefined ? Boolean(row.robotsIndex) : true,
+    robotsFollow: row.robotsFollow !== undefined ? Boolean(row.robotsFollow) : true,
+    ogTitle: row.ogTitle ?? undefined,
+    ogDescription: row.ogDescription ?? undefined,
+    ogImage: row.ogImage ?? undefined,
+    ogImageAlt: row.ogImageAlt ?? undefined,
+    twitterTitle: row.twitterTitle ?? undefined,
+    twitterDescription: row.twitterDescription ?? undefined,
+    twitterImage: row.twitterImage ?? undefined,
+    faqs: row.faqs ?? [],
+    status: (isScheduledAndDue ? "published" : row.status || "published") as BlogPost["status"],
+  };
+}
+
+export const getBlogPosts = cache(async (status?: string): Promise<BlogPostListItem[]> => {
+  const rows = await getCachedBlogListRows();
   const now = Date.now();
-  const items = rows.map((row) => {
-    const isScheduledAndDue =
-      row.status === "scheduled" && new Date(row.publishedAt).getTime() <= now;
-    return {
-      ...serializeDates(row, true),
-      tags: row.tags ?? [],
-      featured: Boolean(row.featured),
-      featuredImage: row.featuredImage ?? undefined,
-      featuredImageAlt: row.featuredImageAlt ?? undefined,
-      featuredImageTitle: row.featuredImageTitle ?? undefined,
-      featuredImageCaption: row.featuredImageCaption ?? undefined,
-      seoTitle: row.seoTitle ?? undefined,
-      metaDescription: row.metaDescription ?? undefined,
-      focusKeyword: row.focusKeyword ?? undefined,
-      secondaryKeywords: row.secondaryKeywords ?? [],
-      canonicalUrl: row.canonicalUrl ?? undefined,
-      robotsIndex: row.robotsIndex !== undefined ? Boolean(row.robotsIndex) : true,
-      robotsFollow: row.robotsFollow !== undefined ? Boolean(row.robotsFollow) : true,
-      ogTitle: row.ogTitle ?? undefined,
-      ogDescription: row.ogDescription ?? undefined,
-      ogImage: row.ogImage ?? undefined,
-      ogImageAlt: row.ogImageAlt ?? undefined,
-      twitterTitle: row.twitterTitle ?? undefined,
-      twitterDescription: row.twitterDescription ?? undefined,
-      twitterImage: row.twitterImage ?? undefined,
-      faqs: row.faqs ?? [],
-      status: (isScheduledAndDue ? "published" : row.status || "published") as BlogPost["status"],
-      versionHistory: row.versionHistory ?? [],
-    };
-  });
+  const items = rows.map((row) => toBlogListItem(row, now));
 
   if (status === "published") {
     return items
@@ -270,11 +295,15 @@ export const getBlogPosts = cache(async (status?: string): Promise<BlogPost[]> =
 
 export const getBlogPostBySlug = cache(
   async (slug: string, allowUnpublished = false): Promise<BlogPost | null> => {
-    const posts = await getBlogPosts();
-    const found = posts.find((row) => row.slug === slug);
-    if (!found) return null;
-    if (!allowUnpublished && found.status !== "published") return null;
-    return found;
+    const row = await getCachedBlogPostRow(slug);
+    if (!row) return null;
+    const post: BlogPost = {
+      ...toBlogListItem(row, Date.now()),
+      content: row.content,
+      versionHistory: row.versionHistory ?? [],
+    };
+    if (!allowUnpublished && post.status !== "published") return null;
+    return post;
   }
 );
 
@@ -291,7 +320,7 @@ export const getAllBlogSlugs = cache(async (): Promise<{ slug: string }[]> => {
  * pages that otherwise only get a link from /blog.
  */
 export const getRelatedPosts = cache(
-  async (currentSlug: string, category?: string | null, limit = 3): Promise<BlogPost[]> => {
+  async (currentSlug: string, category?: string | null, limit = 3): Promise<BlogPostListItem[]> => {
     const allPosts = await getBlogPosts("published");
     const posts = allPosts
       .filter((row) => row.slug !== currentSlug)
