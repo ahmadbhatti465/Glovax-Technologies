@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { siteConfig } from "@/lib/constants";
 import {
@@ -76,21 +73,14 @@ export function TrustSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {trustPoints.map((point, index) => (
-            <motion.div
+            <div
+              data-reveal
+              style={{ ["--stagger" as string]: index * 0.1 }}
               key={point.title}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -4 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{
-                duration: 0.7,
-                delay: index * 0.1,
-                ease: [0.22, 1, 0.36, 1],
-              }}
               className={`group relative p-8 rounded-2xl border transition-all duration-500 overflow-hidden card-shine ${
                 point.highlighted
                   ? "bg-surface-raised border-teal/40 shadow-glow-strong gradient-border"
-                  : "bg-surface-raised border-neutral-border hover:border-white/[0.14] hover:shadow-card"
+                  : "bg-surface-raised border-neutral-border hover:border-white/[0.14] hover:shadow-card hover:-translate-y-1"
               }`}
             >
               <div className="relative z-10">
@@ -102,7 +92,7 @@ export function TrustSection() {
                   {point.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

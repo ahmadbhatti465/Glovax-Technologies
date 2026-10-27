@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Plus, Search } from "lucide-react";
 import { homeFaqs } from "@/data/faqs";
@@ -48,36 +48,32 @@ export function FAQ() {
 
         <div className="space-y-4">
           {filteredFaqs.length === 0 ? (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center text-muted-foreground text-sm py-10"
-            >
+            <p className="enter text-center text-muted-foreground text-sm py-10">
               No questions match &quot;{query}&quot;. Try another search — or{" "}
-              <a href="/contact" className="text-accent underline underline-offset-4 decoration-teal/30">
+              <Link href="/contact" className="text-accent underline underline-offset-4 decoration-accent/30">
                 ask us directly
-              </a>
+              </Link>
               .
-            </motion.p>
+            </p>
           ) : (
             filteredFaqs.map((faq, index) => {
               const isOpen = openIndex === index;
               return (
-                <motion.div
+                <div
+                  data-reveal
+                  style={{ ["--stagger" as string]: index * 0.06 }}
                   key={faq.question}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.5, delay: index * 0.06 }}
                   className={`rounded-2xl border transition-colors duration-300 overflow-hidden ${
                     isOpen
-                      ? "border-teal/30 bg-surface-raised shadow-glow"
+                      ? "border-accent-electricBright/30 bg-surface-raised shadow-glow"
                       : "border-neutral-border bg-surface-raised hover:border-white/[0.14]"
                   }`}
                 >
                   <button
+                    type="button"
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${index}`}
                     className="w-full flex items-center justify-between gap-4 px-6 md:px-8 py-5 text-left"
                   >
                     <span className="text-base md:text-lg font-semibold tracking-tight">{faq.question}</span>
@@ -89,22 +85,21 @@ export function FAQ() {
                       <Plus className="w-4 h-4" />
                     </span>
                   </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <p className="px-6 md:px-8 pb-6 text-muted leading-relaxed text-sm md:text-base">
-                          {faq.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
+                  {/* Height animates via grid rows 0fr → 1fr: no JS measuring. */}
+                  <div
+                    id={`faq-answer-${index}`}
+                    inert={!isOpen}
+                    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="px-6 md:px-8 pb-6 text-muted leading-relaxed text-sm md:text-base">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               );
             })
           )}

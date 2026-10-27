@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { ArrowUpRight, ExternalLink, Clock } from "lucide-react";
@@ -42,15 +39,13 @@ export function WorkShowcase({ projects = [] }: WorkShowcaseProps) {
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
           {featured.map((project, index) => (
-            <motion.div
+            <div
+              data-reveal
+              style={{ ["--stagger" as string]: (index % 2) * 0.1 }}
               key={project.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: (index % 2) * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
               <ProjectCard project={project} />
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,11 +1,8 @@
-"use client";
-
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { services as fallbackServices } from "@/data/services";
-import { motion } from "framer-motion";
 import {
   Code2,
   Smartphone,
@@ -87,16 +84,10 @@ export default function ServicesContent({
 
           <div className="space-y-8">
             {services.map((service, index) => (
-              <motion.div
+              <div
+                data-reveal
+                style={{ ["--stagger" as string]: index * 0.1 }}
                 key={service.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.1,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
                 className="group p-8 md:p-10 rounded-2xl bg-surface border border-border hover:border-accent/30 transition-all duration-500"
               >
                 <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-10">
@@ -170,7 +161,7 @@ export default function ServicesContent({
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -240,16 +231,10 @@ export default function ServicesContent({
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {faqs.map((faq, index) => (
-                <motion.div
+                <div
+                  data-reveal
+                  style={{ ["--stagger" as string]: index * 0.05 }}
                   key={faq.question}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.05,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
                   className="p-6 md:p-8 rounded-2xl bg-surface border border-border hover:border-accent/30 transition-all duration-300"
                 >
                   <h3 className="text-lg md:text-xl font-semibold mb-3 text-foreground">
@@ -258,7 +243,7 @@ export default function ServicesContent({
                   <p className="text-sm md:text-base text-muted leading-relaxed">
                     {faq.answer}
                   </p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </section>

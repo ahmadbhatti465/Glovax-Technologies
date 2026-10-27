@@ -7,7 +7,6 @@ import { MagneticButton } from "@/components/shared/MagneticButton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { motion } from "framer-motion";
 import { useState } from "react";
 import { siteConfig } from "@/lib/constants";
 import { Mail, Phone, MapPin, Calendar, ArrowUpRight, Loader2, ChevronDown } from "lucide-react";

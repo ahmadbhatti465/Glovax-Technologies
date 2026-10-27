@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { Clock, ArrowUpRight } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { BlogPostListItem } from "@/types";
@@ -30,16 +27,10 @@ export function BlogHighlights({ posts }: BlogHighlightsProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {posts.map((post, index) => (
-            <motion.article
+            <article
+              data-reveal
+              style={{ ["--stagger" as string]: index * 0.05 }}
               key={post.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.05,
-                ease: [0.22, 1, 0.36, 1],
-              }}
             >
               <Link href={`/blog/${post.slug}`} className="group block h-full">
                 <div className="p-6 rounded-2xl bg-surface border border-border hover:border-accent/30 transition-all duration-300 h-full">
@@ -67,7 +58,7 @@ export function BlogHighlights({ posts }: BlogHighlightsProps) {
                   </div>
                 </div>
               </Link>
-            </motion.article>
+            </article>
           ))}
         </div>
 

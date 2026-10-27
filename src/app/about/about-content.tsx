@@ -1,10 +1,7 @@
-"use client";
-
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
-import { motion } from "framer-motion";
 import { Target, Shield, Zap, Users, Globe, Heart } from "lucide-react";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
@@ -183,16 +180,10 @@ function AboutContentInner({
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
             {values.map((value, index) => (
-              <motion.div
+              <div
+                data-reveal
+                style={{ ["--stagger" as string]: index * 0.1 }}
                 key={value.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
                 className="p-6 rounded-2xl bg-surface border border-border"
               >
                 <div className="w-10 h-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-4">
@@ -202,7 +193,7 @@ function AboutContentInner({
                 <p className="text-sm text-muted leading-relaxed">
                   {value.description}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -215,11 +206,8 @@ function AboutContentInner({
               subtitle="Direct access to senior full-stack & AI architecture with zero junior handoffs."
               align="left"
             />
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            <div
+              data-reveal
               className="p-8 md:p-10 rounded-2xl bg-surface border border-border hover:border-accent/40 transition-all duration-500 shadow-2xl relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
@@ -270,7 +258,7 @@ function AboutContentInner({
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </section>
 
           {/* Timeline */}
@@ -282,23 +270,17 @@ function AboutContentInner({
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {timeline.map((item, index) => (
-              <motion.div
+              <div
+                data-reveal
+                style={{ ["--stagger" as string]: index * 0.05 }}
                 key={item.year}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.05,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
                 className="relative p-5 rounded-xl bg-surface border border-border"
               >
                 <span className="text-accent text-sm font-semibold">
                   {item.year}
                 </span>
                 <p className="mt-1 text-sm text-foreground">{item.event}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

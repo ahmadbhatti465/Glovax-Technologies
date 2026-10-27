@@ -1,10 +1,7 @@
-"use client";
-
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { MagneticButton } from "@/components/shared/MagneticButton";
-import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   ExternalLink,
@@ -43,15 +40,12 @@ function Reveal({
   className?: string;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      data-reveal
       className={className}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -285,19 +279,17 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                 <div aria-hidden className="absolute left-6 top-0 bottom-0 w-px bg-neutral-border/60" />
                 <div className="space-y-6">
                   {steps.map((step, i) => (
-                    <motion.div
+                    <div
+                      data-reveal
+                      style={{ ["--stagger" as string]: i * 0.08 }}
                       key={step}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true, margin: "-40px" }}
-                      transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                       className="relative flex items-start gap-5"
                     >
                       <span className="relative z-10 mt-1 w-12 h-12 rounded-full bg-surface-raised border border-white/[0.08] flex items-center justify-center text-sm font-bold text-accent shadow-glow shrink-0">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <p className="pt-3 text-muted leading-relaxed">{step}</p>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -349,19 +341,17 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {results.map((result, i) => (
-                  <motion.div
+                  <div
+                    data-reveal
+                    style={{ ["--stagger" as string]: i * 0.06 }}
                     key={result}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-40px" }}
-                    transition={{ duration: 0.5, delay: i * 0.06 }}
                     className="flex items-start gap-3.5 rounded-2xl border border-neutral-border bg-surface-raised p-5 hover:border-white/[0.14] transition-colors duration-300"
                   >
                     <span className="mt-0.5 w-6 h-6 rounded-full bg-canvas-elevated border border-white/[0.08] flex items-center justify-center shrink-0">
                       <Check className="w-3.5 h-3.5 text-accent" />
                     </span>
                     <p className="text-sm md:text-base text-muted leading-relaxed">{result}</p>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </Reveal>

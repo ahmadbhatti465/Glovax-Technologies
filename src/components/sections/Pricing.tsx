@@ -1,6 +1,4 @@
-"use client";
-
-import { motion } from "framer-motion";
+import Link from "next/link";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { Check, Sparkles, ShieldCheck, CalendarCheck, FileSignature, BadgeCheck } from "lucide-react";
@@ -94,21 +92,14 @@ export function Pricing() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {tiers.map((tier, index) => (
-            <motion.div
+            <div
+              data-reveal
+              style={{ ["--stagger" as string]: index * 0.12 }}
               key={tier.name}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -8 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{
-                duration: 0.7,
-                delay: index * 0.12,
-                ease: [0.22, 1, 0.36, 1],
-              }}
               className={`relative flex flex-col p-8 md:p-10 rounded-2xl transition-all duration-500 overflow-hidden ${
                 tier.highlighted
                   ? "bg-surface-raised border border-teal/40 shadow-glow-strong lg:-translate-y-3 gradient-border card-shine"
-                  : "bg-surface-raised border border-neutral-border hover:border-white/[0.14] hover:shadow-card"
+                  : "bg-surface-raised border border-neutral-border hover:border-white/[0.14] hover:shadow-card hover:-translate-y-2"
               }`}
             >
               {tier.highlighted && (
@@ -155,16 +146,13 @@ export function Pricing() {
               >
                 Book a Free Call
               </MagneticButton>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Guarantee strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        <div
+          data-reveal
           className="mt-14 md:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
         >
           {guarantees.map((g) => (
@@ -181,14 +169,11 @@ export function Pricing() {
               </div>
             </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Feature comparison — what every engagement includes */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        <div
+          data-reveal
           className="mt-12 md:mt-16"
         >
           <p className="text-center text-xs font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">
@@ -205,16 +190,16 @@ export function Pricing() {
               </span>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         <p className="mt-10 text-center text-sm text-muted-foreground">
           Not sure which fits?{" "}
-          <a
+          <Link
             href="/contact"
-            className="text-accent hover:text-teal-bright transition-colors underline underline-offset-4 decoration-teal/30"
+            className="text-accent hover:text-accent-hover transition-colors underline underline-offset-4 decoration-accent/30"
           >
             Book a 30-minute call
-          </a>{" "}
+          </Link>{" "}
           — it&apos;s free and there&apos;s no obligation.
         </p>
       </div>

@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { UserCheck, Clock, Brain, ShieldCheck, Lock, LifeBuoy } from "lucide-react";
@@ -59,12 +56,10 @@ export function WhyGlovax() {
 
         <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.06] md:grid-cols-2 lg:grid-cols-3">
           {differentiators.map((d, index) => (
-            <motion.div
+            <div
+              data-reveal
+              style={{ ["--stagger" as string]: (index % 3) * 0.08 }}
               key={d.title}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: (index % 3) * 0.08 }}
             >
               <SpotlightCard className="group h-full rounded-none border-0 bg-canvas-base p-8 hover:bg-canvas-surface">
                 <d.icon
@@ -76,7 +71,7 @@ export function WhyGlovax() {
                 </h3>
                 <p className="mt-2.5 text-sm leading-relaxed text-brand-textSecondary">{d.description}</p>
               </SpotlightCard>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

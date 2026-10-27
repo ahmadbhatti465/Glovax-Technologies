@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { Star, MapPin, BadgeCheck, Globe } from "lucide-react";
 import { Business } from "@/types";
 
@@ -11,15 +10,9 @@ interface ListingCardProps {
 
 export function ListingCard({ business, index = 0 }: ListingCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.6,
-        delay: (index % 3) * 0.08,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+    <div
+      data-reveal
+      style={{ ["--stagger" as string]: (index % 3) * 0.08 }}
       className="group relative rounded-2xl bg-surface-raised border border-neutral-border hover:border-white/[0.14] transition-all duration-500 overflow-hidden"
     >
       <Link href={`/directory/${business.slug}`} className="block p-6 md:p-7">
@@ -83,6 +76,6 @@ export function ListingCard({ business, index = 0 }: ListingCardProps) {
           {business.shortDescription}
         </p>
       </Link>
-    </motion.div>
+    </div>
   );
 }

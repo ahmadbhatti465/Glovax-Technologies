@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef, type RefObject } from "react";
 import {
   Lock,
   LayoutDashboard,
@@ -79,34 +78,22 @@ function Chart() {
         <line key={y} x1="0" y1={y} x2="600" y2={y} stroke="var(--neutral-border)" strokeOpacity="0.6" strokeDasharray="3 6" />
       ))}
 
-      <motion.path
-        d={`${line} V160 H0 Z`}
-        fill="url(#heroChartFill)"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.9, duration: 0.8 }}
-      />
-      <motion.path
+      <path className="chart-fill" d={`${line} V160 H0 Z`} fill="url(#heroChartFill)" />
+      <path
+        className="chart-draw"
+        pathLength={1}
         d={line}
         stroke="url(#heroChartStroke)"
         strokeWidth="2.5"
         strokeLinecap="round"
-        initial={{ pathLength: 0 }}
-        whileInView={{ pathLength: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
       />
       {/* end dot */}
-      <motion.circle
+      <circle
+        className="chart-dot"
         cx="600"
         cy="18"
         r="4"
         fill="var(--teal-bright)"
-        initial={{ scale: 0, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 1.4, duration: 0.4 }}
         style={{ filter: "drop-shadow(0 0 6px var(--teal))" }}
       />
     </svg>
@@ -130,31 +117,58 @@ function ChatBubble({ role, children }: { role: "user" | "ai"; children: React.R
   );
 }
 
+/**
+ * Eased pointer parallax: writes --px / --py (-0.5…0.5) on the container once
+ * per frame while it settles. No React state, no animation library; skipped
+ * for touch and reduced-motion users.
+ */
+function usePointerParallax(ref: RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    let tx = 0, ty = 0, cx = 0, cy = 0;
+    const tick = () => {
+      cx += (tx - cx) * 0.12;
+      cy += (ty - cy) * 0.12;
+      el.style.setProperty("--px", cx.toFixed(4));
+      el.style.setProperty("--py", cy.toFixed(4));
+      frame = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.001 ? requestAnimationFrame(tick) : 0;
+    };
+    const start = () => {
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+    const onMove = (e: PointerEvent) => {
+      const rect = el.getBoundingClientRect();
+      tx = (e.clientX - rect.left) / rect.width - 0.5;
+      ty = (e.clientY - rect.top) / rect.height - 0.5;
+      start();
+    };
+    const onLeave = () => {
+      tx = 0;
+      ty = 0;
+      start();
+    };
+    el.addEventListener("pointermove", onMove, { passive: true });
+    el.addEventListener("pointerleave", onLeave);
+    return () => {
+      cancelAnimationFrame(frame);
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerleave", onLeave);
+    };
+  }, [ref]);
+}
+
 export function HeroDashboardMockup() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const tx = useSpring(useTransform(mx, [-0.5, 0.5], [-14, 14]), { stiffness: 140, damping: 22 });
-  const ty = useSpring(useTransform(my, [-0.5, 0.5], [-10, 10]), { stiffness: 140, damping: 22 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    mx.set((e.clientX - rect.left) / rect.width - 0.5);
-    my.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-
-  const handleMouseLeave = () => {
-    mx.set(0);
-    my.set(0);
-  };
+  usePointerParallax(containerRef);
 
   return (
     <div
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       className="relative mt-16 md:mt-24"
       style={{ perspective: 1400 }}
     >
@@ -169,9 +183,12 @@ export function HeroDashboardMockup() {
         className="mesh-gradient absolute -inset-x-6 -top-10 bottom-0 blur-3xl opacity-40 pointer-events-none"
       />
 
-      <motion.div
-        style={{ x: tx, y: ty, rotateX: useTransform(my, [-0.5, 0.5], [3, -3]) }}
-        className="relative"
+      <div
+        className="relative will-change-transform"
+        style={{
+          transform:
+            "translate3d(calc(var(--px, 0) * 28px), calc(var(--py, 0) * 20px), 0) rotateX(calc(var(--py, 0) * -6deg))",
+        }}
       >
         {/* ===== Browser window ===== */}
         <div className="border-beam relative mx-auto max-w-5xl rounded-2xl md:rounded-[1.75rem] border border-white/[0.08] bg-canvas-surface/90 backdrop-blur-xl shadow-card-lg overflow-hidden">
@@ -338,7 +355,7 @@ export function HeroDashboardMockup() {
             <p className="text-[10px] text-muted-foreground mt-1">served worldwide</p>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* floating action chip — CTA hint */}
       <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 z-10">

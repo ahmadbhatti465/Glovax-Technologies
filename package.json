@@ -22,7 +22,6 @@
     "cloudinary": "^2.11.0",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
-    "framer-motion": "^12.34.3",
     "jose": "^6.2.3",
     "lucide-react": "^0.574.0",
     "next": "16.1.6",

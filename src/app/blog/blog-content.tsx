@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { motion } from "framer-motion";
 import { Clock, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { BlogPostSummary } from "@/types";
@@ -134,16 +133,10 @@ export default function BlogContent({
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visiblePosts.map((post, index) => (
-              <motion.article
+              <article
+                data-reveal
+                style={{ ["--stagger" as string]: index * 0.05 }}
                 key={post.slug}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.05,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
               >
                 <Link href={`/blog/${post.slug}`} className="group block">
                   <div className="p-6 rounded-2xl bg-surface border border-border hover:border-accent/30 transition-all duration-300 h-full">
@@ -171,7 +164,7 @@ export default function BlogContent({
                     </div>
                   </div>
                 </Link>
-              </motion.article>
+              </article>
             ))}
           </div>
 

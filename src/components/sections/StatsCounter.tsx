@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { stats as fallbackStats } from "@/lib/constants";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 
@@ -30,16 +27,10 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
       <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {stats.map((stat, index) => (
-            <motion.div
+            <div
+              data-reveal
+              style={{ ["--stagger" as string]: index * 0.12 }}
               key={stat.label}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.7,
-                delay: index * 0.12,
-                ease: [0.22, 1, 0.36, 1],
-              }}
               className="text-center relative"
             >
               {/* Subtle divider for desktop */}
@@ -63,7 +54,7 @@ export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
                 <p className="text-sm md:text-base text-muted-foreground tracking-wide">{stat.label}</p>
                 <div className="w-5 h-px bg-gradient-to-l from-transparent to-accent/40" />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

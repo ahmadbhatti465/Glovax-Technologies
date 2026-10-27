@@ -1,9 +1,6 @@
-"use client";
-
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { motion } from "framer-motion";
 import { TeamMember } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
@@ -95,16 +92,10 @@ export default function TeamContent({ team: serverTeam, lastUpdated }: TeamConte
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {team.map((member, index) => (
-              <motion.div
+              <div
+                data-reveal
+                style={{ ["--stagger" as string]: index * 0.1 }}
                 key={member.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
                 className="group p-6 rounded-2xl bg-surface border border-border hover:border-accent/30 transition-all duration-300"
               >
                 <div className="flex items-start gap-4">
@@ -124,7 +115,7 @@ export default function TeamContent({ team: serverTeam, lastUpdated }: TeamConte
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

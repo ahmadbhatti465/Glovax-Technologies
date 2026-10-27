@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { siteConfig } from "@/lib/constants";
 import { ShieldCheck, KeyRound, Timer, Check, Mail } from "lucide-react";
@@ -41,11 +38,8 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
   return (
     <section className="py-20 md:py-28 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <div
+          data-reveal
           className="border-beam relative overflow-hidden rounded-[2rem] border border-white/[0.06] bg-canvas-surface"
         >
           {/* Aurora wash rising from the bottom edge */}
@@ -123,7 +117,7 @@ export function CTABanner({ cta, lastUpdated }: CTABannerProps) {
               </p>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

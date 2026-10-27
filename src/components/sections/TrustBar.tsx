@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { clientLogos } from "@/lib/constants";
 
@@ -27,29 +24,14 @@ const proofNumbers = [
   { value: "8", suffix: "+", label: "Years of experience" },
 ];
 
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.05, delayChildren: 0.1 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const } },
-};
-
 export function TrustBar() {
   const doubledLogos = [...clientLogos, ...clientLogos];
 
   return (
     <section className="py-16 md:py-20 border-b border-neutral-border bg-background relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
+          data-reveal
           className="text-center"
         >
           {/* Upwork rating badge */}
@@ -98,31 +80,28 @@ export function TrustBar() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Tech stack divider */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-40px" }}
+        <div
           className="mt-14 pt-10 border-t border-neutral-border/60 text-center"
         >
           <p className="text-xs font-mono tracking-[0.25em] uppercase text-muted-foreground font-medium mb-8">
             The stack behind your product
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2.5">
-            {techStack.map((tech) => (
-              <motion.span
+            {techStack.map((tech, index) => (
+              <span
                 key={tech}
-                variants={item}
+                data-reveal
+                style={{ ["--stagger" as string]: index * 0.03 }}
                 className="px-4 py-2 rounded-full bg-surface-raised border border-neutral-border text-sm font-mono font-medium text-muted-foreground hover:text-accent hover:border-white/[0.14] hover:shadow-glow transition-all duration-300"
               >
                 {tech}
-              </motion.span>
+              </span>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

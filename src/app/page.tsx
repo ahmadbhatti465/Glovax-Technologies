@@ -14,7 +14,7 @@ import {
   getSiteContentUpdatedAt,
   getBlogPosts,
 } from "@/lib/data";
-// Dynamically import below-the-fold sections to code-split framer-motion
+// Dynamically import below-the-fold sections to keep the initial JS payload small
 // and reduce initial JS payload by ~124 KiB
 const TrustBar = dynamic(
   () => import("@/components/sections/TrustBar").then((mod) => ({ default: mod.TrustBar })),

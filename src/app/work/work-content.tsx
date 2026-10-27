@@ -1,9 +1,6 @@
-"use client";
-
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { motion } from "framer-motion";
 import { ArrowUpRight, ExternalLink, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -77,21 +74,15 @@ export default function WorkContent({
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {faqs.map((faq, index) => (
-                  <motion.div
+                  <div
+                    data-reveal
+                    style={{ ["--stagger" as string]: index * 0.05 }}
                     key={faq.question}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 0.5,
-                      delay: index * 0.05,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
                     className="p-6 rounded-2xl bg-surface border border-border"
                   >
                     <h3 className="text-lg font-semibold mb-3">{faq.question}</h3>
                     <p className="text-sm text-muted leading-relaxed">{faq.answer}</p>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </section>
@@ -213,20 +204,14 @@ function WorkCard({
   );
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+    <div
+      data-reveal
+      style={{ ["--stagger" as string]: index * 0.1 }}
       className="h-full"
     >
       <div className="group h-full rounded-2xl bg-surface-raised border border-neutral-border p-3 md:p-4 hover:border-white/[0.14] hover:shadow-card transition-all duration-500">
         {cardBody}
       </div>
-    </motion.div>
+    </div>
   );
 }

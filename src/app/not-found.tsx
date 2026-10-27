@@ -12,7 +12,7 @@ export default function NotFound() {
           Page not found
         </h2>
         <p className="text-muted mb-8 max-w-md mx-auto">
-          The page you're looking for doesn't exist or has been moved.
+          The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
         <MagneticButton href="/" variant="primary">
           Back to Home

@@ -1,7 +1,3 @@
-"use client";
-
-import { motion, useScroll, useSpring } from "framer-motion";
-import { useRef } from "react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import {
   Search,
@@ -81,19 +77,7 @@ interface ProcessStepsProps {
 }
 
 export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
-  const listRef = useRef<HTMLDivElement>(null);
   const steps = serverSteps?.length ? serverSteps : fallbackSteps;
-
-  // Draw the connecting line as the section scrolls into view.
-  const { scrollYProgress } = useScroll({
-    target: listRef,
-    offset: ["start 80%", "end 55%"],
-  });
-  const lineScale = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 24,
-    restDelta: 0.001,
-  });
 
   return (
     <section className="py-20 md:py-28 relative">
@@ -105,18 +89,17 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
           subtitle="A battle-tested methodology refined over 100+ projects. We combine agility with rigor to deliver exceptional results on time and on budget."
         />
 
-        <div ref={listRef} className="relative max-w-4xl mx-auto">
+        <div className="timeline-scope relative max-w-4xl mx-auto">
           {/* Base line */}
           <div
             aria-hidden
             className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-neutral-border/60"
           />
-          {/* Progress line — draws as you scroll */}
-          <motion.div
+          {/* Progress line — draws as you scroll (CSS scroll timeline, see globals.css) */}
+          <div
             aria-hidden
-            className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2 origin-top"
+            className="timeline-progress absolute left-6 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2 origin-top"
             style={{
-              scaleY: lineScale,
               background:
                 "linear-gradient(180deg, var(--teal-deep), var(--teal) 60%, var(--teal-bright))",
               boxShadow: "0 0 12px var(--teal-glow)",
@@ -132,16 +115,9 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
                   className="relative md:grid md:grid-cols-2 md:gap-24"
                 >
                   {/* Icon node on the line */}
-                  <motion.div
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{
-                      delay: index * 0.04,
-                      type: "spring",
-                      stiffness: 260,
-                      damping: 18,
-                    }}
+                  <div
+                    data-reveal
+                    style={{ ["--stagger" as string]: index * 0.04 }}
                     className="absolute left-6 md:left-1/2 top-0 z-10 -translate-x-1/2"
                   >
                     <div className="group/node relative w-12 h-12 md:w-14 md:h-14 rounded-2xl glass-strong border border-white/[0.08] flex items-center justify-center text-accent shadow-glow transition-all duration-500 group-hover:shadow-glow-strong">
@@ -153,18 +129,12 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
                         {step.number}
                       </span>
                     </div>
-                  </motion.div>
+                  </div>
 
                   {/* Content — alternates sides on desktop, right column on mobile */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{
-                      duration: 0.6,
-                      delay: index * 0.06,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
+                  <div
+                    data-reveal
+                    style={{ ["--stagger" as string]: index * 0.06 }}
                     className={[
                       "pl-20 md:pl-0",
                       isRight
@@ -180,7 +150,7 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
                         {step.description}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
               );
             })}

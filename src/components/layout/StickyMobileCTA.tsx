@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/constants";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 
@@ -9,11 +6,9 @@ import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 // Mounted inside Navbar so it appears on every public page and stays off /admin.
 export function StickyMobileCTA() {
   return (
-    <motion.div
-      initial={{ y: 100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed bottom-0 inset-x-0 z-30 lg:hidden"
+    <div
+      className="enter-rise fixed bottom-0 inset-x-0 z-30 lg:hidden"
+      style={{ ["--d" as string]: "300ms" }}
     >
       <div aria-hidden className="hairline-lit absolute inset-x-0 top-0" />
       <div
@@ -38,6 +33,6 @@ export function StickyMobileCTA() {
           </a>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

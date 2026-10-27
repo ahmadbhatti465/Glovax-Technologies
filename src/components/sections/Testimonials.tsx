@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Star, Quote, Linkedin, Play, BadgeCheck } from "lucide-react";
 import Image from "next/image";
@@ -36,18 +33,11 @@ function Avatar({ testimonial }: { testimonial: Testimonial }) {
 
 function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
   return (
-    <motion.div
+    <div
+      data-reveal
+      style={{ ["--stagger" as string]: index * 0.12 }}
       key={testimonial.id}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -8 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.7,
-        delay: index * 0.12,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="group relative flex flex-col h-full p-8 md:p-10 rounded-2xl bg-surface-raised border border-neutral-border hover:border-white/[0.14] hover:shadow-card transition-all duration-500 card-shine"
+      className="group relative flex flex-col h-full p-8 md:p-10 rounded-2xl bg-surface-raised border border-neutral-border hover:border-white/[0.14] hover:shadow-card hover:-translate-y-1.5 transition-all duration-500 card-shine"
     >
       {/* Subtle glow on hover */}
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
@@ -77,7 +67,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
         </div>
 
         <p className="text-foreground/90 text-base md:text-lg leading-relaxed mb-8 flex-1">
-          "{testimonial.content}"
+          &ldquo;{testimonial.content}&rdquo;
         </p>
 
         <div className="flex items-center justify-between gap-4">
@@ -116,7 +106,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -150,11 +140,9 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
         </div>
 
         {/* Video testimonial placeholder */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        <div
+          data-reveal
+          style={{ ["--stagger" as string]: 0.2 }}
           className="mt-8"
         >
           <div className="group relative aspect-[16/5] md:aspect-[21/7] rounded-2xl overflow-hidden border border-neutral-border">
@@ -187,7 +175,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

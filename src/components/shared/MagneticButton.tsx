@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -39,8 +38,8 @@ const variantClasses = {
 
 /**
  * CTA button with a subtle magnetic pull toward the cursor.
- * Offset is held in framer motion values (no React state), so pointer
- * movement animates on the compositor without re-rendering.
+ * The label's transform is written directly (one write per frame, no React
+ * state); a CSS transition supplies the easing and the spring-back.
  */
 export function MagneticButton({
   children,
@@ -54,24 +53,28 @@ export function MagneticButton({
   disabled = false,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-  const x = useSpring(rawX, { stiffness: 300, damping: 20, mass: 0.4 });
-  const y = useSpring(rawY, { stiffness: 300, damping: 20, mass: 0.4 });
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const frame = useRef(0);
+
+  const moveLabel = (x: number, y: number) => {
+    cancelAnimationFrame(frame.current);
+    frame.current = requestAnimationFrame(() => {
+      if (labelRef.current) labelRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+  };
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (e.pointerType !== "mouse") return;
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    rawX.set((e.clientX - (rect.left + rect.width / 2)) * 0.12);
-    rawY.set((e.clientY - (rect.top + rect.height / 2)) * 0.18);
+    moveLabel(
+      (e.clientX - (rect.left + rect.width / 2)) * 0.12,
+      (e.clientY - (rect.top + rect.height / 2)) * 0.18
+    );
   };
 
-  const reset = () => {
-    rawX.set(0);
-    rawY.set(0);
-  };
+  const reset = () => moveLabel(0, 0);
 
   const classes = cn(
     "group relative inline-flex items-center justify-center gap-2 rounded-full",
@@ -83,7 +86,10 @@ export function MagneticButton({
   );
 
   const content = (
-    <motion.span className="relative z-10 inline-flex items-center gap-2" style={{ x, y }}>
+    <span
+      ref={labelRef}
+      className="relative z-10 inline-flex items-center gap-2 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+    >
       {children}
       {withArrow && (
         <ArrowUpRight
@@ -91,7 +97,7 @@ export function MagneticButton({
           aria-hidden
         />
       )}
-    </motion.span>
+    </span>
   );
 
   if (href) {

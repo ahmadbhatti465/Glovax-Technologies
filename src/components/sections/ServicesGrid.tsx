@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { services as fallbackServices } from "@/data/services";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
@@ -42,11 +39,9 @@ function ServiceCard({ service, index, total }: { service: Service; index: numbe
   const isAI = service.icon === "Brain";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      data-reveal
+      style={{ ["--stagger" as string]: (index % 3) * 0.08 }}
       className={cn(
         span === "wide" && "lg:col-span-2",
         span === "full" && "md:col-span-2 lg:col-span-3"
@@ -105,7 +100,7 @@ function ServiceCard({ service, index, total }: { service: Service; index: numbe
           </span>
         </Link>
       </SpotlightCard>
-    </motion.div>
+    </div>
   );
 }
 

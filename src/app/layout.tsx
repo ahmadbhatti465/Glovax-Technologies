@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Inter, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { Toaster } from "sonner";
@@ -7,25 +7,21 @@ import { StructuredData } from "@/components/shared/StructuredData";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { BackToTop } from "@/components/layout/BackToTop";
 
-const display = Geist({
+// One variable font file serves every weight for both headings and body text;
+// omitting `weight` makes next/font ship the variable file instead of statics.
+const sans = Geist({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-inter",
+  variable: "--font-geist-sans",
   display: "swap",
 });
 
 const mono = Geist_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
   variable: "--font-geist-mono",
   display: "swap",
+  // Mono only appears in small eyebrow labels and kbd hints — don't block
+  // the initial render on it.
+  preload: false,
 });
 
 export const viewport: Viewport = {
@@ -112,7 +108,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${display.variable} ${inter.variable} ${mono.variable} dark`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable} dark`}>
       <body
         className="font-body antialiased bg-background text-foreground min-h-screen"
       >

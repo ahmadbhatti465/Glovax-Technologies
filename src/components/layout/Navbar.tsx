@@ -3,7 +3,6 @@
 import { useState, useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import { navLinks, siteConfig } from "@/lib/constants";
 import { Menu, X, ArrowUpRight, Calendar, MessageCircle, Mail, Search } from "lucide-react";
 import Image from "next/image";
@@ -40,10 +39,9 @@ function NavLink({
       )}
     >
       {active && (
-        <motion.span
-          layoutId="nav-active-pill"
-          transition={{ type: "spring", stiffness: 420, damping: 36 }}
-          className="absolute inset-0 rounded-full border border-white/[0.08] bg-white/[0.05]"
+        <span
+          aria-hidden
+          className="absolute inset-0 rounded-full border border-white/[0.08] bg-white/[0.05] animate-in fade-in zoom-in-95 duration-200"
         />
       )}
       <span className="relative z-10">{link.label}</span>
@@ -202,25 +200,24 @@ export function Navbar() {
       </header>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-canvas-base/80 backdrop-blur-xl lg:hidden"
-              onClick={closeMobile}
-            />
-            <motion.div
-              id="mobile-menu"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 320, damping: 34 }}
-              className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-sm flex-col border-l border-white/[0.06] bg-canvas-surface lg:hidden"
-            >
+      {/* Always mounted so open/close animate with CSS; inert while closed. */}
+      <div
+        aria-hidden
+        className={cn(
+          "fixed inset-0 z-40 bg-canvas-base/80 backdrop-blur-xl transition-opacity duration-200 lg:hidden",
+          isMobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        )}
+        onClick={closeMobile}
+      />
+      <div
+        id="mobile-menu"
+        inert={!isMobileMenuOpen}
+        className={cn(
+          "fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-sm flex-col border-l border-white/[0.06] bg-canvas-surface lg:hidden",
+          "transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        )}
+      >
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-electricBright/50 to-transparent" />
 
               <div className="flex h-16 items-center justify-between px-6">
@@ -245,11 +242,13 @@ export function Navbar() {
                   {navLinks.map((link, i) => {
                     const active = isLinkActive(link.href);
                     return (
-                      <motion.div
+                      <div
                         key={link.href}
-                        initial={{ opacity: 0, x: 24 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.04 + i * 0.04, duration: 0.3 }}
+                        className={cn(
+                          "transition-[opacity,translate] duration-300 ease-out",
+                          isMobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0"
+                        )}
+                        style={{ transitionDelay: isMobileMenuOpen ? `${80 + i * 40}ms` : "0ms" }}
                       >
                         <Link
                           href={link.href}
@@ -262,7 +261,7 @@ export function Navbar() {
                         >
                           {link.label}
                         </Link>
-                      </motion.div>
+                      </div>
                     );
                   })}
                 </nav>
@@ -296,10 +295,7 @@ export function Navbar() {
                   <span>{siteConfig.email}</span>
                 </a>
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      </div>
 
       <CommandMenu />
       {/* Site-wide conversion CTAs (mobile bar + AI concierge) */}
