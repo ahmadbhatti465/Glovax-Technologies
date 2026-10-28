@@ -76,16 +76,6 @@ export function HeroSection() {
             <HeroEmailCapture />
           </div>
         </div>
-
-        {/* Product preview */}
-        <div className="enter relative mt-4" style={{ ["--d" as string]: "360ms" }}>
-          <HeroDashboardMockup />
-          {/* Floor reflection — grounds the mockup on the canvas */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-[15%] -bottom-10 h-24 rounded-full bg-accent-electric/20 blur-3xl"
-          />
-        </div>
       </div>
 
       {/* Fade into the next section */}
