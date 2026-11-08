@@ -488,9 +488,10 @@ export const getAllPageSlugs = cache(async (): Promise<{ slug: string }[]> => {
   }
 });
 
-export const getRedirect = cache(async (source: string): Promise<Redirect | null> => {
+type RedirectRow = typeof schema.redirects.$inferSelect;
+
+function matchRedirect(rows: RedirectRow[], source: string): Redirect | null {
   const normalizedSource = (source.startsWith("/") ? source : `/${source}`).replace(/\/+$/, "") || "/";
-  const rows = await getCachedRedirectRows();
   const found = rows.find(
     (r) =>
       (r.source.startsWith("/") ? r.source : `/${r.source}`).replace(/\/+$/, "") ===
@@ -501,7 +502,26 @@ export const getRedirect = cache(async (source: string): Promise<Redirect | null
     ...serializeDates(found),
     statusCode: found.statusCode ?? 301,
   };
-});
+}
+
+export const getRedirect = cache(async (source: string): Promise<Redirect | null> =>
+  matchRedirect(await getCachedRedirectRows(), source)
+);
+
+const PROXY_REDIRECT_TTL_MS = 60_000;
+let proxyRedirects: { rows: RedirectRow[]; expiresAt: number } | null = null;
+
+/**
+ * Redirect lookup for src/proxy.ts. unstable_cache throws outside a render
+ * ("incrementalCache missing"), so the proxy keeps its own short-lived copy.
+ */
+export async function getRedirectForProxy(source: string): Promise<Redirect | null> {
+  if (!proxyRedirects || proxyRedirects.expiresAt <= Date.now()) {
+    const rows = await withRetry(() => db.select().from(schema.redirects));
+    proxyRedirects = { rows, expiresAt: Date.now() + PROXY_REDIRECT_TTL_MS };
+  }
+  return matchRedirect(proxyRedirects.rows, source);
+}
 
 export const getInternalLinkTargets = cache(async (): Promise<InternalLinkTarget[]> => {
   const targets: InternalLinkTarget[] = [

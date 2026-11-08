@@ -1,13 +1,17 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/constants";
 
+// Tag archives are noindexed and number in the hundreds; blocking them keeps
+// Google's crawl queue on pages that can actually be indexed.
+const disallow = ["/admin", "/api", "/blog/tag/"];
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/api"],
+        disallow,
       },
       {
         userAgent: [
@@ -23,7 +27,7 @@ export default function robots(): MetadataRoute.Robots {
           "CCBot",
         ],
         allow: "/",
-        disallow: ["/admin", "/api"],
+        disallow,
       },
     ],
     sitemap: `${siteConfig.url}/sitemap.xml`,

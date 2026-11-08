@@ -182,7 +182,7 @@ function WorkCard({
 
       <div className="flex flex-wrap items-center gap-3 mt-5">
         <Link
-          href={`/work/${project.id}`}
+          href={`/work/${project.slug || project.id}`}
           className="group/btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full gradient-cta text-accent-foreground text-sm font-semibold shadow-glow hover:shadow-glow-strong transition-all duration-300 active:scale-[0.98]"
         >
           Read Case Study

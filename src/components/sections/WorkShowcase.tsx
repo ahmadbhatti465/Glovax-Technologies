@@ -97,7 +97,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
     <SpotlightCard className="group flex h-full flex-col p-2">
       {/* Screenshot in a minimal browser frame */}
       <Link
-        href={`/work/${project.id}`}
+        href={`/work/${project.slug || project.id}`}
         aria-label={`${project.title} case study`}
         className="relative block overflow-hidden rounded-xl border border-white/[0.06] bg-canvas-elevated"
       >
@@ -179,7 +179,7 @@ function ProjectCard({ project }: { project: PortfolioItem }) {
 
         <div className="mt-auto flex flex-wrap items-center gap-4 pt-6">
           <Link
-            href={`/work/${project.id}`}
+            href={`/work/${project.slug || project.id}`}
             className="group/btn inline-flex items-center gap-1.5 text-sm font-medium text-brand-textPrimary"
           >
             Read case study

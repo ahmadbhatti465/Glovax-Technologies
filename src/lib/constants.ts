@@ -60,7 +60,7 @@ export const footerLinks = {
     { label: "Contact", href: "/contact" },
   ],
   services: [
-    { label: "Web Development", href: "/services" },
+    { label: "Web Development", href: "/web-development-services" },
     { label: "Mobile Apps", href: "/services" },
     { label: "AI & Machine Learning", href: "/services" },
     { label: "Cloud & DevOps", href: "/services" },

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRedirect } from "@/lib/data";
+import { getRedirectForProxy } from "@/lib/data";
 
 export async function proxy(request: NextRequest) {
   const response = NextResponse.next();
@@ -12,7 +12,7 @@ export async function proxy(request: NextRequest) {
   }
 
   try {
-    const redirect = await getRedirect(request.nextUrl.pathname);
+    const redirect = await getRedirectForProxy(request.nextUrl.pathname);
     if (!redirect) return response;
 
     const destination = new URL(redirect.destination, request.url);
@@ -28,7 +28,7 @@ export async function proxy(request: NextRequest) {
     }
   } catch (error) {
     console.error("Failed to resolve a CMS redirect", error);
-    return NextResponse.next();
+    return response;
   }
 }
 
