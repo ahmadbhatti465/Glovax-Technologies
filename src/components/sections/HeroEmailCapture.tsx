@@ -4,10 +4,12 @@ import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { siteConfig } from "@/lib/constants";
+import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 
 export function HeroEmailCapture() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
+  const { formRef, turnstileSlot, getProtectionFields } = useSpamProtection();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -20,6 +22,8 @@ export function HeroEmailCapture() {
         body: JSON.stringify({
           email,
           message: "Hero early-access / free-estimate request",
+          source: "hero",
+          ...(await getProtectionFields()),
         }),
       });
       const data = await res.json();
@@ -42,9 +46,11 @@ export function HeroEmailCapture() {
   return (
     <div className="mx-auto w-full max-w-md">
       <form
+        ref={formRef}
         onSubmit={handleSubmit}
         className="group relative flex items-center gap-2 rounded-full border border-white/[0.08] bg-canvas-surface/80 p-1.5 pl-5 backdrop-blur-md transition-[border-color,box-shadow] duration-300 focus-within:border-accent-electricBright/60 focus-within:shadow-[0_0_0_4px_rgba(37,99,235,0.15)] hover:border-white/[0.14]"
       >
+        <HoneypotField />
         <label htmlFor="hero-email" className="sr-only">
           Work email for a free estimate
         </label>
@@ -74,9 +80,10 @@ export function HeroEmailCapture() {
           )}
         </button>
       </form>
+      {turnstileSlot}
       <p className="mt-3 text-xs text-brand-textMuted" aria-live="polite">
         {status === "done"
-          ? "Received — check your inbox shortly."
+          ? `Received — we'll reply within ${siteConfig.responseTime}.`
           : `No obligation. We reply within ${siteConfig.responseTime}.`}
       </p>
     </div>

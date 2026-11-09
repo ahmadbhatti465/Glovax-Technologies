@@ -6,23 +6,14 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MagneticButton } from "@/components/shared/MagneticButton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useState } from "react";
 import { siteConfig } from "@/lib/constants";
 import { Mail, Phone, MapPin, Loader2, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
-
-const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email"),
-  company: z.string().optional(),
-  service: z.string().min(1, "Please select a service"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
-});
-
-type ContactForm = z.infer<typeof contactSchema>;
+import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
+import { contactSchema, type ContactForm } from "@/lib/lead-schemas";
 
 const fieldClass =
   "w-full rounded-xl border border-white/[0.08] bg-canvas-base px-4 py-3 text-sm text-brand-textPrimary " +
@@ -61,6 +52,7 @@ function Field({
 
 export default function ContactContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { formRef, turnstileSlot, getProtectionFields } = useSpamProtection();
 
   const {
     register,
@@ -77,7 +69,7 @@ export default function ContactContent() {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, ...(await getProtectionFields()) }),
       });
 
       const result = await response.json();
@@ -115,10 +107,12 @@ export default function ContactContent() {
             {/* Form */}
             <div className="lg:col-span-3">
               <form
+                ref={formRef}
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
-                className="space-y-5 rounded-2xl border border-white/[0.06] bg-canvas-surface p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)] md:p-8"
+                className="relative space-y-5 rounded-2xl border border-white/[0.06] bg-canvas-surface p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)] md:p-8"
               >
+                <HoneypotField />
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                   <Field id="contact-name" label="Name" required error={errors.name?.message}>
                     <input
@@ -193,6 +187,8 @@ export default function ContactContent() {
                     className={`${fieldClass} resize-none`}
                   />
                 </Field>
+
+                {turnstileSlot}
 
                 <div className="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-xs text-brand-textMuted">

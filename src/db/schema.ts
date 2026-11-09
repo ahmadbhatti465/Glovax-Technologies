@@ -218,6 +218,19 @@ export const rateLimits = sqliteTable("rate_limits", {
   resetAt: integer("reset_at").notNull(),
 });
 
+export const leads = sqliteTable("leads", {
+  id: text("id").primaryKey(),
+  source: text("source").notNull(),
+  name: text("name"),
+  email: text("email").notNull(),
+  company: text("company"),
+  service: text("service"),
+  message: text("message"),
+  emailStatus: text("email_status").notNull().default("pending"),
+  emailError: text("email_error"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),
+});
+
 export const redirects = sqliteTable("redirects", {
   id: text("id").primaryKey(),
   source: text("source").notNull().unique(),

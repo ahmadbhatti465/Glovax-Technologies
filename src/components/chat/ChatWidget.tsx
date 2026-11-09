@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Bot, Send, X, Mail } from "lucide-react";
 import { getChatAnswer, findEmail, QUICK_REPLIES } from "@/lib/chat-concierge";
 import { siteConfig } from "@/lib/constants";
+import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 
 interface Msg {
   role: "user" | "bot";
@@ -12,6 +13,8 @@ interface Msg {
 
 // Set NEXT_PUBLIC_CHAT_ENABLED=false (and rebuild) to hide the concierge entirely.
 const ENABLED = process.env.NEXT_PUBLIC_CHAT_ENABLED !== "false";
+
+const DECLINED = /^\s*(no|nope|no thanks|not now)\b/i;
 
 const LEAD_HINT = /contact me|email me|call me|callback|get back|reach (me|out)|my email|book a call/i;
 
@@ -22,6 +25,7 @@ export function ChatWidget() {
   const [typing, setTyping] = useState(false);
   const [pendingEmail, setPendingEmail] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { formRef, turnstileSlot, getProtectionFields } = useSpamProtection();
 
   useEffect(() => {
     if (open && messages.length === 0) {
@@ -39,13 +43,14 @@ export function ChatWidget() {
 
   async function submitLead(email: string, extra: string) {
     try {
-      await fetch("/api/chat/lead", {
+      const response = await fetch("/api/chat/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, message: extra }),
+        body: JSON.stringify({ email, message: extra, source: "chat", ...(await getProtectionFields()) }),
       });
+      return response.ok;
     } catch {
-      // lead capture is best-effort; never break the chat
+      return false;
     }
   }
 
@@ -61,19 +66,23 @@ export function ChatWidget() {
     if (pendingEmail) {
       const email = pendingEmail;
       setPendingEmail(null);
-      void submitLead(email, text);
-      setTimeout(() => {
+      if (DECLINED.test(text)) {
+        setTyping(false);
+        setMessages((m) => [...m, { role: "bot", content: "No problem. Ask me anything else about our services." }]);
+        return;
+      }
+      void submitLead(email, text).then((saved) => {
         setTyping(false);
         setMessages((m) => [
           ...m,
           {
             role: "bot",
-            content:
-              "Thanks! Our team will reach out within 24 hours. Meanwhile, you can also reach us through our contact page: " +
-              `${siteConfig.url}/contact`,
+            content: saved
+              ? `Thanks! Our team will reach out within 24 hours. Meanwhile, you can also reach us through our contact page: ${siteConfig.url}/contact`
+              : `Sorry, I couldn't save your details. Please email us at ${siteConfig.email} or use our contact page: ${siteConfig.url}/contact`,
           },
         ]);
-      }, 700);
+      });
       return;
     }
 
@@ -181,16 +190,20 @@ export function ChatWidget() {
             )}
 
             {/* Input */}
+            <div className="px-4">{turnstileSlot}</div>
             <form
+              ref={formRef}
               onSubmit={(e) => {
                 e.preventDefault();
                 send(input);
               }}
-              className="px-4 py-3 border-t border-neutral-border flex gap-2"
+              className="relative px-4 py-3 border-t border-neutral-border flex gap-2"
             >
+              <HoneypotField />
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                maxLength={500}
                 placeholder="Ask about pricing, services, NDAs…"
                 className="flex-1 px-4 py-2.5 rounded-full bg-card border border-neutral-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent-electricBright/60 transition-colors"
               />

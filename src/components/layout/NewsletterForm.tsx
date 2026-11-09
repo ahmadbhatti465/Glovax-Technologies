@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 
 /** Newsletter signup — delivered to the owner inbox via the lead endpoint. */
 export function NewsletterForm() {
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
+  const { formRef, turnstileSlot, getProtectionFields } = useSpamProtection();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -17,7 +19,12 @@ export function NewsletterForm() {
       const res = await fetch("/api/chat/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, message: "Newsletter signup (footer)" }),
+        body: JSON.stringify({
+          email,
+          message: "Newsletter signup (footer)",
+          source: "newsletter",
+          ...(await getProtectionFields()),
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -35,9 +42,11 @@ export function NewsletterForm() {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
-      className="flex w-full max-w-sm items-center gap-1.5 rounded-full border border-white/[0.08] bg-canvas-surface p-1 pl-4 transition-[border-color,box-shadow] duration-300 focus-within:border-accent-electricBright/60 focus-within:shadow-[0_0_0_4px_rgba(37,99,235,0.15)]"
+      className="relative flex w-full flex-wrap max-w-sm items-center gap-1.5 rounded-full border border-white/[0.08] bg-canvas-surface p-1 pl-4 transition-[border-color,box-shadow] duration-300 focus-within:border-accent-electricBright/60 focus-within:shadow-[0_0_0_4px_rgba(37,99,235,0.15)]"
     >
+      <HoneypotField />
       <input
         type="email"
         required
@@ -57,6 +66,7 @@ export function NewsletterForm() {
       >
         {sending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ArrowRight className="h-3.5 w-3.5" />}
       </button>
+      {turnstileSlot}
     </form>
   );
 }
