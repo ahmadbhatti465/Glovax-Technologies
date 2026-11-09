@@ -13,6 +13,7 @@ import { MagneticButton } from "@/components/shared/MagneticButton";
 import { Clock, Calendar, User, ArrowLeft, Lock } from "lucide-react";
 import { normalizeCanonicalUrl } from "@/lib/utils";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
+import { isAdminPreview } from "@/lib/preview";
 
 export const revalidate = 3600; // ISR: revalidate once an hour
 export const dynamicParams = true;
@@ -38,7 +39,7 @@ export async function generateMetadata({
     return { title: "Redirecting...", robots: { index: false, follow: false } };
   }
 
-  const page = await getPageBySlug(slug, false);
+  const page = await getPageBySlug(slug, await isAdminPreview());
   if (!page) {
     return {
       title: "Page Not Found",
@@ -102,14 +103,11 @@ export async function generateMetadata({
 
 export default async function DynamicCmsPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams?: Promise<{ preview?: string }>;
 }) {
   const { slug } = await params;
-  const searchParamsObj = searchParams ? await searchParams : {};
-  const isPreview = searchParamsObj.preview === "true";
+  const isPreview = await isAdminPreview();
 
   // Check 301 Permanent Redirect first
   const redir = await getRedirect(slug);
@@ -236,7 +234,8 @@ export default async function DynamicCmsPage({
             <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 flex items-center gap-3">
               <Lock className="w-5 h-5 text-amber-400 shrink-0" />
               <div className="text-xs">
-                <strong>Admin Preview Mode:</strong> This page is currently a <strong>{page.status.toUpperCase()}</strong>. It is not publicly indexable by search engines until published.
+                <strong>Admin Preview Mode:</strong> This page is currently a <strong>{page.status.toUpperCase()}</strong>. It is not publicly indexable by search engines until published.{" "}
+                <a href="/api/admin/preview/exit" className="underline">Exit preview</a>
               </div>
             </div>
           )}

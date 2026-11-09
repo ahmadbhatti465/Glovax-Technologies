@@ -456,7 +456,7 @@ export default function PortfolioManagement() {
                           <div className="flex items-center gap-1.5 mt-0.5 text-gray-400 font-mono text-[11px] truncate">
                             <span>/work/{displaySlug}</span>
                             <a
-                              href={`/work/${displaySlug}?preview=true`}
+                              href={`/api/admin/preview?path=${encodeURIComponent(`/work/${displaySlug}`)}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-gray-500 hover:text-[#1EDAC6] transition-colors"
@@ -558,7 +558,7 @@ export default function PortfolioManagement() {
                             </Link>
 
                             <a
-                              href={`/work/${displaySlug}?preview=true`}
+                              href={`/api/admin/preview?path=${encodeURIComponent(`/work/${displaySlug}`)}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="p-1.5 rounded-md hover:bg-white/10 text-gray-300 transition-colors"

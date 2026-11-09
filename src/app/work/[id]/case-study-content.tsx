@@ -91,7 +91,8 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
             <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 flex items-center gap-3">
               <Lock className="w-5 h-5 text-amber-400 shrink-0" />
               <div className="text-xs">
-                <strong>Admin Preview Mode:</strong> This project is currently a <strong>{(project.status || "draft").toUpperCase()}</strong>. It is not indexable by search engines until published.
+                <strong>Admin Preview Mode:</strong> This project is currently a <strong>{(project.status || "draft").toUpperCase()}</strong>. It is not indexable by search engines until published.{" "}
+                <a href="/api/admin/preview/exit" className="underline">Exit preview</a>
               </div>
             </div>
           )}

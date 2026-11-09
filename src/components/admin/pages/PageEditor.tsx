@@ -302,7 +302,7 @@ export function PageEditor({ initialPage, isNew = false }: PageEditorProps) {
 
             {/* Live Preview Button */}
             <a
-              href={`/${slug || "preview"}?preview=true`}
+              href={`/api/admin/preview?path=${encodeURIComponent(`/${slug || "preview"}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 bg-card hover:bg-card-hover border border-[#1EDAC6]/20 text-gray-300 hover:text-white text-xs font-medium rounded-lg transition-colors"

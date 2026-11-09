@@ -5,6 +5,7 @@ import { enrichWithCaseStudy } from "@/data/case-studies";
 import { siteConfig, ogImage as defaultOgImage } from "@/lib/constants";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
 import { normalizeCanonicalUrl } from "@/lib/utils";
+import { isAdminPreview } from "@/lib/preview";
 import CaseStudyContent from "./case-study-content";
 
 export const revalidate = 60;
@@ -39,7 +40,7 @@ export async function generateMetadata({
     return { title: "Redirecting...", robots: { index: false, follow: false } };
   }
 
-  const rawItem = await getPortfolioItemByIdOrSlug(id, true);
+  const rawItem = await getPortfolioItemByIdOrSlug(id, await isAdminPreview());
   if (!rawItem) {
     return {
       title: "Case Study Not Found",
@@ -113,14 +114,11 @@ export async function generateMetadata({
 
 export default async function CaseStudyPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams?: Promise<{ preview?: string }>;
 }) {
   const { id } = await params;
-  const searchParamsObj = searchParams ? await searchParams : {};
-  const isPreview = searchParamsObj.preview === "true";
+  const isPreview = await isAdminPreview();
 
   // Check 301 Permanent Redirect
   const redir = await getRedirect(`/work/${id}`);

@@ -684,7 +684,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
             {/* Live Preview link */}
             {!isNew && (
               <a
-                href={`/work/${slug || id}?preview=true`}
+                href={`/api/admin/preview?path=${encodeURIComponent(`/work/${slug || id}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-card hover:bg-card-hover border border-white/10 text-gray-300 text-xs font-medium rounded-lg transition-colors"
