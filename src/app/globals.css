@@ -78,7 +78,7 @@
 
   --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -204,15 +204,21 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  text-wrap: balance;
 }
 
 h1, h2, h3, h4 {
   letter-spacing: -0.02em;
 }
 
-p {
-  text-wrap: pretty;
+/* Desktop only: these re-run line breaking for every block, which is slow on phones. */
+@media (min-width: 1024px) {
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
 }
 
 ::selection {
@@ -685,7 +691,8 @@ p {
   to { opacity: 1; }
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* Desktop only: on phones the style and layout work outweighed the effect. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
   @supports (animation-timeline: view()) {
     /* Longhands with the timeline behind a custom property: the production CSS
        minifier otherwise folds animation-timeline into the `animation`
@@ -762,8 +769,7 @@ p {
 }
 
 /* ========== SPOTLIGHT SURFACE ==========
-   Driven by --spot-x / --spot-y (px), written by <SpotlightCard> through
-   requestAnimationFrame — pointer movement never triggers a React render.
+   Pure CSS: the glow is centred on the card and fades in on hover.
    ::before = interior backlight, ::after = border glow (masked to the 1px ring). */
 .spotlight {
   position: relative;
@@ -806,8 +812,13 @@ p {
   mask-composite: exclude;
 }
 
-.spotlight[data-active="true"]::before,
-.spotlight[data-active="true"]::after,
+@media (hover: hover) {
+  .spotlight:hover::before,
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+}
+
 .spotlight:focus-within::after {
   opacity: 1;
 }
@@ -908,6 +919,10 @@ p {
   .teal-shimmer,
   .text-signal {
     animation: none;
+  }
+
+  .tech-grid {
+    display: none;
   }
 }
 

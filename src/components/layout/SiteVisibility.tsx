@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import Link from "next/link";
+import Link from "@/components/shared/Link";
 
 const HiddenHrefsContext = createContext<string[]>([]);
 

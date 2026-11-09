@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { getHiddenNavHrefs } from "@/lib/data";
 import { SiteVisibilityProvider } from "@/components/layout/SiteVisibility";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { StructuredData } from "@/components/shared/StructuredData";
@@ -14,15 +14,6 @@ const sans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
   display: "swap",
-});
-
-const mono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-  display: "swap",
-  // Mono only appears in small eyebrow labels and kbd hints — don't block
-  // the initial render on it.
-  preload: false,
 });
 
 export const viewport: Viewport = {
@@ -111,7 +102,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} dark`}>
+    <html lang="en" className={`${sans.variable} dark`}>
       <body
         className="font-body antialiased bg-background text-foreground min-h-screen"
       >

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useSyncExternalStore } from "react";
-import Link from "next/link";
+import Link from "@/components/shared/Link";
 import { usePathname } from "next/navigation";
 import { navLinks, siteConfig } from "@/lib/constants";
 import { Menu, X, ArrowUpRight, Calendar, MessageCircle, Mail, Search } from "lucide-react";

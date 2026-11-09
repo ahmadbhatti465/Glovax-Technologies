@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/shared/Link";
 import { services as fallbackServices } from "@/data/services";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { SpotlightCard } from "@/components/ui/spotlight-card";

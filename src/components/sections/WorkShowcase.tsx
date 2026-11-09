@@ -2,7 +2,7 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { ArrowUpRight, ExternalLink, Clock } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/shared/Link";
 import { PortfolioItem } from "@/types";
 import { enrichWithCaseStudy } from "@/data/case-studies";
 import { isValidExternalUrl } from "@/lib/utils";

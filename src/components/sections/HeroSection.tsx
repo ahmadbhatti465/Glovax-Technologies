@@ -1,15 +1,13 @@
-import Link from "next/link";
+import Link from "@/components/shared/Link";
 import { ArrowRight, Check } from "lucide-react";
 import { MagneticButton } from "@/components/shared/MagneticButton";
-import { HeroBacklight } from "@/components/sections/HeroBacklight";
 import { HeroEmailCapture } from "@/components/sections/HeroEmailCapture";
 
 const assurances = ["UK/US timezone overlap", "NDA on request", "24-hour response"];
 
 /**
  * Server-rendered hero. The headline and subtitle (LCP) ship as static
- * HTML with no hydration cost; only the backlight, email capture and
- * product mockup are client islands.
+ * HTML with no hydration cost; only the email capture is a client island.
  */
 export function HeroSection() {
   return (
@@ -21,7 +19,6 @@ export function HeroSection() {
         aria-hidden
         className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-accent-electricBright/50 to-transparent"
       />
-      <HeroBacklight />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 pt-36 pb-24 md:px-8 md:pt-44 md:pb-32">
         <div className="mx-auto max-w-4xl text-center">

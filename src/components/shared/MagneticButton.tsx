@@ -1,7 +1,4 @@
-"use client";
-
-import { useRef } from "react";
-import Link from "next/link";
+import Link from "@/components/shared/Link";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -36,11 +33,7 @@ const variantClasses = {
   ghost: "text-brand-textSecondary font-medium hover:text-brand-textPrimary",
 };
 
-/**
- * CTA button with a subtle magnetic pull toward the cursor.
- * The label's transform is written directly (one write per frame, no React
- * state); a CSS transition supplies the easing and the spring-back.
- */
+/** CTA button. Hover effects are CSS only, so it adds no JavaScript to the page. */
 export function MagneticButton({
   children,
   href,
@@ -52,30 +45,6 @@ export function MagneticButton({
   withArrow = false,
   disabled = false,
 }: MagneticButtonProps) {
-  const ref = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const frame = useRef(0);
-
-  const moveLabel = (x: number, y: number) => {
-    cancelAnimationFrame(frame.current);
-    frame.current = requestAnimationFrame(() => {
-      if (labelRef.current) labelRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    });
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (e.pointerType !== "mouse") return;
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    moveLabel(
-      (e.clientX - (rect.left + rect.width / 2)) * 0.12,
-      (e.clientY - (rect.top + rect.height / 2)) * 0.18
-    );
-  };
-
-  const reset = () => moveLabel(0, 0);
-
   const classes = cn(
     "group relative inline-flex items-center justify-center gap-2 rounded-full",
     "transition-[background-color,border-color,box-shadow,color] duration-200",
@@ -87,7 +56,6 @@ export function MagneticButton({
 
   const content = (
     <span
-      ref={labelRef}
       className="relative z-10 inline-flex items-center gap-2 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
     >
       {children}
@@ -106,9 +74,6 @@ export function MagneticButton({
       <Link
         href={href}
         className={classes}
-        ref={ref as React.RefObject<HTMLAnchorElement>}
-        onPointerMove={handlePointerMove}
-        onPointerLeave={reset}
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "noopener noreferrer" : undefined}
       >
@@ -124,9 +89,6 @@ export function MagneticButton({
       disabled={disabled}
       aria-busy={disabled || undefined}
       className={classes}
-      ref={ref as React.RefObject<HTMLButtonElement>}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={reset}
     >
       {content}
     </button>
