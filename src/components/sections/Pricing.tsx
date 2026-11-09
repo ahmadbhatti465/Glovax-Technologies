@@ -8,7 +8,7 @@ const tiers = [
     name: "MVP Sprint",
     tagline: "Validate your idea in weeks",
     price: "Fixed quote",
-    priceNote: "Scoped on a free call",
+    priceNote: "Scoped to your project",
     features: [
       "2–4 week delivery",
       "Design + build + deploy",
@@ -51,8 +51,8 @@ const tiers = [
 const guarantees = [
   {
     icon: CalendarCheck,
-    title: "Free scoping call",
-    description: "30 minutes, no obligation — leave with a clear plan and quote.",
+    title: "Free project scoping",
+    description: "No obligation — tell us what you need and get a clear plan and quote.",
   },
   {
     icon: ShieldCheck,
@@ -87,7 +87,7 @@ export function Pricing() {
           eyebrow="Engagements"
           title="Pricing that"
           titleHighlight="fits how you work"
-          subtitle="No hidden costs, no guesswork. Pick an engagement model — we'll scope it precisely on a free call."
+          subtitle="No hidden costs, no guesswork. Pick an engagement model — we'll scope it precisely with you."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
@@ -144,7 +144,7 @@ export function Pricing() {
                 withArrow
                 className="w-full"
               >
-                Book a Free Call
+                Start a Project
               </MagneticButton>
             </div>
           ))}
@@ -198,7 +198,7 @@ export function Pricing() {
             href="/contact"
             className="text-accent hover:text-accent-hover transition-colors underline underline-offset-4 decoration-accent/30"
           >
-            Book a 30-minute call
+            Contact us
           </Link>{" "}
           — it&apos;s free and there&apos;s no obligation.
         </p>

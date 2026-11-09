@@ -163,7 +163,7 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                   variant={hasLink || hasClientSite ? "outline" : "primary"}
                   size="lg"
                 >
-                  Book a Similar Project
+                  Start a Similar Project
                 </MagneticButton>
               </div>
             </div>
@@ -488,11 +488,11 @@ export default function CaseStudyContent({ project, related, isPreview }: CaseSt
                   Have a project like <span className="teal-shimmer">this one?</span>
                 </h2>
                 <p className="mt-4 text-muted max-w-xl mx-auto">
-                  Tell us about your product goals — we&apos;ll architect a solution on a free 30-minute consultation call.
+                  Tell us about your product goals — we&apos;ll propose a solution that fits.
                 </p>
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
                   <MagneticButton href="/contact" variant="primary" size="lg" withArrow>
-                    Book a Free Call
+                    Start a Project
                   </MagneticButton>
                   <MagneticButton href="/work" variant="outline" size="lg">
                     See All Projects

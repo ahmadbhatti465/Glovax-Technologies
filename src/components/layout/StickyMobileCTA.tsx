@@ -20,7 +20,7 @@ export function StickyMobileCTA() {
             href="/contact"
             className="flex-1 inline-flex items-center justify-center h-12 rounded-full bg-accent-electric text-white text-sm font-medium shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_0_0_1px_rgba(37,99,235,0.6)] hover:bg-accent-electricBright transition-colors"
           >
-            Book a free call
+            Start a project
           </Link>
           <a
             href={siteConfig.social.whatsapp}

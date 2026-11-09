@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: "Information we collect",
-    body: "We collect information you provide directly to us — such as your name, email address, phone number, and project details when you contact us, book a call, or subscribe to our newsletter. We also collect limited, non-identifying analytics data about how visitors use our site to improve its performance and usability.",
+    body: "We collect information you provide directly to us — such as your name, email address, phone number, and project details when you contact us or subscribe to our newsletter. We also collect limited, non-identifying analytics data about how visitors use our site to improve its performance and usability.",
   },
   {
     title: "How we use your information",

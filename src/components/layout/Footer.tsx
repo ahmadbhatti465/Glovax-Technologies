@@ -96,7 +96,7 @@ export function Footer() {
                   href="/contact"
                   className="group inline-flex items-center gap-1 font-medium text-brand-textPrimary"
                 >
-                  Book a call
+                  Start a project
                   <ArrowUpRight
                     className="h-3.5 w-3.5 text-accent-electricBright transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     aria-hidden

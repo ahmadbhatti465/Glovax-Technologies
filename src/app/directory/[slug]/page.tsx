@@ -282,7 +282,7 @@ export default async function ListingPage({
                   Start a Project
                 </MagneticButton>
                 <MagneticButton href="/contact" variant="outline" size="lg">
-                  Book a Call
+                  Contact Us
                 </MagneticButton>
               </div>
             </div>

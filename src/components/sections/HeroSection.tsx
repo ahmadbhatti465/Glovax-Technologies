@@ -53,7 +53,7 @@ export function HeroSection() {
 
           <div className="enter mt-10 flex flex-wrap items-center justify-center gap-3" style={{ ["--d" as string]: "120ms" }}>
             <MagneticButton href="/contact" variant="primary" size="lg" withArrow>
-              Book a free call
+              Start a project
             </MagneticButton>
             <MagneticButton href="/work" variant="outline" size="lg">
               See our work

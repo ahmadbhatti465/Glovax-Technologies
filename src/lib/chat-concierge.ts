@@ -12,7 +12,7 @@ export interface ChatEntry {
 
 const fmt = (tpl: string) =>
   tpl
-    .replace("{calendar}", `${siteConfig.url}/contact`)
+    .replace("{contact}", `${siteConfig.url}/contact`)
     .replace("{whatsapp}", siteConfig.social.whatsapp)
     .replace("{email}", siteConfig.email)
     .replace("{phone}", siteConfig.phone)
@@ -23,43 +23,43 @@ const CHAT_ENTRIES: ChatEntry[] = [
     id: "services-overview",
     keywords: ["services", "what do you do", "offer", "help with", "capabilities"],
     answer:
-      "We're a software house and AI/ML agency serving UK & US clients. We build: web apps & SaaS, mobile apps, AI/LLM features & RAG systems, cloud & DevOps, UI/UX design, and digital marketing. Tell me which one interests you — or book a free call: {calendar}",
+      "We're a software house and AI/ML agency serving UK & US clients. We build: web apps & SaaS, mobile apps, AI/LLM features & RAG systems, cloud & DevOps, UI/UX design, and digital marketing. Tell me which one interests you — or contact us: {contact}",
   },
   {
     id: "web",
     keywords: ["web", "website", "saas", "frontend", "next", "react", "e-commerce", "ecommerce", "shop"],
     answer:
-      "We build fast, conversion-focused web apps and SaaS with Next.js/React — e-commerce, dashboards, and custom platforms that load fast and rank well. Want a quick scope? Book a free call: {calendar}",
+      "We build fast, conversion-focused web apps and SaaS with Next.js/React — e-commerce, dashboards, and custom platforms that load fast and rank well. Want a quick scope? Get in touch: {contact}",
   },
   {
     id: "mobile",
     keywords: ["mobile", "app", "ios", "android", "react native", "play store"],
     answer:
-      "We build cross-platform iOS & Android apps (React Native) with intuitive UX that drives retention. Happy to scope yours on a free call: {calendar}",
+      "We build cross-platform iOS & Android apps (React Native) with intuitive UX that drives retention. Happy to scope yours: {contact}",
   },
   {
     id: "ai",
     keywords: ["ai", "ai services", "ai development", "ai apps", "ai app", "ml", "machine learning", "chatbot", "llm", "rag", "openai", "gpt", "assistant", "langchain", "mistral"],
     answer:
-      "Yes — AI is our specialty. We build AI chatbots & assistants, RAG systems on your own documents, and custom LLM apps (OpenAI, Mistral, LangChain). This is exactly the kind of project we love. Let's talk: {calendar}",
+      "Yes — AI is our specialty. We build AI chatbots & assistants, RAG systems on your own documents, and custom LLM apps (OpenAI, Mistral, LangChain). This is exactly the kind of project we love. Let's talk: {contact}",
   },
   {
     id: "cloud-devops",
     keywords: ["cloud", "devops", "aws", "deploy", "infrastructure", "kubernetes", "docker", "ci/cd", "hosting"],
     answer:
-      "We handle AWS architecture, CI/CD pipelines, Docker/Kubernetes, and cost & security optimization. Book a free call to discuss your setup: {calendar}",
+      "We handle AWS architecture, CI/CD pipelines, Docker/Kubernetes, and cost & security optimization. Contact us to discuss your setup: {contact}",
   },
   {
     id: "design",
     keywords: ["design", "ui", "ux", "wireframe", "prototype", "branding", "figma"],
     answer:
-      "We do research-driven UI/UX design, design systems, and WCAG-accessible interfaces. Happy to share examples — or book a call: {calendar}",
+      "We do research-driven UI/UX design, design systems, and WCAG-accessible interfaces. Happy to share examples — or contact us: {contact}",
   },
   {
     id: "pricing",
     keywords: ["cost", "price", "pricing", "how much", "quote", "budget", "expensive", "rate", "fee", "charge", "afford"],
     answer:
-      "We work in three engagement models: an MVP Sprint (fixed quote, 2–4 weeks), Product Build (custom proposal, milestone billing), and AI & Team Aug (monthly retainer). No hidden costs — we scope precisely on a free 30-minute call: {calendar}",
+      "We work in three engagement models: an MVP Sprint (fixed quote, 2–4 weeks), Product Build (custom proposal, milestone billing), and AI & Team Aug (monthly retainer). No hidden costs — we scope each project precisely: {contact}",
   },
   {
     id: "process",
@@ -101,7 +101,7 @@ const CHAT_ENTRIES: ChatEntry[] = [
     id: "timeline",
     keywords: ["timeline", "how long", "long does", "weeks", "months", "deadline", "when will", "estimate time"],
     answer:
-      "An MVP can ship in 2–4 weeks. A full SaaS or web product typically takes 8–16 weeks depending on scope and integrations. You'll get a precise timeline in the proposal after a free scoping call: {calendar}",
+      "An MVP can ship in 2–4 weeks. A full SaaS or web product typically takes 8–16 weeks depending on scope and integrations. You'll get a precise timeline in the proposal after we scope your project: {contact}",
   },
   {
     id: "support",
@@ -113,13 +113,13 @@ const CHAT_ENTRIES: ChatEntry[] = [
     id: "booking",
     keywords: ["book", "call", "meeting", "schedule", "appointment", "talk", "discuss", "consult", "call with"],
     answer:
-      "You can book a free 30-minute call right here: {calendar}. Or message us on WhatsApp: {whatsapp} — we reply within 24 hours.",
+      "We don't have online booking, but send us your project details here and we'll arrange a time: {contact}. Or message us on WhatsApp: {whatsapp} — we reply within 24 hours.",
   },
   {
     id: "contact",
     keywords: ["contact", "email", "phone", "reach", "get in touch", "number", "whatsapp"],
     answer:
-      "You can reach us at {email}, call/text {phone}, or chat on WhatsApp: {whatsapp}. Prefer to talk? Book a free call: {calendar}",
+      "You can reach us at {email}, call/text {phone}, or chat on WhatsApp: {whatsapp}. Prefer a form? Contact us here: {contact}",
   },
   {
     id: "team",
@@ -143,7 +143,7 @@ const CHAT_ENTRIES: ChatEntry[] = [
     id: "trust",
     keywords: ["trust", "secure", "security", "safe", "reliable", "scam", "legit", "fraud", "worried", "risk"],
     answer:
-      "Fair question! We protect clients with: NDAs on request, 100% IP ownership, private repos & secure code handling, milestone payments (escrow via Upwork available), and a 24-hour response promise. Book a free call and judge for yourself: {calendar}",
+      "Fair question! We protect clients with: NDAs on request, 100% IP ownership, private repos & secure code handling, milestone payments (escrow via Upwork available), and a 24-hour response promise. Contact us and judge for yourself: {contact}",
   },
   {
     id: "careers",
@@ -202,14 +202,14 @@ export function getChatAnswer(raw: string): { text: string; id: string } {
 }
 
 const greetingAnswer =
-  "Hi there! 👋 Welcome to Glovax Technologies. I can answer questions about our services, pricing, process, NDAs, and more — or book you a free 30-minute call. What would you like to know?";
+  "Hi there! 👋 Welcome to Glovax Technologies. I can answer questions about our services, pricing, process, NDAs, and more — or help you get in touch with our team. What would you like to know?";
 
 const fallbackAnswer =
-  "I'm not sure I caught that. I can help with: pricing & costs, services, the process, NDAs & IP, payments, and booking a free call. Try one of the quick options below, email us directly at {email}, or book a call: {calendar}";
+  "I'm not sure I caught that. I can help with: pricing & costs, services, the process, NDAs & IP, payments, and how to contact us. Try one of the quick options below, email us directly at {email}, or contact us: {contact}";
 
 export const QUICK_REPLIES = [
   { label: "Pricing", message: "How much does a project cost?" },
-  { label: "Book a call", message: "I'd like to book a free call" },
+  { label: "Contact us", message: "How can I contact you?" },
   { label: "Email & Contact", message: "How can I contact or email you?" },
   { label: "NDAs", message: "Will you sign an NDA?" },
   { label: "Your process", message: "How do you work?" },

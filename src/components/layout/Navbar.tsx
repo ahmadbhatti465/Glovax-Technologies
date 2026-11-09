@@ -165,7 +165,7 @@ export function Navbar() {
                   href="/contact"
                   className="group inline-flex h-9 items-center gap-1.5 rounded-full bg-accent-electric pl-4 pr-3 text-sm font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_0_0_1px_rgba(37,99,235,0.6),0_6px_20px_-6px_rgba(37,99,235,0.7)] transition-colors duration-200 hover:bg-accent-electricBright"
                 >
-                  Book a call
+                  Start a project
                   <ArrowUpRight
                     className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     aria-hidden
@@ -274,7 +274,7 @@ export function Navbar() {
                   className="flex w-full items-center justify-center gap-2 rounded-full bg-accent-electric px-6 py-3.5 text-base font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_0_0_1px_rgba(37,99,235,0.6)]"
                 >
                   <Calendar className="h-4 w-4" />
-                  Book a call
+                  Start a project
                 </Link>
                 <a
                   href={siteConfig.social.whatsapp}
