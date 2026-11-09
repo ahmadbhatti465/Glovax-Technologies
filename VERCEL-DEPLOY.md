@@ -102,6 +102,10 @@ Add these in **Settings > Environment Variables**:
 | `CLOUDINARY_API_KEY` | Your Cloudinary API key | Optional |
 | `CLOUDINARY_API_SECRET` | Your Cloudinary API secret | Optional |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob store token | Optional (Alternative to Cloudinary) |
+| `RESEND_FROM` | `Glovax Technologies <hello@glovaxtechnologies.com>` (domain must be verified in Resend) | Recommended |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key | Recommended (set both Turnstile keys together) |
+| `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret key | Recommended |
+| `NEXT_PUBLIC_SENTRY_DSN` | Sentry project DSN | Optional (Sentry stays off without it) |
 
 > **Note on Image Uploads:** In online environments like Vercel (serverless `/var/task`), the file system is read-only. We support:
 > 1. **Cloudinary (Recommended, Free 25GB)**: Just add `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` to Vercel Environment Variables.
