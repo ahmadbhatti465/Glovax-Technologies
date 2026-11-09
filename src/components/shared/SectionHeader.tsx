@@ -56,10 +56,10 @@ export function SectionHeader({
 
   const classes = cn("flex flex-col max-w-3xl mb-12 md:mb-16", alignClasses[align], className);
 
-  // Page titles are the LCP element: render them visible immediately with a
-  // CSS-only entrance instead of waiting for hydration + an in-view trigger.
+  // Page titles are the LCP element, and text at opacity 0 does not count toward
+  // it, so they render fully visible with no entrance animation.
   if (isPageTitle) {
-    return <div className={cn("enter", classes)}>{content}</div>;
+    return <div className={classes}>{content}</div>;
   }
 
   return (

@@ -48,7 +48,7 @@ export default function DirectoryContent({
           <div className="absolute inset-0 grid-pattern z-[1]" />
           <div className="absolute inset-0 gradient-brand opacity-30 z-0" />
           <div
-            className="absolute -top-1/4 -left-1/4 w-[700px] h-[700px] rounded-full opacity-20 pointer-events-none"
+            className="absolute -top-40 -left-1/4 w-[700px] h-[700px] rounded-full opacity-20 pointer-events-none"
             style={{
               background:
                 "radial-gradient(circle, color-mix(in srgb, var(--teal) 15%, transparent) 0%, transparent 70%)",

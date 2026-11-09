@@ -107,7 +107,7 @@
   /* Typography */
   --brand-text-primary:   #f4f4f5;
   --brand-text-secondary: #a1a1aa;
-  --brand-text-muted:     #52525b;
+  --brand-text-muted:     #85858f;
 
   /* Accents */
   --accent-electric:        #2563eb;
@@ -536,15 +536,6 @@ p {
 /* ========== PAGE ENTER (template transition) ========== */
 /* Opacity-only: a transform here would create a containing block and break
    position:fixed chrome (Navbar/BackToTop) inside the template wrapper. */
-@keyframes page-enter {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.page-enter {
-  animation: page-enter 0.45s ease-out both;
-}
-
 /* ========== CURSOR GLOW ========== */
 .cursor-glow {
   position: fixed;
@@ -909,6 +900,28 @@ p {
   transform: translateY(0);
 }
 
+/* ========== RENDERING ========== */
+/* Lower homepage sections skip layout and paint until they near the viewport. */
+/* The shimmer animates background-position, which repaints every frame. It sits on
+   the largest text on the page, so phones don't run it. */
+@media (max-width: 1023px) {
+  .teal-shimmer,
+  .text-signal {
+    animation: none;
+  }
+}
+
+/* Estimated heights would throw off a jump to #pricing, so those render fully; see render-all-sections.ts. */
+.defer-sections > section:nth-of-type(n + 2) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+.defer-sections:has(#pricing:target) > section,
+[data-render-all] .defer-sections > section {
+  content-visibility: visible;
+}
+
 /* ========== REDUCED MOTION ========== */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -928,7 +941,6 @@ p {
   .teal-border-glow { animation: none; }
   .pulse-glow { animation: none; }
   .float-y, .float-y-delay { animation: none; }
-  .page-enter { animation: none; }
   .scroll-progress { display: none; }
   .timeline-progress { animation: none; transform: none; }
   .cursor-glow { display: none; }

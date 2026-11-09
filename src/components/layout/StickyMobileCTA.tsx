@@ -12,7 +12,7 @@ export function StickyMobileCTA() {
     >
       <div aria-hidden className="hairline-lit absolute inset-x-0 top-0" />
       <div
-        className="bg-canvas-base/80 backdrop-blur-xl border-t border-white/[0.06]"
+        className="bg-canvas-base/95 border-t border-white/[0.06]"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="flex items-center gap-3 px-4 pt-3 pb-3">
