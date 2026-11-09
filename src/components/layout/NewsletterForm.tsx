@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { notify } from "@/lib/notify";
+import { trackEvent } from "@/lib/analytics";
 import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 
 /** Newsletter signup — delivered to the owner inbox via the lead endpoint. */
@@ -29,6 +30,7 @@ export function NewsletterForm() {
       const data = await res.json();
       if (data.success) {
         void notify("success", "You're subscribed. Talk soon.");
+        trackEvent("generate_lead", { form: "newsletter" });
         setEmail("");
       } else {
         void notify("error", data.message || "Something went wrong. Please try again.");

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Bot, Send, X, Mail } from "lucide-react";
 import { getChatAnswer, findEmail, QUICK_REPLIES } from "@/lib/chat-concierge";
 import { siteConfig } from "@/lib/constants";
+import { trackEvent } from "@/lib/analytics";
 import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 
 interface Msg {
@@ -28,18 +29,17 @@ export function ChatWidget() {
   const { formRef, turnstileSlot, getProtectionFields } = useSpamProtection();
 
   useEffect(() => {
-    if (open && messages.length === 0) {
-      const greet = getChatAnswer("hi");
-      setMessages([{ role: "bot", content: greet.text }]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
-
-  useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
 
   if (!ENABLED) return null;
+
+  function toggleOpen() {
+    if (!open && messages.length === 0) {
+      setMessages([{ role: "bot", content: getChatAnswer("hi").text }]);
+    }
+    setOpen(!open);
+  }
 
   async function submitLead(email: string, extra: string) {
     try {
@@ -48,6 +48,7 @@ export function ChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, message: extra, source: "chat", ...(await getProtectionFields()) }),
       });
+      if (response.ok) trackEvent("generate_lead", { form: "chat" });
       return response.ok;
     } catch {
       return false;
@@ -112,7 +113,7 @@ export function ChatWidget() {
       {/* Launcher */}
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={toggleOpen}
         style={{ ["--d" as string]: "1200ms" }}
         className="pop-in fixed bottom-24 lg:bottom-6 left-6 z-40 w-14 h-14 rounded-full bg-gradient-to-r from-teal-deep to-teal text-accent-foreground flex items-center justify-center shadow-[0_0_25px_var(--teal-muted)] hover:brightness-110 transition-all"
         aria-label={open ? "Close chat" : "Open chat with the Glovax concierge"}

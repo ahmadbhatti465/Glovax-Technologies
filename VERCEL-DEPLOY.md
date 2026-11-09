@@ -106,6 +106,8 @@ Add these in **Settings > Environment Variables**:
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key | Recommended (set both Turnstile keys together) |
 | `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret key | Recommended |
 | `NEXT_PUBLIC_SENTRY_DSN` | Sentry project DSN | Optional (Sentry stays off without it) |
+| `NEXT_PUBLIC_GA_ID` | Google Analytics 4 measurement ID (`G-...`) | Optional (no analytics load without it) |
+| `NEXT_PUBLIC_GSC_VERIFICATION` | Google Search Console verification code | Optional |
 
 > **Note on Image Uploads:** In online environments like Vercel (serverless `/var/task`), the file system is read-only. We support:
 > 1. **Cloudinary (Recommended, Free 25GB)**: Just add `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` to Vercel Environment Variables.

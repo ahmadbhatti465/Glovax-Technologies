@@ -13,6 +13,7 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
 import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 import type { ContactForm } from "@/lib/lead-schemas";
+import { trackEvent } from "@/lib/analytics";
 
 const fieldClass =
   "w-full rounded-xl border border-white/[0.08] bg-canvas-base px-4 py-3 text-sm text-brand-textPrimary " +
@@ -84,6 +85,7 @@ export default function ContactContent() {
 
       if (response.ok && result.success) {
         toast.success(result.message || `Message sent! We'll get back to you within ${siteConfig.responseTime}.`);
+        trackEvent("generate_lead", { form: "contact" });
         reset();
       } else {
         toast.error(result.message || "Something went wrong. Please try again.");

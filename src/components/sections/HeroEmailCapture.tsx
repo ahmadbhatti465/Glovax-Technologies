@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { notify } from "@/lib/notify";
+import { trackEvent } from "@/lib/analytics";
 import { siteConfig } from "@/lib/constants";
 import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 
@@ -29,6 +30,7 @@ export function HeroEmailCapture() {
       const data = await res.json();
       if (data.success) {
         void notify("success", "Thanks! We'll be in touch within 24 hours.");
+        trackEvent("generate_lead", { form: "homepage" });
         setEmail("");
         setStatus("done");
       } else {

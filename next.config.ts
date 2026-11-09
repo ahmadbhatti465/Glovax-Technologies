@@ -6,6 +6,11 @@ const isDev = process.env.NODE_ENV === "development";
 const TURNSTILE_ORIGIN = "https://challenges.cloudflare.com";
 
 // Errors are sent to the host in the DSN, so the CSP has to allow exactly that host.
+const ANALYTICS_SCRIPT = process.env.NEXT_PUBLIC_GA_ID ? " https://www.googletagmanager.com" : "";
+const ANALYTICS_CONNECT = process.env.NEXT_PUBLIC_GA_ID
+  ? " https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com"
+  : "";
+
 function getSentryOrigin() {
   try {
     return process.env.NEXT_PUBLIC_SENTRY_DSN ? new URL(process.env.NEXT_PUBLIC_SENTRY_DSN).origin : "";
@@ -19,11 +24,11 @@ function getSentryOrigin() {
 // nonces, would force every page to render dynamically and lose ISR caching.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${TURNSTILE_ORIGIN}${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' ${TURNSTILE_ORIGIN}${ANALYTICS_SCRIPT}${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  `connect-src 'self' ${getSentryOrigin()}${isDev ? " ws:" : ""}`.trimEnd(),
+  `connect-src 'self' ${getSentryOrigin()}${ANALYTICS_CONNECT}${isDev ? " ws:" : ""}`.trimEnd(),
   "media-src 'self' https://res.cloudinary.com",
   `frame-src ${TURNSTILE_ORIGIN}`,
   "object-src 'none'",
