@@ -8,7 +8,7 @@ import { Menu, X, ArrowUpRight, Calendar, MessageCircle, Mail, Search } from "lu
 import Image from "next/image";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
 import { DeferredWidgets } from "@/components/layout/DeferredWidgets";
-import { Analytics } from "@/components/layout/Analytics";
+import { CookieConsent } from "@/components/layout/CookieConsent";
 import { renderAllSections } from "@/lib/render-all-sections";
 import { openCommandMenu } from "@/components/layout/command-menu-events";
 import { cn } from "@/lib/utils";
@@ -314,7 +314,7 @@ export function Navbar() {
               </div>
       </div>
 
-      <Analytics />
+      <CookieConsent />
 
       <DeferredWidgets />
       {/* Site-wide conversion CTAs (mobile bar + AI concierge) */}

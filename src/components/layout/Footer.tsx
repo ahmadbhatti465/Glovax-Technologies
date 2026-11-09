@@ -5,6 +5,7 @@ import { Linkedin, Instagram, Mail, Phone, MapPin, ArrowUpRight } from "lucide-r
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { NewsletterForm } from "@/components/layout/NewsletterForm";
 import { FooterLinkList } from "@/components/layout/SiteVisibility";
+import { CookieSettingsButton } from "@/components/layout/CookieConsent";
 
 const socials = [
   { label: "LinkedIn", href: siteConfig.social.linkedin, icon: Linkedin },
@@ -109,6 +110,7 @@ export function Footer() {
             <Link href="/terms" className="text-xs text-brand-textMuted transition-colors hover:text-brand-textSecondary">
               Terms
             </Link>
+            <CookieSettingsButton />
             <span aria-hidden className="h-3 w-px bg-white/[0.08]" />
             <div className="flex items-center gap-1">
               {socials.map(({ label, href, icon: Icon }) => (
