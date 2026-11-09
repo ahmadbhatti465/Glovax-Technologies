@@ -7,7 +7,6 @@ import {
   ArrowRight,
   BookOpen,
   Briefcase,
-  Calendar,
   Copy,
   CornerDownLeft,
   FileText,
@@ -53,7 +52,6 @@ const commands: Command[] = [
     keywords: s.features.join(" "),
     run: go("/services"),
   })),
-  { id: "book", label: "Book a free call", group: "Contact", icon: Calendar, keywords: "meeting calendly", run: open(siteConfig.calendarUrl) },
   { id: "contact", label: "Contact form", group: "Contact", icon: Mail, run: go("/contact") },
   { id: "whatsapp", label: "Chat on WhatsApp", group: "Contact", icon: MessageCircle, run: open(siteConfig.social.whatsapp) },
   {

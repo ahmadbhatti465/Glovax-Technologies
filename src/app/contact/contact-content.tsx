@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 import { siteConfig } from "@/lib/constants";
-import { Mail, Phone, MapPin, Calendar, ArrowUpRight, Loader2, ChevronDown } from "lucide-react";
+import { Mail, Phone, MapPin, Loader2, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
@@ -209,37 +209,6 @@ export default function ContactContent() {
             {/* Contact Info Sidebar */}
             <div className="lg:col-span-2">
               <div className="space-y-8">
-                {/* Book a Call */}
-                <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] p-6 bg-surface-raised">
-                  <div
-                    className="absolute inset-0 pointer-events-none opacity-60"
-                    style={{
-                      background:
-                        "radial-gradient(circle at top right, var(--teal-glow), transparent 60%)",
-                    }}
-                  />
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-2 text-xs font-mono font-semibold text-accent uppercase tracking-wider mb-3">
-                      <Calendar className="w-4 h-4" />
-                      Prefer to talk?
-                    </div>
-                    <h2 className="text-lg font-semibold text-foreground mb-1.5">
-                      Book a Call
-                    </h2>
-                    <p className="text-sm text-muted mb-5 leading-relaxed">
-                      Skip the back-and-forth. Grab a 30-minute slot on our
-                      calendar and let&apos;s discuss your project live.
-                    </p>
-                    <a
-                      href="#book"
-                      className="inline-flex items-center gap-2 w-full justify-center px-5 py-3 rounded-full gradient-cta text-accent-foreground font-semibold text-sm shadow-glow hover:shadow-glow-strong hover:brightness-110 transition-all"
-                    >
-                      Schedule Now
-                      <ArrowUpRight className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-
                 <div>
                   <h3 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                     Contact Info
@@ -281,27 +250,6 @@ export default function ContactContent() {
                     business days.
                   </p>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Calendly inline booking embed */}
-          <div id="book" className="mt-16 md:mt-24">
-            <div className="max-w-4xl">
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
-                Prefer to book a slot <span className="teal-shimmer">right away?</span>
-              </h2>
-              <p className="text-muted text-base mb-8">
-                Skip the form — grab a 30-minute slot on our calendar directly. We reply within{" "}
-                {siteConfig.responseTime} on every inquiry.
-              </p>
-              <div className="rounded-2xl border border-neutral-border bg-surface-raised overflow-hidden">
-                <iframe
-                  src={`https://calendly.com/${siteConfig.calendarUrl.replace("https://calendly.com/", "")}?theme=dark&hide_gdpr_banner=1&primary_color=D4AF37`}
-                  title="Schedule a call with Glovax Technologies"
-                  loading="lazy"
-                  className="w-full h-[680px] lg:h-[750px] block"
-                />
               </div>
             </div>
           </div>

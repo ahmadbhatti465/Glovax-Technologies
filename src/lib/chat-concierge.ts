@@ -111,7 +111,7 @@ const CHAT_ENTRIES: ChatEntry[] = [
   },
   {
     id: "booking",
-    keywords: ["book", "call", "meeting", "schedule", "calendly", "appointment", "talk", "discuss", "consult", "call with"],
+    keywords: ["book", "call", "meeting", "schedule", "appointment", "talk", "discuss", "consult", "call with"],
     answer:
       "You can book a free 30-minute call right here: {calendar}. Or message us on WhatsApp: {whatsapp} — we reply within 24 hours.",
   },

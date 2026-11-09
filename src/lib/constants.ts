@@ -9,7 +9,6 @@ export const siteConfig = {
   email: "info@glovaxtechnologies.com",
   phone: "+923254255480",
   address: "31 K, DHA Phase 5",
-  calendarUrl: "https://calendly.com/glovaxtechnologies/30min",
   responseTime: "24 hours",
   founder: {
     name: "Muhammad Ahmad",

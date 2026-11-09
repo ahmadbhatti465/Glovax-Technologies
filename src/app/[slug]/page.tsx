@@ -335,9 +335,6 @@ export default async function DynamicCmsPage({
               <MagneticButton href="/contact" variant="primary" size="lg">
                 Start a Project
               </MagneticButton>
-              <MagneticButton href={siteConfig.calendarUrl} variant="outline" size="lg">
-                Book a Consultation
-              </MagneticButton>
             </div>
           </div>
         </div>
