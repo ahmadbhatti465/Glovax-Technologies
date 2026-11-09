@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { MagneticButton } from "@/components/shared/MagneticButton";
-import { HeroDashboardMockup } from "@/components/sections/HeroDashboardMockup";
 import { HeroBacklight } from "@/components/sections/HeroBacklight";
 import { HeroEmailCapture } from "@/components/sections/HeroEmailCapture";
 

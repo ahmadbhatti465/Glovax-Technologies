@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { HONEYPOT_FIELD } from "@/lib/lead-schemas";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 
 interface TurnstileApi {
   render(container: HTMLElement, options: Record<string, unknown>): string;

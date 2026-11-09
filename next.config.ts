@@ -50,6 +50,7 @@ const nextConfig: NextConfig = {
 
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       { protocol: 'https', hostname: 'res.cloudinary.com', pathname: '/ds0fbflvi/**' },
       { protocol: 'https', hostname: '*.public.blob.vercel-storage.com' },

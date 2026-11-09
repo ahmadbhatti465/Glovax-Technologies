@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { notify } from "@/lib/notify";
 import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 
 /** Newsletter signup — delivered to the owner inbox via the lead endpoint. */
@@ -28,13 +28,13 @@ export function NewsletterForm() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success("You're subscribed. Talk soon.");
+        void notify("success", "You're subscribed. Talk soon.");
         setEmail("");
       } else {
-        toast.error(data.message || "Something went wrong. Please try again.");
+        void notify("error", data.message || "Something went wrong. Please try again.");
       }
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      void notify("error", "Something went wrong. Please try again.");
     } finally {
       setSending(false);
     }

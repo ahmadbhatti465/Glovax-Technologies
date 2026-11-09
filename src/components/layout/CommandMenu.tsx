@@ -24,6 +24,8 @@ import { services } from "@/data/services";
 import { siteConfig } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useHiddenHrefs } from "@/components/layout/SiteVisibility";
+import { renderAllSections } from "@/lib/render-all-sections";
+import { clearOpenRequest, OPEN_COMMAND_MENU_EVENT, wasOpenRequested } from "@/components/layout/command-menu-events";
 
 type Command = {
   id: string;
@@ -42,7 +44,7 @@ const commands: Command[] = [
   { id: "home", label: "Home", group: "Pages", icon: Home, run: go("/") },
   { id: "services", label: "Services", group: "Pages", icon: Layers, run: go("/services") },
   { id: "work", label: "Work & case studies", group: "Pages", icon: Briefcase, keywords: "portfolio projects", run: go("/work") },
-  { id: "pricing", label: "Pricing", group: "Pages", icon: Tag, keywords: "cost plans", run: go("/#pricing") },
+  { id: "pricing", label: "Pricing", group: "Pages", icon: Tag, keywords: "cost plans", run: (router) => { renderAllSections(); router.push("/#pricing"); } },
   { id: "about", label: "About", group: "Pages", icon: Users, keywords: "team company", run: go("/about") },
   { id: "blog", label: "Blog", group: "Pages", icon: BookOpen, keywords: "articles insights", href: "/blog", run: go("/blog") },
   { id: "career", label: "Careers", group: "Pages", icon: FileText, keywords: "jobs hiring", href: "/career", run: go("/career") },
@@ -90,17 +92,10 @@ function scoreCommand(cmd: Command, tokens: string[]): number {
   return score;
 }
 
-const OPEN_EVENT = "glovax:command-menu";
-
-/** Open the command menu from anywhere (e.g. a navbar button). */
-export function openCommandMenu() {
-  window.dispatchEvent(new Event(OPEN_EVENT));
-}
-
 export function CommandMenu() {
   const router = useRouter();
   const hiddenHrefs = useHiddenHrefs();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(wasOpenRequested);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -126,12 +121,16 @@ export function CommandMenu() {
         toggle();
       }
     };
-    const onOpen = () => toggle(true);
+    clearOpenRequest();
+    const onOpen = () => {
+      clearOpenRequest();
+      toggle(true);
+    };
     window.addEventListener("keydown", onKey);
-    window.addEventListener(OPEN_EVENT, onOpen);
+    window.addEventListener(OPEN_COMMAND_MENU_EVENT, onOpen);
     return () => {
       window.removeEventListener("keydown", onKey);
-      window.removeEventListener(OPEN_EVENT, onOpen);
+      window.removeEventListener(OPEN_COMMAND_MENU_EVENT, onOpen);
     };
   }, [toggle]);
 

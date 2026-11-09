@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
+
+export { HONEYPOT_FIELD };
 
 // Shared by the browser forms and the API routes, so both enforce the same rules.
 
@@ -14,10 +17,6 @@ export const SERVICE_LABELS = {
 
 type ServiceKey = keyof typeof SERVICE_LABELS;
 const SERVICE_KEYS = Object.keys(SERVICE_LABELS) as [ServiceKey, ...ServiceKey[]];
-
-// A deliberately dull name: browsers autofill fields called "website" or "url",
-// which would silently discard real visitors as bots.
-export const HONEYPOT_FIELD = "reference_code";
 
 const SINGLE_LINE = /^[^\r\n]*$/;
 const email = z.string().trim().email("Please enter a valid email").max(254, "Email is too long");

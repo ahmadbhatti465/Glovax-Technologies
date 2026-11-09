@@ -4,8 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MagneticButton } from "@/components/shared/MagneticButton";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, type Resolver } from "react-hook-form";
 import { useState } from "react";
 import { siteConfig } from "@/lib/constants";
 import { Mail, Phone, MapPin, Loader2, ChevronDown } from "lucide-react";
@@ -13,7 +12,7 @@ import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
 import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
-import { contactSchema, type ContactForm } from "@/lib/lead-schemas";
+import type { ContactForm } from "@/lib/lead-schemas";
 
 const fieldClass =
   "w-full rounded-xl border border-white/[0.08] bg-canvas-base px-4 py-3 text-sm text-brand-textPrimary " +
@@ -50,6 +49,15 @@ function Field({
   );
 }
 
+// The validation library is large, so it loads only when the form is submitted.
+const lazyResolver: Resolver<ContactForm> = async (values, context, options) => {
+  const [{ zodResolver }, { contactSchema }] = await Promise.all([
+    import("@hookform/resolvers/zod"),
+    import("@/lib/lead-schemas"),
+  ]);
+  return zodResolver(contactSchema)(values, context, options);
+};
+
 export default function ContactContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { formRef, turnstileSlot, getProtectionFields } = useSpamProtection();
@@ -60,7 +68,7 @@ export default function ContactContent() {
     formState: { errors },
     reset,
   } = useForm<ContactForm>({
-    resolver: zodResolver(contactSchema),
+    resolver: lazyResolver,
   });
 
   const onSubmit = async (data: ContactForm) => {

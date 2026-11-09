@@ -4,7 +4,6 @@ import { SiteVisibilityProvider } from "@/components/layout/SiteVisibility";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig, ogImage } from "@/lib/constants";
-import { Toaster } from "sonner";
 import { StructuredData } from "@/components/shared/StructuredData";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { BackToTop } from "@/components/layout/BackToTop";
@@ -127,16 +126,6 @@ export default async function RootLayout({
           {children}
         </SiteVisibilityProvider>
         <BackToTop />
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              background: "var(--surface-raised)",
-              color: "var(--foreground)",
-              border: "1px solid var(--hairline-strong)",
-            },
-          }}
-        />
       </body>
     </html>
   );

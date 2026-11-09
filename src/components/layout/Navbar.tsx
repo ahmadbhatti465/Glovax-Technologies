@@ -7,8 +7,9 @@ import { navLinks, siteConfig } from "@/lib/constants";
 import { Menu, X, ArrowUpRight, Calendar, MessageCircle, Mail, Search } from "lucide-react";
 import Image from "next/image";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
-import { ChatWidget } from "@/components/chat/ChatWidget";
-import { CommandMenu, openCommandMenu } from "@/components/layout/CommandMenu";
+import { DeferredWidgets } from "@/components/layout/DeferredWidgets";
+import { renderAllSections } from "@/lib/render-all-sections";
+import { openCommandMenu } from "@/components/layout/command-menu-events";
 import { cn } from "@/lib/utils";
 import { useHiddenHrefs } from "@/components/layout/SiteVisibility";
 
@@ -32,7 +33,10 @@ function NavLink({
   return (
     <Link
       href={link.href}
-      onClick={onNavigate}
+      onClick={() => {
+        if (getHashId(link.href)) renderAllSections();
+        onNavigate();
+      }}
       aria-current={active ? "page" : undefined}
       className={cn(
         "relative rounded-full px-3.5 py-1.5 text-sm transition-colors duration-200",
@@ -142,7 +146,7 @@ export function Navbar() {
                   alt="Glovax Technologies"
                   width={161}
                   height={49}
-                  priority
+                  loading="eager"
                   className="h-8 w-auto"
                 />
               </Link>
@@ -261,7 +265,10 @@ export function Navbar() {
                       >
                         <Link
                           href={link.href}
-                          onClick={closeMobile}
+                          onClick={() => {
+                            if (getHashId(link.href)) renderAllSections();
+                            closeMobile();
+                          }}
                           aria-current={active ? "page" : undefined}
                           className={cn(
                             "block py-2.5 text-2xl font-medium tracking-tight transition-colors",
@@ -306,10 +313,9 @@ export function Navbar() {
               </div>
       </div>
 
-      <CommandMenu />
+      <DeferredWidgets />
       {/* Site-wide conversion CTAs (mobile bar + AI concierge) */}
       <StickyMobileCTA />
-      <ChatWidget />
     </>
   );
 }

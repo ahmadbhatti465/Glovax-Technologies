@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { notify } from "@/lib/notify";
 import { siteConfig } from "@/lib/constants";
 import { HoneypotField, useSpamProtection } from "@/components/shared/SpamProtection";
 
@@ -28,15 +28,15 @@ export function HeroEmailCapture() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success("Thanks! We'll be in touch within 24 hours.");
+        void notify("success", "Thanks! We'll be in touch within 24 hours.");
         setEmail("");
         setStatus("done");
       } else {
-        toast.error(data.message || "Something went wrong. Please try again.");
+        void notify("error", data.message || "Something went wrong. Please try again.");
         setStatus("idle");
       }
     } catch {
-      toast.error("Something went wrong. Please try again.");
+      void notify("error", "Something went wrong. Please try again.");
       setStatus("idle");
     }
   }
@@ -48,7 +48,7 @@ export function HeroEmailCapture() {
       <form
         ref={formRef}
         onSubmit={handleSubmit}
-        className="group relative flex items-center gap-2 rounded-full border border-white/[0.08] bg-canvas-surface/80 p-1.5 pl-5 backdrop-blur-md transition-[border-color,box-shadow] duration-300 focus-within:border-accent-electricBright/60 focus-within:shadow-[0_0_0_4px_rgba(37,99,235,0.15)] hover:border-white/[0.14]"
+        className="group relative flex items-center gap-2 rounded-full border border-white/[0.08] bg-canvas-surface p-1.5 pl-5 transition-[border-color,box-shadow] duration-300 focus-within:border-accent-electricBright/60 focus-within:shadow-[0_0_0_4px_rgba(37,99,235,0.15)] hover:border-white/[0.14]"
       >
         <HoneypotField />
         <label htmlFor="hero-email" className="sr-only">
