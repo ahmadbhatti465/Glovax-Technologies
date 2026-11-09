@@ -236,15 +236,6 @@ function AboutContentInner({
                     >
                       GitHub Projects &rarr;
                     </a>
-                    <span className="text-border">·</span>
-                    <a
-                      href="https://www.upwork.com/freelancers/ahmadbhatti465"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-accent font-medium hover:underline"
-                    >
-                      Upwork Top Rated &rarr;
-                    </a>
                   </div>
                 </div>
               </div>
