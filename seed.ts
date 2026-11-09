@@ -2,6 +2,9 @@ import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./src/db/schema";
 import { businesses as seedBusinesses } from "./src/data/businesses";
+import { assertSeedAllowed } from "./src/lib/seed-guard";
+
+assertSeedAllowed(process.env);
 
 const url = process.env.DATABASE_URL || "file:./sqlite.db";
 const isTurso = url.startsWith("libsql://") || url.startsWith("https://");
