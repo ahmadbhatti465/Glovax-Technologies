@@ -15,6 +15,7 @@ import { FAQItem } from "@/types";
 import { toBlogTaxonomySlug } from "@/lib/blog-taxonomy";
 import { normalizeCanonicalUrl, toIsoDate } from "@/lib/utils";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
+import { ArticleBody } from "@/components/blog/ArticleBody";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -113,181 +114,6 @@ function extractFaqsFromMarkdown(content: string): FAQItem[] {
   });
 }
 
-function renderMarkdown(content: string) {
-  const lines = content.split("\n");
-  const blocks: React.ReactNode[] = [];
-  let i = 0;
-  let key = 0;
-
-  while (i < lines.length) {
-    const line = lines[i];
-
-    if (line.startsWith("## ")) {
-      blocks.push(
-        <h2 key={key++} className="text-2xl font-semibold mt-10 mb-4 text-foreground">
-          {line.slice(3)}
-        </h2>
-      );
-      i++;
-      continue;
-    }
-
-    if (line.startsWith("### ")) {
-      blocks.push(
-        <h3 key={key++} className="text-xl font-semibold mt-6 mb-3 text-foreground">
-          {line.slice(4)}
-        </h3>
-      );
-      i++;
-      continue;
-    }
-
-    if (line.startsWith("- ")) {
-      const items: React.ReactNode[] = [];
-      while (i < lines.length && lines[i].startsWith("- ")) {
-        items.push(
-          <li key={items.length} className="ml-6 list-disc text-foreground/90 leading-relaxed mb-1">
-            {renderInline(lines[i].slice(2))}
-          </li>
-        );
-        i++;
-      }
-      blocks.push(<ul key={key++} className="my-4">{items}</ul>);
-      continue;
-    }
-
-    if (/^\d+\.\s/.test(line)) {
-      const items: React.ReactNode[] = [];
-      while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
-        items.push(
-          <li key={items.length} className="ml-6 list-decimal text-foreground/90 leading-relaxed mb-1">
-            {renderInline(lines[i].replace(/^\d+\.\s/, ""))}
-          </li>
-        );
-        i++;
-      }
-      blocks.push(<ol key={key++} className="my-4">{items}</ol>);
-      continue;
-    }
-
-    if (line.startsWith("> ")) {
-      const quoteLines: string[] = [];
-      while (i < lines.length && lines[i].startsWith("> ")) {
-        quoteLines.push(lines[i].slice(2));
-        i++;
-      }
-      blocks.push(
-        <blockquote
-          key={key++}
-          className="my-4 pl-4 border-l-2 border-accent/40 text-muted italic"
-        >
-          {renderInline(quoteLines.join(" "))}
-        </blockquote>
-      );
-      continue;
-    }
-
-    if (line.startsWith("```")) {
-      const codeLines: string[] = [];
-      i++;
-      while (i < lines.length && !lines[i].startsWith("```")) {
-        codeLines.push(lines[i]);
-        i++;
-      }
-      i++;
-      blocks.push(
-        <pre
-          key={key++}
-          className="my-4 p-4 rounded-lg bg-surface border border-border overflow-x-auto"
-        >
-          <code className="text-sm text-foreground/90 font-mono">{codeLines.join("\n")}</code>
-        </pre>
-      );
-      continue;
-    }
-
-    if (line.trim() === "") {
-      i++;
-      continue;
-    }
-
-    blocks.push(
-      <p key={key++} className="text-foreground/90 leading-relaxed mb-4">
-        {renderInline(line)}
-      </p>
-    );
-    i++;
-  }
-
-  return blocks;
-}
-
-function renderInline(text: string): React.ReactNode {
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let key = 0;
-
-  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-  let match: RegExpExecArray | null;
-
-  while ((match = linkRegex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(renderBold(text.slice(lastIndex, match.index)));
-    }
-    const [, label, href] = match;
-    const isInternal = href.startsWith("/");
-    parts.push(
-      isInternal ? (
-        <Link
-          key={key++}
-          href={href}
-          className="text-accent hover:underline"
-        >
-          {label}
-        </Link>
-      ) : (
-        <a
-          key={key++}
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-accent hover:underline"
-        >
-          {label}
-        </a>
-      )
-    );
-    lastIndex = match.index + match[0].length;
-  }
-
-  if (lastIndex < text.length) {
-    parts.push(renderBold(text.slice(lastIndex)));
-  }
-
-  return <>{parts}</>;
-}
-
-function renderBold(text: string): React.ReactNode {
-  const parts: React.ReactNode[] = [];
-  let remaining = text;
-  let key = 0;
-  let start: number;
-
-  while ((start = remaining.indexOf("**")) !== -1) {
-    const end = remaining.indexOf("**", start + 2);
-    if (end === -1) break;
-    parts.push(remaining.slice(0, start));
-    parts.push(
-      <strong key={key++} className="font-semibold text-foreground">
-        {remaining.slice(start + 2, end)}
-      </strong>
-    );
-    remaining = remaining.slice(end + 2);
-  }
-  parts.push(remaining);
-  return <>{parts}</>;
-}
-
 export default async function BlogPostPage({
   params,
 }: {
@@ -370,9 +196,6 @@ export default async function BlogPostPage({
 
   const publishedDate = new Date(post.publishedAt);
   const modifiedDate = post.updatedAt || publishedDate;
-
-  // Check if content is rich HTML or raw Markdown
-  const isHtml = /<[a-z][\s\S]*>/i.test(post.content);
 
   return (
     <>
@@ -490,11 +313,7 @@ export default async function BlogPostPage({
 
           {/* Article Body */}
           <article className="prose prose-invert max-w-none text-foreground/90 leading-relaxed space-y-6">
-            {isHtml ? (
-              <div dangerouslySetInnerHTML={{ __html: post.content }} />
-            ) : (
-              renderMarkdown(post.content)
-            )}
+            <ArticleBody content={post.content} />
           </article>
 
           {relatedService && (
