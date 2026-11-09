@@ -212,6 +212,12 @@ export const pages = sqliteTable("pages", {
   versionHistory: text("version_history", { mode: "json" }).$type<{ version: number; title: string; updatedAt: string; author: string; note?: string }[]>().notNull().default([]),
 });
 
+export const rateLimits = sqliteTable("rate_limits", {
+  key: text("key").primaryKey(),
+  count: integer("count").notNull().default(0),
+  resetAt: integer("reset_at").notNull(),
+});
+
 export const redirects = sqliteTable("redirects", {
   id: text("id").primaryKey(),
   source: text("source").notNull().unique(),
