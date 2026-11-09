@@ -99,7 +99,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="flex flex-col-reverse items-center justify-between gap-5 border-t border-white/[0.06] py-6 md:flex-row">
-          <p className="text-xs text-brand-textMuted">
+          <p className="text-xs text-brand-textMuted" suppressHydrationWarning>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
           <div className="flex items-center gap-5">

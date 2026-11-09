@@ -39,12 +39,14 @@ function NavLink({
         active ? "text-brand-textPrimary" : "text-brand-textSecondary hover:text-brand-textPrimary"
       )}
     >
-      {active && (
-        <span
-          aria-hidden
-          className="absolute inset-0 rounded-full border border-white/[0.08] bg-white/[0.05] animate-in fade-in zoom-in-95 duration-200"
-        />
-      )}
+      {/* Always rendered so the markup can't differ between server and browser. */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute inset-0 rounded-full border border-white/[0.08] bg-white/[0.05]",
+          active ? "animate-in fade-in zoom-in-95 duration-200" : "opacity-0"
+        )}
+      />
       <span className="relative z-10">{link.label}</span>
     </Link>
   );
@@ -61,7 +63,11 @@ export function Navbar() {
     () => (/Mac|iPhone|iPad/.test(navigator.platform) ? "⌘" : "Ctrl"),
     () => "Ctrl"
   );
-  const pathname = usePathname();
+  // When a cached homepage is regenerated it renders as "/index". Without this,
+  // the server skips the active-link highlight the browser then adds, and React
+  // throws hydration error #418.
+  const rawPathname = usePathname();
+  const pathname = rawPathname === "/index" ? "/" : rawPathname;
   const hiddenHrefs = useHiddenHrefs();
   const visibleLinks = navLinks.filter((link) => !hiddenHrefs.includes(link.href));
 
