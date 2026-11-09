@@ -26,12 +26,13 @@ export function AnimatedCounter({
     if (!isInView || hasAnimated.current) return;
     hasAnimated.current = true;
 
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let startTime: number;
     let animationFrame: number;
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const progress = reduceMotion ? 1 : Math.min((timestamp - startTime) / duration, 1);
 
       // Ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);

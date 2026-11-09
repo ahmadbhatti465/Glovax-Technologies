@@ -175,7 +175,7 @@ export default function ServicesContent({
               align="left"
             />
 
-            <div className="overflow-x-auto rounded-2xl border border-border bg-surface shadow-xl">
+            <div tabIndex={0} className="overflow-x-auto rounded-2xl border border-border bg-surface shadow-xl">
               <table className="w-full text-left border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-border bg-surface-raised/50">
