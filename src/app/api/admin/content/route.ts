@@ -27,9 +27,9 @@ export async function POST(request: Request) {
       target: siteContent.key,
       set: { value: body.value, updatedAt: new Date() },
     });
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     if (body.key) revalidateTag(`content:${body.key}`, "max");
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to save content";

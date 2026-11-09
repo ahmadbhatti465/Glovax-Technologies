@@ -156,14 +156,15 @@ export async function POST(request: Request) {
 
     await db.insert(blogPosts).values(newPost);
 
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/blog");
     revalidatePath("/blog/page/[page]", "page");
     revalidatePath("/blog/category/[slug]", "page");
     revalidatePath("/blog/tag/[slug]", "page");
     revalidatePath("/sitemap.xml");
+    revalidatePath("/feed.xml");
     if (newPost.slug) revalidatePath(`/blog/${newPost.slug}`);
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
 
     return NextResponse.json({ success: true, post: newPost });
   } catch (err: unknown) {

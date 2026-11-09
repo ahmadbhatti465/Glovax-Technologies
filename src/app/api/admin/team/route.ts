@@ -23,10 +23,10 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     await db.insert(teamMembers).values(body);
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/team");
     revalidatePath("/about");
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to create team member";

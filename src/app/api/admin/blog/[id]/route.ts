@@ -178,16 +178,17 @@ export async function PUT(request: Request, { params }: { params: Params }) {
 
     await db.update(blogPosts).set(updatedPost).where(eq(blogPosts.id, id));
 
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/blog");
     revalidatePath("/blog/page/[page]", "page");
     revalidatePath("/blog/category/[slug]", "page");
     revalidatePath("/blog/tag/[slug]", "page");
     revalidatePath("/sitemap.xml");
+    revalidatePath("/feed.xml");
     revalidatePath(`/blog/${existing.slug}`);
     if (newSlug !== existing.slug) revalidatePath(`/blog/${newSlug}`);
-    revalidateTag("public-data", "max");
-    revalidateTag("runtime-redirects", "max");
+    revalidateTag("public-data", { expire: 0 });
+    revalidateTag("runtime-redirects", { expire: 0 });
 
     return NextResponse.json({ success: true, post: { id, ...updatedPost } });
   } catch (err: unknown) {
@@ -210,11 +211,12 @@ export async function DELETE(_request: Request, { params }: { params: Params }) 
 
     await db.delete(blogPosts).where(eq(blogPosts.id, id));
 
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/blog");
     revalidatePath("/sitemap.xml");
+    revalidatePath("/feed.xml");
     if (slug) revalidatePath(`/blog/${slug}`);
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
 
     return NextResponse.json({ success: true });
   } catch (err: unknown) {

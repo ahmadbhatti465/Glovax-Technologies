@@ -15,9 +15,9 @@ export async function PUT(request: Request, { params }: { params: Params }) {
     const { id } = await params;
     const body = await request.json();
     await db.update(jobPositions).set(body).where(eq(jobPositions.id, id));
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/career");
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to update job position";
@@ -32,9 +32,9 @@ export async function DELETE(_request: Request, { params }: { params: Params }) 
   try {
     const { id } = await params;
     await db.delete(jobPositions).where(eq(jobPositions.id, id));
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/career");
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Failed to delete job position" }, { status: 500 });
