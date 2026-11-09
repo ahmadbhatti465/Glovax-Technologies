@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { getChatAnswer } from "@/lib/chat-concierge";
 import { isBlogPostLive } from "@/lib/blog-publishing";
 import { hasFictionalPhone, isPublishableListing } from "@/lib/directory";
 import { PUBLIC_STATIC_ROUTES } from "@/lib/public-routes";
@@ -70,5 +71,14 @@ describe("sitemap routes", () => {
       .map((route) => (route ? `/${route}` : ""));
 
     expect([...found].sort()).toEqual([...PUBLIC_STATIC_ROUTES].sort());
+  });
+});
+
+describe("chat assistant", () => {
+  it("does not send people to pages that may be empty", () => {
+    const answer = getChatAnswer("are you hiring? any job vacancy").text;
+    expect(answer).toContain("CV");
+    expect(answer).not.toContain("/career");
+    expect(answer).not.toContain("/team");
   });
 });

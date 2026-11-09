@@ -148,7 +148,7 @@ const CHAT_ENTRIES: ChatEntry[] = [
   {
     id: "careers",
     keywords: ["career", "job", "hiring", "work for", "vacancy", "apply", "join"],
-    answer: "We're always interested in great engineers and designers. See open roles at {url}/career",
+    answer: "We're always interested in great engineers and designers. Send your CV and portfolio to {email}.",
   },
 ];
 
