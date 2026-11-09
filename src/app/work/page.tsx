@@ -37,7 +37,7 @@ const workFaqs = [
   {
     question: "What industries does Glovax Technologies serve?",
     answer:
-      "We build digital products for fintech, healthtech, e-commerce, SaaS, logistics, education, and consumer startups across 30+ countries.",
+      "We build digital products for fintech, healthtech, e-commerce, SaaS, logistics, education, and consumer startups.",
   },
   {
     question: "Can I see live results for the projects in your portfolio?",

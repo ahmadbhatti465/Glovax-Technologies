@@ -1,5 +1,4 @@
 import { Star } from "lucide-react";
-import { clientLogos } from "@/lib/constants";
 
 // Real technologies the team ships with — honest social proof for technical buyers.
 const techStack = [
@@ -17,16 +16,7 @@ const techStack = [
   "PostgreSQL",
 ];
 
-const proofNumbers = [
-  { value: "120", suffix: "+", label: "Projects delivered" },
-  { value: "30", suffix: "+", label: "Countries served" },
-  { value: "12", suffix: "+", label: "Industries served" },
-  { value: "8", suffix: "+", label: "Years of experience" },
-];
-
 export function TrustBar() {
-  const doubledLogos = [...clientLogos, ...clientLogos];
-
   return (
     <section className="py-16 md:py-20 border-b border-neutral-border bg-background relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
@@ -43,42 +33,6 @@ export function TrustBar() {
             </span>
             <span className="text-sm font-semibold">Top Rated</span>
             <span className="text-sm text-muted-foreground">on Upwork</span>
-          </div>
-
-          {/* Client logo marquee */}
-          <p className="text-xs font-mono tracking-[0.25em] uppercase text-muted-foreground font-medium mb-8">
-            Trusted by innovative teams worldwide
-          </p>
-
-          <div className="relative mb-10 overflow-hidden">
-            <div className="absolute left-0 top-0 bottom-0 w-28 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-28 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-            {/* w-max so the -50% translate loops exactly one logo set */}
-            <div className="flex w-max animate-marquee">
-              {doubledLogos.map((logo, index) => (
-                <div
-                  key={index}
-                  className="flex-shrink-0 px-8 md:px-12 flex items-center justify-center"
-                >
-                  <span className="text-lg md:text-xl font-semibold text-muted-foreground/30 hover:text-muted-foreground/70 transition-colors duration-500 whitespace-nowrap tracking-wide">
-                    {logo}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Proof numbers */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto">
-            {proofNumbers.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-4xl md:text-5xl font-heading font-semibold tracking-[-0.04em]">
-                  <span className="gradient-text">{stat.value}</span>
-                  <span className="gradient-text">{stat.suffix}</span>
-                </div>
-                <p className="mt-2 text-xs md:text-sm text-muted-foreground tracking-wide">{stat.label}</p>
-              </div>
-            ))}
           </div>
         </div>
 

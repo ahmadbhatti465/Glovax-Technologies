@@ -1,12 +1,13 @@
-import { stats as fallbackStats } from "@/lib/constants";
+import { visibleStats, type SiteStat } from "@/lib/site-stats";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 
 interface StatsCounterProps {
-  stats?: { value: number; suffix: string; label: string }[];
+  stats?: SiteStat[];
 }
 
 export function StatsCounter({ stats: serverStats }: StatsCounterProps) {
-  const stats = serverStats?.length ? serverStats : fallbackStats;
+  const stats = visibleStats(serverStats);
+  if (stats.length === 0) return null;
 
   return (
     <section className="py-16 md:py-24 border-y border-neutral-border bg-section-alt relative overflow-hidden">

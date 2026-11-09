@@ -5,6 +5,7 @@ import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 import { Target, Shield, Zap, Users, Globe, Heart } from "lucide-react";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
+import { visibleStats, type SiteStat } from "@/lib/site-stats";
 
 const iconMap: Record<string, React.ReactNode> = {
   Target: <Target className="w-5 h-5" />,
@@ -48,36 +49,28 @@ const fallbackValues = [
   },
 ];
 
-const fallbackTimeline = [
-  { year: "2018", event: "Founded in Lahore, Pakistan" },
-  { year: "2019", event: "First 25 clients across Pakistan" },
-  { year: "2020", event: "Expanded to mobile development" },
-  { year: "2021", event: "AI & ML practice launched" },
-  { year: "2022", event: "100+ projects delivered" },
-  { year: "2023", event: "Global expansion: 30+ countries" },
-  { year: "2024", event: "35+ team members worldwide" },
-  { year: "2025", event: "Recognized software house in APAC" },
-];
-
 interface AboutContentProps {
   about?: {
     heroEyebrow: string;
     heroTitle: string;
     heroTitleHighlight: string;
     heroSubtitle: string;
-    stats: { value: number; suffix: string; label: string }[];
     values: { icon: string; title: string; description: string }[];
     timeline: { year: string; event: string }[];
   } | null;
+  stats?: SiteStat[] | null;
   lastUpdated?: Date | null;
 }
 
-export default function AboutContent({ about, lastUpdated }: AboutContentProps) {
+export default function AboutContent({ about, stats, lastUpdated }: AboutContentProps) {
+  const shownStats = visibleStats(stats);
+
   if (!about) {
     return (
       <AboutContentInner
+        stats={shownStats}
         values={fallbackValues}
-        timeline={fallbackTimeline}
+        timeline={[]}
         lastUpdated={lastUpdated}
       />
     );
@@ -89,9 +82,9 @@ export default function AboutContent({ about, lastUpdated }: AboutContentProps) 
       heroTitle={about.heroTitle}
       heroTitleHighlight={about.heroTitleHighlight}
       heroSubtitle={about.heroSubtitle}
-      stats={about.stats}
+      stats={shownStats}
       values={about.values ?? fallbackValues}
-      timeline={about.timeline ?? fallbackTimeline}
+      timeline={(about.timeline ?? []).filter((item) => item.year?.trim() && item.event?.trim())}
       lastUpdated={lastUpdated}
     />
   );
@@ -102,7 +95,7 @@ interface AboutContentInnerProps {
   heroTitle?: string;
   heroTitleHighlight?: string;
   heroSubtitle?: string;
-  stats?: { value: number; suffix: string; label: string }[];
+  stats: SiteStat[];
   values: { icon: string; title: string; description: string }[];
   timeline: { year: string; event: string }[];
   lastUpdated?: Date | null;
@@ -113,12 +106,7 @@ function AboutContentInner({
   heroTitle = "Building the future,",
   heroTitleHighlight = "one product at a time.",
   heroSubtitle = "Glovax Technologies is a Lahore-based software house and digital agency that helps businesses worldwide leverage AI, cloud, and modern web technologies to create meaningful impact.",
-  stats = [
-    { value: 100, suffix: "+", label: "Projects" },
-    { value: 99, suffix: "%", label: "Satisfaction" },
-    { value: 30, suffix: "+", label: "Countries" },
-    { value: 35, suffix: "+", label: "Team" },
-  ],
+  stats,
   values,
   timeline,
   lastUpdated,
@@ -157,8 +145,9 @@ function AboutContentInner({
           </div>
 
           {/* Stats */}
+          {stats.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 border-y border-border mb-20">
-            {(stats ?? []).map((stat) => (
+            {stats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold gradient-text">
                   <AnimatedCounter
@@ -170,6 +159,7 @@ function AboutContentInner({
               </div>
             ))}
           </div>
+          )}
 
           {/* Values */}
           <SectionHeader
@@ -262,6 +252,8 @@ function AboutContentInner({
           </section>
 
           {/* Timeline */}
+          {timeline.length > 0 && (
+          <>
           <SectionHeader
             eyebrow="Our Journey"
             title="How we got"
@@ -283,6 +275,8 @@ function AboutContentInner({
               </div>
             ))}
           </div>
+          </>
+          )}
         </div>
       </main>
       <Footer />

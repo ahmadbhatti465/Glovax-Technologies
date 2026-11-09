@@ -75,22 +75,3 @@ export const footerLinks = {
   ],
 };
 
-export const clientLogos = [
-  "TechStart",
-  "InnovateLabs",
-  "GrowthCo",
-  "GlobalTech",
-  "DigitalFirst",
-  "AppVenture",
-  "CloudNine",
-  "FutureSoft",
-  "DataPulse",
-  "NexGen AI",
-];
-
-export const stats = [
-  { value: 100, suffix: "+", label: "Projects Delivered" },
-  { value: 99, suffix: "%", label: "Client Satisfaction" },
-  { value: 30, suffix: "+", label: "Countries Served" },
-  { value: 35, suffix: "+", label: "Team Members" },
-];

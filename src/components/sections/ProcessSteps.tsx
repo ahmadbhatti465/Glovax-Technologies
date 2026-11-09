@@ -86,7 +86,7 @@ export function ProcessSteps({ steps: serverSteps }: ProcessStepsProps) {
           eyebrow="Our Process"
           title="How we"
           titleHighlight="work"
-          subtitle="A battle-tested methodology refined over 100+ projects. We combine agility with rigor to deliver exceptional results on time and on budget."
+          subtitle="A battle-tested methodology. We combine agility with rigor to deliver exceptional results on time and on budget."
         />
 
         <div className="timeline-scope relative max-w-4xl mx-auto">

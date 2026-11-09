@@ -11,11 +11,12 @@ interface ContentItem {
 }
 
 const defaultContent: Record<string, unknown> = {
+  // A stat with a value of 0 is not shown on the site.
   stats: [
-    { value: 100, suffix: "+", label: "Projects Delivered" },
-    { value: 99, suffix: "%", label: "Client Satisfaction" },
-    { value: 30, suffix: "+", label: "Countries Served" },
-    { value: 35, suffix: "+", label: "Team Members" },
+    { value: 0, suffix: "+", label: "Projects Delivered" },
+    { value: 0, suffix: "%", label: "Client Satisfaction" },
+    { value: 0, suffix: "+", label: "Countries Served" },
+    { value: 0, suffix: "+", label: "Team Members" },
   ],
   process_steps: [
     { number: "01", title: "Discover", description: "We dive deep into your business, users, and goals through research and stakeholder interviews to build a solid foundation.", icon: "Search" },
@@ -23,7 +24,6 @@ const defaultContent: Record<string, unknown> = {
     { number: "03", title: "Develop", description: "We build with clean, scalable code using modern frameworks and best practices for performance and maintainability.", icon: "Code" },
     { number: "04", title: "Deliver", description: "We deploy, monitor, and optimize your product with CI/CD pipelines, ensuring long-term success and growth.", icon: "Rocket" },
   ],
-  client_logos: ["TechStart", "InnovateLabs", "GrowthCo", "GlobalTech", "DigitalFirst", "AppVenture", "CloudNine", "FutureSoft", "DataPulse", "NexGen AI"],
   cta_banner: {
     eyebrow: "Let's Collaborate",
     title: "Ready to build",
@@ -41,12 +41,6 @@ const defaultContent: Record<string, unknown> = {
     heroTitleHighlight: "one product at a time.",
     heroSubtitle:
       "Glovax Technologies was founded with a simple mission: to help businesses leverage technology to create meaningful impact. Today, we're a global team of engineers, designers, and strategists who believe that great software can change the world.",
-    stats: [
-      { value: 100, suffix: "+", label: "Projects" },
-      { value: 99, suffix: "%", label: "Satisfaction" },
-      { value: 30, suffix: "+", label: "Countries" },
-      { value: 35, suffix: "+", label: "Team" },
-    ],
     values: [
       { icon: "Target", title: "Results First", description: "We measure success by the tangible business outcomes we deliver, not just lines of code shipped." },
       { icon: "Shield", title: "Quality Obsessed", description: "Every pixel, every interaction, every line of code is crafted with precision and pride." },
@@ -55,27 +49,10 @@ const defaultContent: Record<string, unknown> = {
       { icon: "Globe", title: "Global Mindset", description: "We build products that work everywhere, for everyone, respecting diverse users and markets." },
       { icon: "Heart", title: "Craft with Care", description: "We love what we do, and it shows in the attention and thoughtfulness we bring to every project." },
     ],
-    timeline: [
-      { year: "2018", event: "Founded in San Francisco" },
-      { year: "2019", event: "First 50 clients" },
-      { year: "2020", event: "Expanded to mobile development" },
-      { year: "2021", event: "AI & ML practice launched" },
-      { year: "2022", event: "100+ projects delivered" },
-      { year: "2023", event: "Global expansion 30+ countries" },
-      { year: "2024", event: "50+ team members" },
-      { year: "2025", event: "Industry recognition & awards" },
-    ],
+    // Rows left blank are not shown on the site.
+    timeline: [{ year: "", event: "" }],
   },
-  career_benefits: [
-    "Competitive salary & equity",
-    "Remote-first culture",
-    "Health, dental & vision",
-    "Learning budget",
-    "Flexible PTO",
-    "Annual team retreats",
-    "Home office stipend",
-    "Parental leave",
-  ],
+  career_benefits: [""],
 };
 
 export default function SettingsPage() {

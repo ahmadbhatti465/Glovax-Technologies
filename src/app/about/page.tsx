@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd, AboutPageJsonLd } from "@/components/shared/StructuredData";
+import type { SiteStat } from "@/lib/site-stats";
 import AboutContent from "./about-content";
 import { getSiteContent, getSiteContentUpdatedAt } from "@/lib/data";
 
@@ -37,10 +38,10 @@ export default async function AboutPage() {
     heroTitle: string;
     heroTitleHighlight: string;
     heroSubtitle: string;
-    stats: { value: number; suffix: string; label: string }[];
     values: { icon: string; title: string; description: string }[];
     timeline: { year: string; event: string }[];
   }>("about");
+  const stats = await getSiteContent<SiteStat[]>("stats");
   const lastUpdated = await getSiteContentUpdatedAt("about");
 
   return (
@@ -52,7 +53,7 @@ export default async function AboutPage() {
         ]}
       />
       <AboutPageJsonLd />
-      <AboutContent about={about} lastUpdated={lastUpdated} />
+      <AboutContent about={about} stats={stats} lastUpdated={lastUpdated} />
     </>
   );
 }
