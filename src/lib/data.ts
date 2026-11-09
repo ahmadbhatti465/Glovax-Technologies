@@ -4,6 +4,8 @@ import { eq, getTableColumns } from "drizzle-orm";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { isPublishableListing } from "@/lib/directory";
+import { isBlogPostLive } from "@/lib/blog-publishing";
+import { isRedirectLoop } from "@/lib/redirects";
 import type {
   Service,
   PortfolioItem,
@@ -89,91 +91,83 @@ function serializeDates<T extends { createdAt?: Date | null; updatedAt?: Date | 
 }
 
 export const getServices = cache(async (): Promise<Service[]> => {
-  try {
-    const rows = await db.select().from(schema.services);
-    return rows.map((row) => ({
-      ...serializeDates(row),
-      features: row.features ?? [],
-    }));
-  } catch {
-    return [];
-  }
+  const rows = await withRetry(() => db.select().from(schema.services));
+  return rows.map((row) => ({
+    ...serializeDates(row),
+    features: row.features ?? [],
+  }));
 });
 
 export const getPortfolioItems = cache(async (status?: string): Promise<PortfolioItem[]> => {
-  try {
-    const rows = await withRetry(() => db.select().from(schema.portfolioItems));
-    const items = rows.map((row) => {
-      const base: PortfolioItem = {
-        ...serializeDates(row, true),
-        slug: row.slug || row.id,
-        shortDescription: row.shortDescription ?? undefined,
-        clientWebsite: row.clientWebsite ?? undefined,
-        industry: row.industry ?? undefined,
-        services: row.services ?? [],
-        technologies: row.technologies ?? [],
-        timeline: row.timeline ?? undefined,
-        projectYear: row.projectYear ?? undefined,
-        location: row.location ?? undefined,
-        featured: Boolean(row.featured),
-        status: (row.status as PortfolioItem["status"]) || "published",
-        challenge: row.challenge ?? undefined,
-        solution: row.solution ?? undefined,
-        process: row.process ?? [],
-        results: row.results ?? [],
-        keyFeatures: row.keyFeatures ?? [],
-        testimonialQuote: row.testimonialQuote ?? undefined,
-        testimonialAuthor: row.testimonialAuthor ?? undefined,
-        testimonialRole: row.testimonialRole ?? undefined,
-        testimonialCompany: row.testimonialCompany ?? undefined,
-        testimonialRating: row.testimonialRating ?? 5,
-        testimonial: row.testimonialQuote
-          ? {
-              quote: row.testimonialQuote,
-              author: row.testimonialAuthor || "Client",
-              role: row.testimonialRole || "",
-              company: row.testimonialCompany || row.client || "",
-              rating: row.testimonialRating || 5,
-            }
-          : undefined,
-        image: row.image ?? undefined,
-        imageAlt: row.imageAlt ?? undefined,
-        imageTitle: row.imageTitle ?? undefined,
-        imageCaption: row.imageCaption ?? undefined,
-        gallery: row.gallery ?? [],
-        relatedProjects: row.relatedProjects ?? [],
-        seoTitle: row.seoTitle ?? undefined,
-        metaDescription: row.metaDescription ?? undefined,
-        focusKeyword: row.focusKeyword ?? undefined,
-        secondaryKeywords: row.secondaryKeywords ?? [],
-        canonicalUrl: row.canonicalUrl ?? undefined,
-        robotsIndex: row.robotsIndex !== undefined ? Boolean(row.robotsIndex) : true,
-        robotsFollow: row.robotsFollow !== undefined ? Boolean(row.robotsFollow) : true,
-        includeInSitemap: row.includeInSitemap !== undefined ? Boolean(row.includeInSitemap) : true,
-        sitemapPriority: row.sitemapPriority ?? 0.8,
-        changeFrequency: (row.changeFrequency as PortfolioItem["changeFrequency"]) || "monthly",
-        ogTitle: row.ogTitle ?? undefined,
-        ogDescription: row.ogDescription ?? undefined,
-        ogImage: row.ogImage ?? undefined,
-        ogImageAlt: row.ogImageAlt ?? undefined,
-        twitterTitle: row.twitterTitle ?? undefined,
-        twitterDescription: row.twitterDescription ?? undefined,
-        twitterImage: row.twitterImage ?? undefined,
-        schemaType: (row.schemaType as PortfolioItem["schemaType"]) || "CreativeWork",
-        publishedAt: row.publishedAt ?? undefined,
-        link: row.link ?? undefined,
-      };
+  const rows = await withRetry(() => db.select().from(schema.portfolioItems));
+  const items = rows.map((row) => {
+    const base: PortfolioItem = {
+      ...serializeDates(row, true),
+      slug: row.slug || row.id,
+      shortDescription: row.shortDescription ?? undefined,
+      clientWebsite: row.clientWebsite ?? undefined,
+      industry: row.industry ?? undefined,
+      services: row.services ?? [],
+      technologies: row.technologies ?? [],
+      timeline: row.timeline ?? undefined,
+      projectYear: row.projectYear ?? undefined,
+      location: row.location ?? undefined,
+      featured: Boolean(row.featured),
+      status: (row.status as PortfolioItem["status"]) || "published",
+      challenge: row.challenge ?? undefined,
+      solution: row.solution ?? undefined,
+      process: row.process ?? [],
+      results: row.results ?? [],
+      keyFeatures: row.keyFeatures ?? [],
+      testimonialQuote: row.testimonialQuote ?? undefined,
+      testimonialAuthor: row.testimonialAuthor ?? undefined,
+      testimonialRole: row.testimonialRole ?? undefined,
+      testimonialCompany: row.testimonialCompany ?? undefined,
+      testimonialRating: row.testimonialRating ?? 5,
+      testimonial: row.testimonialQuote
+        ? {
+            quote: row.testimonialQuote,
+            author: row.testimonialAuthor || "Client",
+            role: row.testimonialRole || "",
+            company: row.testimonialCompany || row.client || "",
+            rating: row.testimonialRating || 5,
+          }
+        : undefined,
+      image: row.image ?? undefined,
+      imageAlt: row.imageAlt ?? undefined,
+      imageTitle: row.imageTitle ?? undefined,
+      imageCaption: row.imageCaption ?? undefined,
+      gallery: row.gallery ?? [],
+      relatedProjects: row.relatedProjects ?? [],
+      seoTitle: row.seoTitle ?? undefined,
+      metaDescription: row.metaDescription ?? undefined,
+      focusKeyword: row.focusKeyword ?? undefined,
+      secondaryKeywords: row.secondaryKeywords ?? [],
+      canonicalUrl: row.canonicalUrl ?? undefined,
+      robotsIndex: row.robotsIndex !== undefined ? Boolean(row.robotsIndex) : true,
+      robotsFollow: row.robotsFollow !== undefined ? Boolean(row.robotsFollow) : true,
+      includeInSitemap: row.includeInSitemap !== undefined ? Boolean(row.includeInSitemap) : true,
+      sitemapPriority: row.sitemapPriority ?? 0.8,
+      changeFrequency: (row.changeFrequency as PortfolioItem["changeFrequency"]) || "monthly",
+      ogTitle: row.ogTitle ?? undefined,
+      ogDescription: row.ogDescription ?? undefined,
+      ogImage: row.ogImage ?? undefined,
+      ogImageAlt: row.ogImageAlt ?? undefined,
+      twitterTitle: row.twitterTitle ?? undefined,
+      twitterDescription: row.twitterDescription ?? undefined,
+      twitterImage: row.twitterImage ?? undefined,
+      schemaType: (row.schemaType as PortfolioItem["schemaType"]) || "CreativeWork",
+      publishedAt: row.publishedAt ?? undefined,
+      link: row.link ?? undefined,
+    };
 
-      return base;
-    });
+    return base;
+  });
 
-    if (status) {
-      return items.filter((p) => (p.status || "published") === status);
-    }
-    return items;
-  } catch {
-    return [];
+  if (status) {
+    return items.filter((p) => (p.status || "published") === status);
   }
+  return items;
 });
 
 export const getFeaturedPortfolioItems = cache(async (): Promise<PortfolioItem[]> => {
@@ -183,78 +177,57 @@ export const getFeaturedPortfolioItems = cache(async (): Promise<PortfolioItem[]
 
 export const getPortfolioItemByIdOrSlug = cache(
   async (idOrSlug: string, allowUnpublished = false): Promise<PortfolioItem | null> => {
-    try {
-      const items = await getPortfolioItems();
-      const found = items.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
-      if (!found) return null;
-      if (!allowUnpublished && (found.status || "published") !== "published") return null;
-      return found;
-    } catch {
-      return null;
-    }
+    const items = await getPortfolioItems();
+    const found = items.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
+    if (!found) return null;
+    if (!allowUnpublished && (found.status || "published") !== "published") return null;
+    return found;
   }
 );
 
 export const getAllPortfolioSlugs = cache(async (): Promise<{ id: string; slug: string }[]> => {
-  try {
-    const items = await getPortfolioItems("published");
-    return items.map((p) => ({ id: p.id, slug: p.slug || p.id }));
-  } catch {
-    return [];
-  }
+  const items = await getPortfolioItems("published");
+  return items.map((p) => ({ id: p.id, slug: p.slug || p.id }));
 });
 
 export const getTeamMembers = cache(async (): Promise<TeamMember[]> => {
-  try {
-    const rows = await db.select().from(schema.teamMembers);
-    return rows.map((row) => ({
-      ...serializeDates(row),
-      expertise: row.expertise ?? [],
-      image: row.image ?? undefined,
-    }));
-  } catch {
-    return [];
-  }
+  const rows = await withRetry(() => db.select().from(schema.teamMembers));
+  return rows.map((row) => ({
+    ...serializeDates(row),
+    expertise: row.expertise ?? [],
+    image: row.image ?? undefined,
+  }));
 });
 
 export const getJobPositions = cache(async (): Promise<JobPosition[]> => {
-  try {
-    const rows = await db.select().from(schema.jobPositions);
-    return rows.map((row) => ({
-      ...serializeDates(row),
-      responsibilities: row.responsibilities ?? [],
-      requirements: row.requirements ?? [],
-      type: row.type as JobPosition["type"],
-    }));
-  } catch {
-    return [];
-  }
+  const rows = await withRetry(() => db.select().from(schema.jobPositions));
+  return rows.map((row) => ({
+    ...serializeDates(row),
+    responsibilities: row.responsibilities ?? [],
+    requirements: row.requirements ?? [],
+    type: row.type as JobPosition["type"],
+  }));
 });
 
 export const getTestimonials = cache(async (): Promise<Testimonial[]> => {
-  try {
-    const rows = await db.select().from(schema.testimonials);
-    return rows.map((row) => ({
-      ...serializeDates(row),
-      // Optional display fields are nullable in the DB — normalize to undefined
-      // so the UI's truthiness checks work (no broken <Image> or stray "●" flag).
-      avatar: row.avatar || undefined,
-      country: row.country || undefined,
-      countryCode: row.countryCode || undefined,
-      linkedin: row.linkedin || undefined,
-      projectType: row.projectType || undefined,
-    }));
-  } catch {
-    return [];
-  }
+  const rows = await withRetry(() => db.select().from(schema.testimonials));
+  return rows.map((row) => ({
+    ...serializeDates(row),
+    // Optional display fields are nullable in the DB — normalize to undefined
+    // so the UI's truthiness checks work (no broken <Image> or stray "●" flag).
+    avatar: row.avatar || undefined,
+    country: row.country || undefined,
+    countryCode: row.countryCode || undefined,
+    linkedin: row.linkedin || undefined,
+    projectType: row.projectType || undefined,
+  }));
 });
 
 type BlogListRow = Awaited<ReturnType<typeof getCachedBlogListRows>>[number];
 
 /** Normalize a DB row's nullable columns; scheduled posts past their date count as published. */
 function toBlogListItem(row: BlogListRow, now: number): BlogPostListItem {
-  const isScheduledAndDue =
-    row.status === "scheduled" && new Date(row.publishedAt).getTime() <= now;
+  const isScheduledAndDue = row.status === "scheduled" && isBlogPostLive(row, now);
   return {
     ...serializeDates(row, true),
     // unstable_cache round-trips through JSON, so a cache hit yields an ISO
@@ -343,154 +316,122 @@ export const getRelatedPosts = cache(
 );
 
 export async function getSiteContent<T>(key: string): Promise<T | null> {
-  try {
-    const rows = await db.select().from(schema.siteContent);
-    const found = rows.find((row) => row.key === key);
-    if (!found) return null;
-    return found.value as T;
-  } catch {
-    return null;
-  }
+  const rows = await withRetry(() => db.select().from(schema.siteContent));
+  const found = rows.find((row) => row.key === key);
+  if (!found) return null;
+  return found.value as T;
 }
 
 export async function getLatestUpdatedAt(
   tables: (keyof typeof schema)[]
 ): Promise<Date | null> {
-  try {
-    const dates: Date[] = [];
-    for (const tableName of tables) {
-      const table = schema[tableName];
-      const rows = await db.select().from(table);
-      for (const row of rows) {
-        if ("updatedAt" in row && row.updatedAt) {
-          dates.push(row.updatedAt as Date);
-        }
-        if ("createdAt" in row && row.createdAt) {
-          dates.push(row.createdAt as Date);
-        }
+  const dates: Date[] = [];
+  for (const tableName of tables) {
+    const table = schema[tableName];
+    const rows = await withRetry(() => db.select().from(table));
+    for (const row of rows) {
+      if ("updatedAt" in row && row.updatedAt) {
+        dates.push(row.updatedAt as Date);
+      }
+      if ("createdAt" in row && row.createdAt) {
+        dates.push(row.createdAt as Date);
       }
     }
-    if (dates.length === 0) return null;
-    return new Date(Math.max(...dates.map((d) => d.getTime())));
-  } catch {
-    return null;
   }
+  if (dates.length === 0) return null;
+  return new Date(Math.max(...dates.map((d) => d.getTime())));
 }
 
 export async function getSiteContentUpdatedAt(key: string): Promise<Date | null> {
-  try {
-    const rows = await db.select().from(schema.siteContent);
-    const found = rows.find((row) => row.key === key);
-    return found?.updatedAt ?? null;
-  } catch {
-    return null;
-  }
+  const rows = await withRetry(() => db.select().from(schema.siteContent));
+  const found = rows.find((row) => row.key === key);
+  return found?.updatedAt ?? null;
 }
 
 export const getBusinesses = cache(async (): Promise<Business[]> => {
-  try {
-    const rows = await db.select(businessListColumns).from(schema.businesses);
-    return rows.filter(isPublishableListing).map((row) => ({
-      ...serializeDates(row),
-      hours: row.hours ?? [],
-      tags: row.tags ?? [],
-      featured: Boolean(row.featured),
-      isRemote: Boolean(row.isRemote),
-      address: row.address ?? undefined,
-      phone: row.phone ?? undefined,
-      website: row.website ?? undefined,
-      image: row.image ?? undefined,
-    }));
-  } catch {
-    return [];
-  }
+  const rows = await withRetry(() => db.select(businessListColumns).from(schema.businesses));
+  return rows.filter(isPublishableListing).map((row) => ({
+    ...serializeDates(row),
+    hours: row.hours ?? [],
+    tags: row.tags ?? [],
+    featured: Boolean(row.featured),
+    isRemote: Boolean(row.isRemote),
+    address: row.address ?? undefined,
+    phone: row.phone ?? undefined,
+    website: row.website ?? undefined,
+    image: row.image ?? undefined,
+  }));
 });
 
 export const getBusinessBySlug = cache(
   async (slug: string): Promise<Business | null> => {
-    try {
-      const items = await getBusinesses();
-      return items.find((b) => b.slug === slug) ?? null;
-    } catch {
-      return null;
-    }
+    const items = await getBusinesses();
+    return items.find((b) => b.slug === slug) ?? null;
   }
 );
 
 export const getPages = cache(async (status?: string): Promise<Page[]> => {
-  try {
-    const rows = await withRetry(() => db.select().from(schema.pages));
-    const items = rows.map((row) => ({
-      ...serializeDates(row, true),
-      secondaryKeywords: row.secondaryKeywords ?? [],
-      faqs: row.faqs ?? [],
-      versionHistory: row.versionHistory ?? [],
-      robotsIndex: Boolean(row.robotsIndex),
-      robotsFollow: Boolean(row.robotsFollow),
-      includeInSitemap: Boolean(row.includeInSitemap),
-      featured: Boolean(row.featured),
-      featuredImage: row.featuredImage ?? undefined,
-      featuredImageAlt: row.featuredImageAlt ?? undefined,
-      featuredImageTitle: row.featuredImageTitle ?? undefined,
-      featuredImageCaption: row.featuredImageCaption ?? undefined,
-      seoTitle: row.seoTitle ?? undefined,
-      metaDescription: row.metaDescription ?? undefined,
-      focusKeyword: row.focusKeyword ?? undefined,
-      canonicalUrl: row.canonicalUrl ?? undefined,
-      ogTitle: row.ogTitle ?? undefined,
-      ogDescription: row.ogDescription ?? undefined,
-      ogImage: row.ogImage ?? undefined,
-      ogImageAlt: row.ogImageAlt ?? undefined,
-      twitterTitle: row.twitterTitle ?? undefined,
-      twitterDescription: row.twitterDescription ?? undefined,
-      twitterImage: row.twitterImage ?? undefined,
-      scheduledAt: row.scheduledAt ? new Date(row.scheduledAt) : null,
-      publishedAt: row.publishedAt ? new Date(row.publishedAt) : null,
-      pageType: row.pageType as Page["pageType"],
-      schemaType: row.schemaType as Page["schemaType"],
-      changeFrequency: row.changeFrequency as Page["changeFrequency"],
-      status: row.status as Page["status"],
-    }));
+  const rows = await withRetry(() => db.select().from(schema.pages));
+  const items = rows.map((row) => ({
+    ...serializeDates(row, true),
+    secondaryKeywords: row.secondaryKeywords ?? [],
+    faqs: row.faqs ?? [],
+    versionHistory: row.versionHistory ?? [],
+    robotsIndex: Boolean(row.robotsIndex),
+    robotsFollow: Boolean(row.robotsFollow),
+    includeInSitemap: Boolean(row.includeInSitemap),
+    featured: Boolean(row.featured),
+    featuredImage: row.featuredImage ?? undefined,
+    featuredImageAlt: row.featuredImageAlt ?? undefined,
+    featuredImageTitle: row.featuredImageTitle ?? undefined,
+    featuredImageCaption: row.featuredImageCaption ?? undefined,
+    seoTitle: row.seoTitle ?? undefined,
+    metaDescription: row.metaDescription ?? undefined,
+    focusKeyword: row.focusKeyword ?? undefined,
+    canonicalUrl: row.canonicalUrl ?? undefined,
+    ogTitle: row.ogTitle ?? undefined,
+    ogDescription: row.ogDescription ?? undefined,
+    ogImage: row.ogImage ?? undefined,
+    ogImageAlt: row.ogImageAlt ?? undefined,
+    twitterTitle: row.twitterTitle ?? undefined,
+    twitterDescription: row.twitterDescription ?? undefined,
+    twitterImage: row.twitterImage ?? undefined,
+    scheduledAt: row.scheduledAt ? new Date(row.scheduledAt) : null,
+    publishedAt: row.publishedAt ? new Date(row.publishedAt) : null,
+    pageType: row.pageType as Page["pageType"],
+    schemaType: row.schemaType as Page["schemaType"],
+    changeFrequency: row.changeFrequency as Page["changeFrequency"],
+    status: row.status as Page["status"],
+  }));
 
-    if (status) {
-      return items.filter((p) => p.status === status);
-    }
-    return items;
-  } catch {
-    return [];
+  if (status) {
+    return items.filter((p) => p.status === status);
   }
+  return items;
 });
 
 export const getPageBySlug = cache(
   async (slug: string, allowUnpublished = false): Promise<Page | null> => {
-    try {
-      const pages = await getPages();
-      const found = pages.find((p) => p.slug === slug);
-      if (!found) return null;
+    const pages = await getPages();
+    const found = pages.find((p) => p.slug === slug);
+    if (!found) return null;
 
-      if (!allowUnpublished) {
-        if (found.status !== "published") return null;
-        if (found.scheduledAt && new Date(found.scheduledAt) > new Date()) {
-          return null; // Not reached scheduled release time yet
-        }
+    if (!allowUnpublished) {
+      if (found.status !== "published") return null;
+      if (found.scheduledAt && new Date(found.scheduledAt) > new Date()) {
+        return null; // Not reached scheduled release time yet
       }
-
-      return found;
-    } catch {
-      return null;
     }
+
+    return found;
   }
 );
 
 export const getAllPageSlugs = cache(async (): Promise<{ slug: string }[]> => {
-  try {
-    const pages = await getPages("published");
-    return pages
-      .filter((p) => !p.scheduledAt || new Date(p.scheduledAt) <= new Date())
-      .map((p) => ({ slug: p.slug }));
-  } catch {
-    return [];
-  }
+  const pages = await getPages("published");
+  return pages
+    .filter((p) => !p.scheduledAt || new Date(p.scheduledAt) <= new Date())
+    .map((p) => ({ slug: p.slug }));
 });
 
 type RedirectRow = typeof schema.redirects.$inferSelect;
@@ -502,7 +443,8 @@ function matchRedirect(rows: RedirectRow[], source: string): Redirect | null {
       (r.source.startsWith("/") ? r.source : `/${r.source}`).replace(/\/+$/, "") ===
       normalizedSource
   );
-  if (!found) return null;
+  // Guards against loops already saved in the table.
+  if (!found || isRedirectLoop(rows, found.source)) return null;
   return {
     ...serializeDates(found),
     statusCode: found.statusCode ?? 301,
