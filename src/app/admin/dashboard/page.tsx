@@ -13,9 +13,11 @@ import {
   LayoutDashboard,
   Settings,
   Globe,
+  Inbox,
 } from "lucide-react";
 
 const cards = [
+  { label: "Leads", href: "/admin/dashboard/leads", icon: Inbox, color: "#1EDAC6" },
   { label: "Blog & SEO CMS", href: "/admin/dashboard/blog", icon: Newspaper, color: "#1EDAC6" },
   { label: "Services", href: "/admin/dashboard/services", icon: Rocket, color: "#1EDAC6" },
   { label: "Portfolio", href: "/admin/dashboard/portfolio", icon: FolderOpen, color: "#1EDAC6" },
