@@ -9,7 +9,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Business Directory",
   description:
-    "Browse the businesses Glovax Technologies has helped get online — e-commerce stores, travel platforms, consultancies, and local services across the world.",
+    "Browse the businesses Glovax Technologies has helped get online — e-commerce stores, skincare brands, and travel platforms.",
   keywords: [
     "business directory",
     "local business directory",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     url: `${siteConfig.url}/directory`,
     title: `Business Directory | ${siteConfig.name}`,
     description:
-      "Discover the businesses and services we've helped bring online — from e-commerce stores to cloud consultancies.",
+      "Discover the businesses and services we've helped bring online — from e-commerce stores to travel platforms.",
     type: "website",
     images: [ogImage],
   },

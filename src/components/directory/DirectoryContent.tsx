@@ -6,16 +6,14 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ListingCard } from "@/components/directory/ListingCard";
 import { Business } from "@/types";
-import { businesses as fallbackBusinesses } from "@/data/businesses";
 
 interface DirectoryContentProps {
   businesses?: Business[];
 }
 
 export default function DirectoryContent({
-  businesses: serverBusinesses,
+  businesses: all = [],
 }: DirectoryContentProps) {
-  const all = serverBusinesses?.length ? serverBusinesses : fallbackBusinesses;
 
   const categories = useMemo(
     () => [...new Set(all.map((b) => b.category))].sort(),
@@ -75,7 +73,7 @@ export default function DirectoryContent({
             </h1>
             <p className="mt-6 text-base md:text-lg text-muted max-w-2xl leading-relaxed">
               Browse the companies behind the products we build — from e-commerce
-              stores to cloud consultancies. Find trusted businesses by category
+              stores to travel platforms. Find trusted businesses by category
               or search for what you need.
             </p>
 

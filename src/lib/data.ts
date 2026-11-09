@@ -3,6 +3,7 @@ import { unstable_cache } from "next/cache";
 import { eq, getTableColumns } from "drizzle-orm";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { isPublishableListing } from "@/lib/directory";
 import type {
   Service,
   PortfolioItem,
@@ -47,6 +48,10 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
 // page at build time — went back to Turso, which then timed out under load.
 const { content: _content, versionHistory: _versionHistory, ...blogListColumns } =
   getTableColumns(schema.blogPosts);
+
+// Ratings are not based on real reviews, so they never leave the database.
+const { rating: _rating, reviewCount: _reviewCount, ...businessListColumns } =
+  getTableColumns(schema.businesses);
 
 const getCachedBlogListRows = unstable_cache(
   () => withRetry(() => db.select(blogListColumns).from(schema.blogPosts)),
@@ -384,8 +389,8 @@ export async function getSiteContentUpdatedAt(key: string): Promise<Date | null>
 
 export const getBusinesses = cache(async (): Promise<Business[]> => {
   try {
-    const rows = await db.select().from(schema.businesses);
-    return rows.map((row) => ({
+    const rows = await db.select(businessListColumns).from(schema.businesses);
+    return rows.filter(isPublishableListing).map((row) => ({
       ...serializeDates(row),
       hours: row.hours ?? [],
       tags: row.tags ?? [],
@@ -521,6 +526,47 @@ export async function getRedirectForProxy(source: string): Promise<Redirect | nu
     proxyRedirects = { rows, expiresAt: Date.now() + PROXY_REDIRECT_TTL_MS };
   }
   return matchRedirect(proxyRedirects.rows, source);
+}
+
+const PROXY_BLOG_SLUG_TTL_MS = 60_000;
+const knownBlogSlugs = new Map<string, number>();
+
+/**
+ * For src/proxy.ts. Throws if the database is unreachable, so an outage is
+ * never mistaken for a deleted post. Only slugs that exist are remembered, so a
+ * newly published post is found straight away.
+ */
+export async function blogPostExists(slug: string): Promise<boolean> {
+  if ((knownBlogSlugs.get(slug) ?? 0) > Date.now()) return true;
+
+  const rows = await withRetry(() =>
+    db.select({ slug: schema.blogPosts.slug }).from(schema.blogPosts).where(eq(schema.blogPosts.slug, slug)).limit(1)
+  );
+  if (rows.length === 0) return false;
+
+  knownBlogSlugs.set(slug, Date.now() + PROXY_BLOG_SLUG_TTL_MS);
+  return true;
+}
+
+/** Sections with nothing to show, which the navigation and sitemap should leave out. */
+export async function getHiddenNavHrefs(): Promise<string[]> {
+  try {
+    const [posts, positions, team, businesses] = await Promise.all([
+      getBlogPosts("published"),
+      getJobPositions(),
+      getTeamMembers(),
+      getBusinesses(),
+    ]);
+    const sections: [string, unknown[]][] = [
+      ["/blog", posts],
+      ["/career", positions],
+      ["/team", team],
+      ["/directory", businesses],
+    ];
+    return sections.filter(([, records]) => records.length === 0).map(([href]) => href);
+  } catch {
+    return [];
+  }
 }
 
 export const getInternalLinkTargets = cache(async (): Promise<InternalLinkTarget[]> => {

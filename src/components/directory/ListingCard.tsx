@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Star, MapPin, BadgeCheck, Globe } from "lucide-react";
+import { MapPin, BadgeCheck, Globe } from "lucide-react";
 import { Business } from "@/types";
 
 interface ListingCardProps {
@@ -58,13 +58,8 @@ export function ListingCard({ business, index = 0 }: ListingCardProps) {
           {business.name}
         </h2>
 
-        {/* Rating + location */}
+        {/* Location */}
         <div className="flex items-center gap-3 mt-2 text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <Star className="w-4 h-4 fill-accent text-accent" />
-            <span className="font-semibold text-foreground">{business.rating.toFixed(1)}</span>
-            <span>({business.reviewCount})</span>
-          </span>
           <span className="inline-flex items-center gap-1">
             <MapPin className="w-3.5 h-3.5" />
             {business.city}

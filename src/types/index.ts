@@ -175,8 +175,8 @@ export interface Business {
   country: string;
   shortDescription: string;
   description: string;
-  rating: number;
-  reviewCount: number;
+  rating?: number;
+  reviewCount?: number;
   address?: string;
   phone?: string;
   website?: string;

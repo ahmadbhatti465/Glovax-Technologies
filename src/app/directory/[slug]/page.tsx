@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getBusinessBySlug } from "@/lib/data";
-import { businesses as businessesTable } from "@/db/schema";
-import { db } from "@/db";
+import { getBusinessBySlug, getBusinesses } from "@/lib/data";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -13,7 +11,6 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { isValidExternalUrl } from "@/lib/utils";
 import {
   ArrowLeft,
-  Star,
   MapPin,
   Phone,
   Globe,
@@ -26,12 +23,8 @@ import { PageBackdrop } from "@/components/shared/PageBackdrop";
 export const dynamic = "force-static";
 
 export async function generateStaticParams() {
-  try {
-    const rows = await db.select().from(businessesTable);
-    return rows.map((b) => ({ slug: b.slug }));
-  } catch {
-    return [];
-  }
+  const businesses = await getBusinesses();
+  return businesses.map((b) => ({ slug: b.slug }));
 }
 
 export async function generateMetadata({
@@ -97,11 +90,6 @@ export default async function ListingPage({
           addressLocality: business.city,
           addressCountry: business.country,
         },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: business.rating,
-      reviewCount: business.reviewCount,
-    },
     ...(business.website ? { sameAs: [business.website] } : {}),
     ...(business.isRemote ? { areaServed: "Worldwide" } : {}),
   };
@@ -160,13 +148,6 @@ export default async function ListingPage({
           </h1>
 
           <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5">
-              <Star className="w-4 h-4 fill-accent text-accent" />
-              <span className="font-semibold text-foreground">{business.rating.toFixed(1)}</span>
-              <span>
-                ({business.reviewCount} {business.reviewCount === 1 ? "review" : "reviews"})
-              </span>
-            </span>
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="w-4 h-4" />
               {business.city}, {business.country}
