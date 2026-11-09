@@ -69,7 +69,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   description:
-    "Glovax Technologies is a world-class software house and digital agency delivering AI-powered web development, mobile apps, cloud solutions, and digital marketing.",
+    "Glovax Technologies is a software house delivering AI-powered web development, mobile apps, cloud solutions, and digital marketing.",
   alternates: {
     canonical: siteConfig.url,
   },

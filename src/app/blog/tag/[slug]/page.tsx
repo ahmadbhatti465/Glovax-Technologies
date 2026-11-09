@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, ogImage } from "@/lib/constants";
 import { getBlogPosts } from "@/lib/data";
 import { toBlogTaxonomySlug } from "@/lib/blog-taxonomy";
 import BlogContent from "../../blog-content";
@@ -47,7 +47,7 @@ export async function generateMetadata({
     description,
     robots: { index: false, follow: true },
     alternates: { canonical },
-    openGraph: { type: "website", url: canonical, title, description },
+    openGraph: { type: "website", url: canonical, title, description, images: [ogImage] },
   };
 }
 

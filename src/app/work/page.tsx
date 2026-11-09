@@ -52,7 +52,7 @@ const workFaqs = [
 ];
 
 export default async function WorkPage() {
-  const portfolioItems = await getPortfolioItems();
+  const portfolioItems = await getPortfolioItems("published");
   const lastUpdated = await getLatestUpdatedAt(["portfolioItems"]);
 
   return (

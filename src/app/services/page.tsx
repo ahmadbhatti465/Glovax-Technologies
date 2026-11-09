@@ -11,9 +11,9 @@ import { getBlogPosts, getServices, getLatestUpdatedAt } from "@/lib/data";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Engineering Services: Next.js, AI RAG & FastAPI",
+  title: { absolute: `AI & Web Development Services | ${siteConfig.name}` },
   description:
-    "Glovax Technologies provides custom AI engineering, enterprise RAG systems, full-stack Next.js/MERN development, and scalable FastAPI Python backends for UK & US clients.",
+    "Custom AI engineering, RAG systems, Next.js web apps and scalable cloud architecture from Glovax Technologies, built for teams in the UK and US.",
   keywords: [
     "AI engineering services",
     "custom RAG development",

@@ -47,20 +47,9 @@ export function StructuredData() {
           streetAddress: "31 K, DHA Phase 5",
           addressLocality: "Lahore",
           addressRegion: "Punjab",
-          postalCode: "54000",
           addressCountry: "PK",
         },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: 31.4808,
-          longitude: 74.3758,
-        },
-        areaServed: [
-          { "@type": "Country", name: "United States" },
-          { "@type": "Country", name: "United Kingdom" },
-          { "@type": "Country", name: "Canada" },
-          { "@type": "Country", name: "Worldwide" },
-        ],
+        areaServed: "Worldwide",
         knowsAbout: [
           "Retrieval-Augmented Generation (RAG)",
           "LangChain & Multi-Agent AI Systems",
@@ -73,12 +62,7 @@ export function StructuredData() {
           "Generative Engine Optimization (GEO)",
           "Custom SaaS Development",
         ],
-        sameAs: [
-          siteConfig.social.linkedin,
-          siteConfig.social.instagram,
-          siteConfig.social.upwork,
-          siteConfig.founder.github,
-        ],
+        sameAs: [siteConfig.social.instagram],
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "customer support",
@@ -94,14 +78,6 @@ export function StructuredData() {
         url: siteConfig.url,
         publisher: {
           "@id": `${siteConfig.url}/#organization`,
-        },
-        potentialAction: {
-          "@type": "SearchAction",
-          target: {
-            "@type": "EntryPoint",
-            urlTemplate: `${siteConfig.url}/blog?q={search_term_string}`,
-          },
-          "query-input": "required name=search_term_string",
         },
       },
     ],

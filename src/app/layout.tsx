@@ -81,11 +81,9 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [ogImage],
   },
+  // Title, description and image fall back to each page's Open Graph values.
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    images: [ogImage.url],
   },
   robots: {
     index: true,

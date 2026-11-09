@@ -52,7 +52,8 @@ export async function generateMetadata({
   const project = enrichWithCaseStudy(rawItem);
   const slug = project.slug || project.id;
   const canonicalUrl = normalizeCanonicalUrl(project.canonicalUrl, `/work/${slug}`);
-  const title = project.seoTitle || `${project.title} | Case Study | ${siteConfig.name}`;
+  const withBrand = `${project.title} | ${siteConfig.name}`;
+  const title = project.seoTitle || (withBrand.length <= 60 ? withBrand : project.title);
   const description =
     project.metaDescription ||
     project.shortDescription ||
