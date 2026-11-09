@@ -52,3 +52,9 @@ tools/backup-portfolio-images.json
 
 # local development database
 /dev.db*
+/e2e.db*
+/.vitest.db*
+
+# test output
+/test-results
+/playwright-report
