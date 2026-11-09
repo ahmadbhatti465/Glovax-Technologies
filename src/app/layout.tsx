@@ -102,7 +102,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sans.variable} dark`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${sans.variable} dark`}>
       <body
         className="font-body antialiased bg-background text-foreground min-h-screen"
       >
