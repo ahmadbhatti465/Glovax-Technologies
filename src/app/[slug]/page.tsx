@@ -235,7 +235,7 @@ export default async function DynamicCmsPage({
               <Lock className="w-5 h-5 text-amber-400 shrink-0" />
               <div className="text-xs">
                 <strong>Admin Preview Mode:</strong> This page is currently a <strong>{page.status.toUpperCase()}</strong>. It is not publicly indexable by search engines until published.{" "}
-                <a href="/api/admin/preview/exit" className="underline">Exit preview</a>
+                <Link href="/api/admin/preview/exit" prefetch={false} className="underline">Exit preview</Link>
               </div>
             </div>
           )}
