@@ -78,6 +78,7 @@ describe("chat assistant", () => {
   it("does not send people to pages that may be empty", () => {
     const answer = getChatAnswer("are you hiring? any job vacancy").text;
     expect(answer).toContain("CV");
-    expect(answer).not.toMatch(//(career|team)/);
+    expect(answer).not.toContain("/career");
+    expect(answer).not.toContain("/team");
   });
 });
