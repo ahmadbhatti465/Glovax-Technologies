@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/shared/Link";
 import { siteConfig } from "@/lib/constants";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 

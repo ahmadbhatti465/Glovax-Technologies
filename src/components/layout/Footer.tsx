@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/shared/Link";
 import Image from "next/image";
 import { siteConfig, footerLinks } from "@/lib/constants";
 import { Linkedin, Instagram, Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -14,56 +13,18 @@ import {
   getSiteContentUpdatedAt,
   getBlogPosts,
 } from "@/lib/data";
-// Dynamically import below-the-fold sections to keep the initial JS payload small
-// and reduce initial JS payload by ~124 KiB
-const TrustBar = dynamic(
-  () => import("@/components/sections/TrustBar").then((mod) => ({ default: mod.TrustBar })),
-  { ssr: true }
-);
-const WhyGlovax = dynamic(
-  () => import("@/components/sections/WhyGlovax").then((mod) => ({ default: mod.WhyGlovax })),
-  { ssr: true }
-);
-const Pricing = dynamic(
-  () => import("@/components/sections/Pricing").then((mod) => ({ default: mod.Pricing })),
-  { ssr: true }
-);
-const FAQ = dynamic(
-  () => import("@/components/sections/FAQ").then((mod) => ({ default: mod.FAQ })),
-  { ssr: true }
-);
-const TrustSection = dynamic(
-  () => import("@/components/sections/TrustSection").then((mod) => ({ default: mod.TrustSection })),
-  { ssr: true }
-);
-const ServicesGrid = dynamic(
-  () => import("@/components/sections/ServicesGrid").then((mod) => ({ default: mod.ServicesGrid })),
-  { ssr: true }
-);
-const WorkShowcase = dynamic(
-  () => import("@/components/sections/WorkShowcase").then((mod) => ({ default: mod.WorkShowcase })),
-  { ssr: true }
-);
-const ProcessSteps = dynamic(
-  () => import("@/components/sections/ProcessSteps").then((mod) => ({ default: mod.ProcessSteps })),
-  { ssr: true }
-);
-const StatsCounter = dynamic(
-  () => import("@/components/sections/StatsCounter").then((mod) => ({ default: mod.StatsCounter })),
-  { ssr: true }
-);
-const Testimonials = dynamic(
-  () => import("@/components/sections/Testimonials").then((mod) => ({ default: mod.Testimonials })),
-  { ssr: true }
-);
-const CTABanner = dynamic(
-  () => import("@/components/sections/CTABanner").then((mod) => ({ default: mod.CTABanner })),
-  { ssr: true }
-);
-const BlogHighlights = dynamic(
-  () => import("@/components/sections/BlogHighlights").then((mod) => ({ default: mod.BlogHighlights })),
-  { ssr: true }
-);
+import { TrustBar } from "@/components/sections/TrustBar";
+import { WhyGlovax } from "@/components/sections/WhyGlovax";
+import { Pricing } from "@/components/sections/Pricing";
+import { FAQ } from "@/components/sections/FAQ";
+import { TrustSection } from "@/components/sections/TrustSection";
+import { ServicesGrid } from "@/components/sections/ServicesGrid";
+import { WorkShowcase } from "@/components/sections/WorkShowcase";
+import { ProcessSteps } from "@/components/sections/ProcessSteps";
+import { StatsCounter } from "@/components/sections/StatsCounter";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { CTABanner } from "@/components/sections/CTABanner";
+import { BlogHighlights } from "@/components/sections/BlogHighlights";
 
 export const revalidate = 60;
 

@@ -37,7 +37,7 @@ export function SectionHeader({
       )}
       <Tag
         className={cn(
-          "font-semibold leading-[1.05] text-balance",
+          "font-semibold leading-[1.05] lg:text-balance",
           isPageTitle
             ? "text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] tracking-[-0.045em]"
             : "text-[2rem] sm:text-4xl md:text-5xl lg:text-[3.5rem] tracking-[-0.035em]"
