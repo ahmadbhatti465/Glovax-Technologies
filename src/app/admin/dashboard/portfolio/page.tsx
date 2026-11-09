@@ -53,7 +53,6 @@ export default function PortfolioManagement() {
   const [togglingId, setTogglingId] = useState<string | null>(null);
 
   const fetchItems = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await fetch("/api/admin/portfolio", { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch");
@@ -66,7 +65,7 @@ export default function PortfolioManagement() {
   }, []);
 
   useEffect(() => {
-    fetchItems();
+    void Promise.resolve().then(fetchItems);
   }, [fetchItems]);
 
   // Handle Duplicate Project

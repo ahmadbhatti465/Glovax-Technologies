@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -84,7 +84,7 @@ export function PageEditor({ initialPage, isNew = false }: PageEditorProps) {
   );
 
   // 301 Redirect detection
-  const originalSlugRef = useRef<string>(initialPage?.slug || "");
+  const [originalSlug, setOriginalSlug] = useState<string>(initialPage?.slug || "");
   const [createRedirectOnSlugChange, setCreateRedirectOnSlugChange] = useState(true);
   const [uploadingFeaturedImage, setUploadingFeaturedImage] = useState(false);
 
@@ -215,7 +215,7 @@ export function PageEditor({ initialPage, isNew = false }: PageEditorProps) {
       featured,
       readTime,
       scheduledAt: scheduledAt ? new Date(scheduledAt).toISOString() : null,
-      createRedirect: !isNew && originalSlugRef.current && originalSlugRef.current !== cleanSlug(slug) && createRedirectOnSlugChange,
+      createRedirect: !isNew && originalSlug && originalSlug !== cleanSlug(slug) && createRedirectOnSlugChange,
     };
 
     try {
@@ -233,7 +233,7 @@ export function PageEditor({ initialPage, isNew = false }: PageEditorProps) {
 
       if (res.ok) {
         setSaveStatus("saved");
-        originalSlugRef.current = cleanSlug(slug);
+        setOriginalSlug(cleanSlug(slug));
         if (overrideStatus) setStatus(overrideStatus);
 
         if (isNew && data.page?.id) {
@@ -404,11 +404,11 @@ export function PageEditor({ initialPage, isNew = false }: PageEditorProps) {
                 </div>
 
                 {/* Slug Change 301 Redirect Prompt */}
-                {!isNew && originalSlugRef.current && originalSlugRef.current !== slug && (
+                {!isNew && originalSlug && originalSlug !== slug && (
                   <div className="mt-2.5 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
                     <div className="flex-1">
-                      <p className="font-medium">URL Slug has changed from &quot;/{originalSlugRef.current}&quot; to &quot;/{slug}&quot;.</p>
+                      <p className="font-medium">URL Slug has changed from &quot;/{originalSlug}&quot; to &quot;/{slug}&quot;.</p>
                       <label className="flex items-center gap-2 mt-1.5 cursor-pointer text-gray-200">
                         <input
                           type="checkbox"
@@ -416,7 +416,7 @@ export function PageEditor({ initialPage, isNew = false }: PageEditorProps) {
                           onChange={(e) => setCreateRedirectOnSlugChange(e.target.checked)}
                           className="w-3.5 h-3.5 accent-[#1EDAC6] rounded"
                         />
-                        <span>Create permanent 301 redirect from /{originalSlugRef.current} to /{slug} (Recommended for SEO)</span>
+                        <span>Create permanent 301 redirect from /{originalSlug} to /{slug} (Recommended for SEO)</span>
                       </label>
                     </div>
                   </div>

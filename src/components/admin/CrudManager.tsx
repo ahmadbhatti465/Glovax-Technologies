@@ -54,7 +54,6 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
   const [deleteTarget, setDeleteTarget] = useState<Record<string, unknown> | null>(null);
 
   const fetchItems = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await fetch(apiEndpoint, { credentials: "include" });
       if (!res.ok) throw new Error("Failed");
@@ -67,7 +66,7 @@ export default function CrudManager({ title, apiEndpoint, fields, idKey = "id" }
   }, [apiEndpoint]);
 
   useEffect(() => {
-    fetchItems();
+    void Promise.resolve().then(fetchItems);
   }, [fetchItems]);
 
   function openCreate() {

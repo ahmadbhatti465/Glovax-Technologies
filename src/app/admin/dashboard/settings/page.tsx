@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { LogOut, LayoutDashboard, Save, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface ContentItem {
   key: string;
@@ -56,6 +57,7 @@ const defaultContent: Record<string, unknown> = {
 };
 
 export default function SettingsPage() {
+  const router = useRouter();
   const { loading } = useAuth(true);
   const [items, setItems] = useState<ContentItem[]>([]);
   const [activeKey, setActiveKey] = useState("hero");
@@ -122,7 +124,7 @@ export default function SettingsPage() {
             <button
               onClick={async () => {
                 await fetch("/api/admin/logout", { method: "POST" });
-                window.location.href = "/admin";
+                router.replace("/admin");
               }}
               className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
             >

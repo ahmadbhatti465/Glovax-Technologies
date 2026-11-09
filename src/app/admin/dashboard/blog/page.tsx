@@ -44,7 +44,6 @@ export default function BlogManagement() {
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null);
 
   const fetchPosts = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await fetch("/api/admin/blog", { credentials: "include" });
       if (!res.ok) throw new Error("Failed");
@@ -57,7 +56,7 @@ export default function BlogManagement() {
   }, []);
 
   useEffect(() => {
-    fetchPosts();
+    void Promise.resolve().then(fetchPosts);
   }, [fetchPosts]);
 
   // Handle Duplicate

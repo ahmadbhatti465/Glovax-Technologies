@@ -50,7 +50,7 @@ export async function generateMetadata({
 
   const url = normalizeCanonicalUrl(page.canonicalUrl, `/${page.slug}`);
   const title = page.seoTitle || `${page.title} | ${siteConfig.name}`;
-  const description = page.metaDescription || page.excerpt || siteConfig.description;
+  const description = page.metaDescription || page.excerpt || siteConfig.description.slice(0, 155);
 
   const ogImageUrl = page.ogImage || page.featuredImage || siteConfig.ogImage;
   const resolvedOgImage = ogImageUrl.startsWith("http") || ogImageUrl.startsWith("data:") ? ogImageUrl : `${siteConfig.url}${ogImageUrl.startsWith("/") ? "" : "/"}${ogImageUrl}`;
@@ -121,7 +121,7 @@ export default async function DynamicCmsPage({
   }
 
   const pageUrl = normalizeCanonicalUrl(page.canonicalUrl, `/${page.slug}`);
-  const publishedDate = page.publishedAt ? new Date(page.publishedAt) : new Date(page.createdAt || Date.now());
+  const publishedDate = page.publishedAt ? new Date(page.publishedAt) : page.updatedAt ? new Date(page.updatedAt) : null;
   const modifiedDate = page.updatedAt ? new Date(page.updatedAt) : publishedDate;
 
   // Generate Structured Data Schema
@@ -191,8 +191,8 @@ export default async function DynamicCmsPage({
       name: page.title,
       url: pageUrl,
       description: page.metaDescription || page.excerpt,
-      datePublished: publishedDate.toISOString(),
-      dateModified: modifiedDate.toISOString(),
+      ...(publishedDate ? { datePublished: publishedDate.toISOString() } : {}),
+      ...(modifiedDate ? { dateModified: modifiedDate.toISOString() } : {}),
       publisher: {
         "@type": "Organization",
         name: siteConfig.name,
@@ -255,6 +255,8 @@ export default async function DynamicCmsPage({
                 {page.pageType.replace(/_/g, " ")}
               </span>
 
+              {publishedDate && (
+
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Calendar className="w-3.5 h-3.5" />
                 {publishedDate.toLocaleDateString("en-US", {
@@ -263,6 +265,8 @@ export default async function DynamicCmsPage({
                   day: "numeric",
                 })}
               </span>
+
+              )}
 
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Clock className="w-3.5 h-3.5" />

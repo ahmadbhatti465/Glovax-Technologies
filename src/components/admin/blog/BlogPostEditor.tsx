@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -71,7 +71,8 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
   const [publishedAt, setPublishedAt] = useState(
     initialPost?.publishedAt || new Date().toISOString().slice(0, 10)
   );
-  const [readTime, setReadTime] = useState<number>(initialPost?.readTime || 5);
+  const words = content.replace(/<[^>]*>/g, " ").trim().split(/\s+/).filter(Boolean).length;
+  const readTime = Math.max(1, Math.ceil(words / 220));
   const [featured, setFeatured] = useState(Boolean(initialPost?.featured));
   const [status, setStatus] = useState<PageStatus>(
     initialPost?.status || (isNew ? "draft" : "published")
@@ -101,7 +102,7 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
   const [uploadingFeaturedImage, setUploadingFeaturedImage] = useState(false);
 
   // 301 Redirect detection
-  const originalSlugRef = useRef<string>(initialPost?.slug || "");
+  const [originalSlug, setOriginalSlug] = useState<string>(initialPost?.slug || "");
   const [createRedirectOnSlugChange, setCreateRedirectOnSlugChange] = useState(true);
 
   // Auto-generate slug from title if not customized
@@ -177,14 +178,6 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
     setUploadingFeaturedImage(false);
   };
 
-  // Auto calculate reading time
-  useEffect(() => {
-    const plainText = content.replace(/<[^>]*>/g, " ").trim();
-    const words = plainText.split(/\s+/).filter(Boolean).length;
-    const calculated = Math.max(1, Math.ceil(words / 220));
-    setReadTime(calculated);
-  }, [content]);
-
   // Unsaved changes warning
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -256,8 +249,8 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
       status: currentStatus,
       createRedirect:
         !isNew &&
-        originalSlugRef.current &&
-        originalSlugRef.current !== cleanSlug(slug) &&
+        originalSlug &&
+        originalSlug !== cleanSlug(slug) &&
         createRedirectOnSlugChange,
     };
 
@@ -276,7 +269,7 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
 
       if (res.ok) {
         setSaveStatus("saved");
-        originalSlugRef.current = cleanSlug(slug);
+        setOriginalSlug(cleanSlug(slug));
         if (overrideStatus) setStatus(overrideStatus);
 
         if (isNew && data.post?.id) {
@@ -450,11 +443,11 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
                 </div>
 
                 {/* Slug Change 301 Redirect Prompt */}
-                {!isNew && originalSlugRef.current && originalSlugRef.current !== slug && (
+                {!isNew && originalSlug && originalSlug !== slug && (
                   <div className="mt-2.5 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
                     <div className="flex-1">
-                      <p className="font-medium">URL Slug changed from &quot;/blog/{originalSlugRef.current}&quot; to &quot;/blog/{slug}&quot;.</p>
+                      <p className="font-medium">URL Slug changed from &quot;/blog/{originalSlug}&quot; to &quot;/blog/{slug}&quot;.</p>
                       <label className="flex items-center gap-2 mt-1.5 cursor-pointer text-gray-200">
                         <input
                           type="checkbox"
@@ -462,7 +455,7 @@ export function BlogPostEditor({ initialPost, isNew = false }: BlogPostEditorPro
                           onChange={(e) => setCreateRedirectOnSlugChange(e.target.checked)}
                           className="w-3.5 h-3.5 accent-[#1EDAC6] rounded"
                         />
-                        <span>Create permanent 301 redirect from /blog/{originalSlugRef.current} to /blog/{slug} (Preserves backlink juice)</span>
+                        <span>Create permanent 301 redirect from /blog/{originalSlug} to /blog/{slug} (Preserves backlink juice)</span>
                       </label>
                     </div>
                   </div>

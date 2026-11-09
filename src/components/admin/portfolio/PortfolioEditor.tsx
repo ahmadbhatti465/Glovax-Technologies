@@ -239,7 +239,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
   } | null>(null);
 
   // 301 Redirect Handling
-  const originalSlugRef = useRef(initialItem?.slug || initialItem?.id || "");
+  const [originalSlug, setOriginalSlug] = useState(initialItem?.slug || initialItem?.id || "");
   const [createRedirectOnSlugChange, setCreateRedirectOnSlugChange] = useState(true);
 
   // Fetch all portfolio projects for Related Projects dropdown
@@ -593,7 +593,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
       twitterImage: twitterImage.trim() || null,
       schemaType,
       publishedAt: publishedAt || new Date().toISOString().slice(0, 10),
-      createRedirect: !isNew && createRedirectOnSlugChange && originalSlugRef.current !== finalSlug,
+      createRedirect: !isNew && createRedirectOnSlugChange && originalSlug !== finalSlug,
     };
 
     try {
@@ -617,7 +617,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
 
       setSaveStatus("saved");
       if (forcedStatus) setStatus(forcedStatus);
-      originalSlugRef.current = finalSlug;
+      setOriginalSlug(finalSlug);
 
       if (isNew) {
         router.push(`/admin/dashboard/portfolio/${data.item.id}`);
@@ -629,11 +629,17 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
     setSaving(false);
   };
 
+  // Keeps the autosave timer calling the latest save with the latest field values.
+  const latestSave = useRef(handleSave);
+  useEffect(() => {
+    latestSave.current = handleSave;
+  });
+
   // Debounced autosave for existing records
   useEffect(() => {
     if (isNew || saveStatus !== "unsaved") return;
     const timer = setTimeout(() => {
-      handleSave();
+      latestSave.current();
     }, 15000);
     return () => clearTimeout(timer);
   }, [saveStatus, isNew]);
@@ -2160,12 +2166,12 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
                   </div>
 
                   {/* 301 Redirect Checkbox */}
-                  {!isNew && originalSlugRef.current !== slug && (
+                  {!isNew && originalSlug !== slug && (
                     <div className="sm:col-span-2 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 space-y-2">
                       <div className="flex items-center gap-2">
                         <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
                         <span className="text-xs font-semibold">
-                          URL Slug Changed from &quot;/work/{originalSlugRef.current}&quot; to &quot;/work/{slug}&quot;
+                          URL Slug Changed from &quot;/work/{originalSlug}&quot; to &quot;/work/{slug}&quot;
                         </span>
                       </div>
                       <label className="flex items-start gap-2 cursor-pointer text-xs text-gray-200">
@@ -2176,7 +2182,7 @@ export function PortfolioEditor({ initialItem, isNew = false }: PortfolioEditorP
                           className="w-3.5 h-3.5 accent-[#1EDAC6] rounded mt-0.5"
                         />
                         <span>
-                          Automatically create a 301 Permanent Redirect from <code>/work/{originalSlugRef.current}</code> to <code>/work/{slug}</code> to protect SEO ranking.
+                          Automatically create a 301 Permanent Redirect from <code>/work/{originalSlug}</code> to <code>/work/{slug}</code> to protect SEO ranking.
                         </span>
                       </label>
                     </div>

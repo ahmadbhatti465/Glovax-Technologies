@@ -16,12 +16,16 @@ interface InternalLinkModalProps {
   selectedText?: string;
 }
 
-export function InternalLinkModal({
-  isOpen,
+export function InternalLinkModal({ isOpen, ...props }: InternalLinkModalProps) {
+  // Mounting only while open gives each opening a fresh form.
+  return isOpen ? <InternalLinkForm {...props} /> : null;
+}
+
+function InternalLinkForm({
   onClose,
   onInsert,
   selectedText = "",
-}: InternalLinkModalProps) {
+}: Omit<InternalLinkModalProps, "isOpen">) {
   const [text, setText] = useState(selectedText);
   const [url, setUrl] = useState("");
   const [openInNewTab, setOpenInNewTab] = useState(false);
@@ -30,23 +34,9 @@ export function InternalLinkModal({
   const [ugc, setUgc] = useState(false);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<InternalLinkTarget[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (isOpen) {
-      setText(selectedText);
-      setUrl("");
-      setOpenInNewTab(false);
-      setNofollow(false);
-      setSponsored(false);
-      setUgc(false);
-      setQuery("");
-      fetchSuggestions("");
-    }
-  }, [isOpen, selectedText]);
+  const [loading, setLoading] = useState(true);
 
   const fetchSuggestions = async (q: string) => {
-    setLoading(true);
     try {
       const res = await fetch(`/api/admin/internal-links?q=${encodeURIComponent(q)}`);
       if (res.ok) {
@@ -59,8 +49,27 @@ export function InternalLinkModal({
     setLoading(false);
   };
 
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/internal-links?q=")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (!cancelled) setSuggestions(data);
+      })
+      .catch(() => {
+        if (!cancelled) setSuggestions([]);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const handleSearchChange = (val: string) => {
     setQuery(val);
+    setLoading(true);
     fetchSuggestions(val);
   };
 
@@ -97,8 +106,6 @@ export function InternalLinkModal({
 
     onClose();
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">

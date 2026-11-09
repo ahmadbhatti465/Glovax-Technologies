@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Briefcase,
   FolderOpen,
@@ -28,6 +29,7 @@ const cards = [
 ];
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const { loading } = useAuth(true);
   if (loading) return <div className="min-h-screen bg-background" />;
 
@@ -42,7 +44,7 @@ export default function AdminDashboard() {
           <button
             onClick={async () => {
               await fetch("/api/admin/logout", { method: "POST" });
-              window.location.href = "/admin";
+              router.replace("/admin");
             }}
             className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
           >
