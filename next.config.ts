@@ -3,18 +3,29 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
 
+const TURNSTILE_ORIGIN = "https://challenges.cloudflare.com";
+
+// Errors are sent to the host in the DSN, so the CSP has to allow exactly that host.
+function getSentryOrigin() {
+  try {
+    return process.env.NEXT_PUBLIC_SENTRY_DSN ? new URL(process.env.NEXT_PUBLIC_SENTRY_DSN).origin : "";
+  } catch {
+    return "";
+  }
+}
+
 // 'unsafe-inline' is required for scripts because Next.js injects inline
 // bootstrap scripts into prerendered pages. The alternative, per-request
 // nonces, would force every page to render dynamically and lose ISR caching.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' ${TURNSTILE_ORIGIN}${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  `connect-src 'self'${isDev ? " ws:" : ""}`,
+  `connect-src 'self' ${getSentryOrigin()}${isDev ? " ws:" : ""}`.trimEnd(),
   "media-src 'self' https://res.cloudinary.com",
-  "frame-src 'none'",
+  `frame-src ${TURNSTILE_ORIGIN}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -54,7 +65,7 @@ const nextConfig: NextConfig = {
 
   // Optional performance optimizations you might want:
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production', // Remove console.log in production
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false, // Keep errors visible in production logs
   },
 
   // Optional: Add experimental features if needed
