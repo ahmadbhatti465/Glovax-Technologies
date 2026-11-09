@@ -1,8 +1,10 @@
 import { db } from "@/db";
 import { blogPosts } from "@/db/schema";
 import { siteConfig } from "@/lib/constants";
+import { isBlogPostLive } from "@/lib/blog-publishing";
 
-export const revalidate = 3600; // 1 hour ISR
+// Short, so a scheduled post appears soon after its publish date passes.
+export const revalidate = 60;
 
 export async function GET() {
   try {
@@ -21,7 +23,7 @@ export async function GET() {
       .from(blogPosts);
 
     const publishedPosts = posts
-      .filter((p) => (p.status || "published") === "published" && p.robotsIndex !== false)
+      .filter((p) => isBlogPostLive(p) && p.robotsIndex !== false)
       .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
     const xmlItems = publishedPosts

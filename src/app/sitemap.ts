@@ -4,6 +4,7 @@ import { blogPosts, portfolioItems, redirects } from "@/db/schema";
 import { siteConfig } from "@/lib/constants";
 import { normalizeCanonicalUrl } from "@/lib/utils";
 import { getHiddenNavHrefs } from "@/lib/data";
+import { isBlogPostLive } from "@/lib/blog-publishing";
 
 export const revalidate = 60;
 
@@ -77,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       toSitemapDate(post.updatedAt) ?? toSitemapDate(post.publishedAt);
 
     if (
-      post.status !== "published" ||
+      !isBlogPostLive(post) ||
       post.robotsIndex === false ||
       !lastModified ||
       url.replace(/\/+$/, "") !== localUrl.replace(/\/+$/, "") ||

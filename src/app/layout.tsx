@@ -104,6 +104,10 @@ export const metadata: Metadata = {
   },
 };
 
+// Keeps the navigation current on pages that have no timer of their own, for
+// example when a scheduled post makes the blog live.
+export const revalidate = 3600;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
