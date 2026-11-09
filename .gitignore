@@ -49,3 +49,6 @@ public/uploads/*
 
 # recovery artifact (base64 image backup from image migration)
 tools/backup-portfolio-images.json
+
+# local development database
+/dev.db*
