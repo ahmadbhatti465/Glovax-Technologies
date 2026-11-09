@@ -94,7 +94,7 @@ Add these in **Settings > Environment Variables**:
 |------|-------|----------|
 | `DATABASE_URL` | `libsql://glovax-db-YOURNAME.turso.io` | Yes |
 | `DATABASE_AUTH_TOKEN` | `YOUR-TURSO-AUTH-TOKEN` | Yes |
-| `ADMIN_PASSWORD` | `glovax-admin-2026` (or your own) | Yes |
+| `ADMIN_PASSWORD` | `<set in Vercel>` | Yes |
 | `JWT_SECRET` | Generate a random 32+ char string | Yes |
 | `RESEND_API_KEY` | `re_YOUR-RESEND-API-KEY` (from resend.com/api-keys) | Optional |
 | `OWNER_EMAIL` | `info@glovaxtechnologies.com` | Optional |
