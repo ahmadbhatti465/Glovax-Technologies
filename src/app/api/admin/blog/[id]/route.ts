@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { db } from "@/db";
-import { blogPosts, redirects } from "@/db/schema";
+import { blogPosts } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
 import { cleanSlug, validateSlug } from "@/lib/slug";
+import { recordSlugRename } from "@/lib/redirects";
 import {
   hasScheduledBlogPostCapacity,
   MAX_SCHEDULED_BLOG_POSTS_PER_DAY,
@@ -93,32 +94,8 @@ export async function PUT(request: Request, { params }: { params: Params }) {
       );
     }
 
-    // Check if slug changed and create 301 redirect if requested
     if (existing.slug !== newSlug) {
-      if (body.createRedirect !== false) {
-        const sourcePath = `/blog/${existing.slug}`;
-        const destPath = `/blog/${newSlug}`;
-
-        const existingRedirect = await db
-          .select()
-          .from(redirects)
-          .where(eq(redirects.source, sourcePath));
-
-        if (existingRedirect.length > 0) {
-          await db
-            .update(redirects)
-            .set({ destination: destPath, statusCode: 301 })
-            .where(eq(redirects.source, sourcePath));
-        } else {
-          await db.insert(redirects).values({
-            id: `redir_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-            source: sourcePath,
-            destination: destPath,
-            statusCode: 301,
-            createdAt: now,
-          });
-        }
-      }
+      await recordSlugRename(`/blog/${existing.slug}`, `/blog/${newSlug}`, body.createRedirect !== false);
     }
 
     // Version history update

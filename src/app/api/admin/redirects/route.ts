@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { redirects } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
 import { eq, desc } from "drizzle-orm";
+import { saveRedirect } from "@/lib/redirects";
 
 export async function GET() {
   const unauthorized = await requireAdmin();
@@ -35,31 +36,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unsupported redirect status code" }, { status: 400 });
     }
 
-    if (source === destination) {
-      return NextResponse.json({ error: "Source and destination cannot be identical (loop risk)" }, { status: 400 });
+    const saved = await saveRedirect(source, destination, statusCode);
+    if (!saved) {
+      return NextResponse.json(
+        { error: "This redirect would point to itself or create a loop." },
+        { status: 400 }
+      );
     }
 
-    const existing = await db.select().from(redirects).where(eq(redirects.source, source));
-    if (existing.length > 0) {
-      await db
-        .update(redirects)
-        .set({ destination, statusCode })
-        .where(eq(redirects.source, source));
-      revalidateTag("runtime-redirects", "max");
-      return NextResponse.json({ success: true, updated: true });
-    }
-
-    const id = `redir_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
-    await db.insert(redirects).values({
-      id,
-      source,
-      destination,
-      statusCode,
-      createdAt: new Date(),
-    });
-
-    revalidateTag("runtime-redirects", "max");
-    return NextResponse.json({ success: true, id });
+    revalidateTag("runtime-redirects", { expire: 0 });
+    return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to create redirect";
     return NextResponse.json({ error: message }, { status: 500 });
@@ -78,7 +64,7 @@ export async function DELETE(request: Request) {
     }
 
     await db.delete(redirects).where(eq(redirects.id, id));
-    revalidateTag("runtime-redirects", "max");
+    revalidateTag("runtime-redirects", { expire: 0 });
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Failed to delete redirect";

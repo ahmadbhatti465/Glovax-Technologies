@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { db } from "@/db";
-import { pages, redirects } from "@/db/schema";
+import { pages } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
 import { cleanSlug, validateSlug } from "@/lib/slug";
+import { recordSlugRename } from "@/lib/redirects";
 import { eq, and, ne } from "drizzle-orm";
 
 type Params = Promise<{ id: string }>;
@@ -62,33 +63,8 @@ export async function PUT(request: Request, { params }: { params: Params }) {
 
     const now = new Date();
 
-    // Check if slug changed and create 301 redirect if requested or page was published
     if (existing.slug !== newSlug) {
-      if (body.createRedirect !== false) {
-        const sourcePath = `/${existing.slug}`;
-        const destPath = `/${newSlug}`;
-
-        // Check if redirect source already exists
-        const existingRedirect = await db
-          .select()
-          .from(redirects)
-          .where(eq(redirects.source, sourcePath));
-
-        if (existingRedirect.length > 0) {
-          await db
-            .update(redirects)
-            .set({ destination: destPath, statusCode: 301 })
-            .where(eq(redirects.source, sourcePath));
-        } else {
-          await db.insert(redirects).values({
-            id: `redir_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-            source: sourcePath,
-            destination: destPath,
-            statusCode: 301,
-            createdAt: now,
-          });
-        }
-      }
+      await recordSlugRename(`/${existing.slug}`, `/${newSlug}`, body.createRedirect !== false);
     }
 
     // Version history update
@@ -159,7 +135,8 @@ export async function PUT(request: Request, { params }: { params: Params }) {
     revalidatePath("/sitemap.xml");
     revalidatePath(`/${existing.slug}`);
     if (newSlug !== existing.slug) revalidatePath(`/${newSlug}`);
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
+    revalidateTag("runtime-redirects", { expire: 0 });
 
     return NextResponse.json({ success: true, page: { id, ...updatedPage } });
   } catch (err: unknown) {
@@ -185,7 +162,8 @@ export async function DELETE(_request: Request, { params }: { params: Params }) 
     revalidatePath("/");
     revalidatePath("/sitemap.xml");
     if (slug) revalidatePath(`/${slug}`);
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
+    revalidateTag("runtime-redirects", { expire: 0 });
 
     return NextResponse.json({ success: true });
   } catch (err: unknown) {

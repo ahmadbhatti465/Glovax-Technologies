@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { db } from "@/db";
-import { portfolioItems, redirects } from "@/db/schema";
+import { portfolioItems } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
 import { cleanSlug, validateSlug } from "@/lib/slug";
+import { recordSlugRename, saveRedirect } from "@/lib/redirects";
 import { eq } from "drizzle-orm";
 
 type Params = Promise<{ id: string }>;
@@ -62,28 +63,9 @@ export async function PUT(request: Request, { params }: { params: Params }) {
       );
     }
 
-    // 301 Redirect creation if slug changed and requested
     const oldSlug = existing.slug || existing.id;
-    if (oldSlug && oldSlug !== newSlug && body.createRedirect) {
-      try {
-        const redirectSource = `/work/${oldSlug}`;
-        const redirectDest = `/work/${newSlug}`;
-        const existingRedir = await db
-          .select()
-          .from(redirects)
-          .where(eq(redirects.source, redirectSource));
-        if (existingRedir.length === 0) {
-          await db.insert(redirects).values({
-            id: `redir-${Date.now()}`,
-            source: redirectSource,
-            destination: redirectDest,
-            statusCode: 301,
-            createdAt: new Date(),
-          });
-        }
-      } catch (redirErr) {
-        console.error("Failed to insert auto 301 redirect:", redirErr);
-      }
+    if (oldSlug && oldSlug !== newSlug) {
+      await recordSlugRename(`/work/${oldSlug}`, `/work/${newSlug}`, Boolean(body.createRedirect));
     }
 
     const updatedData = {
@@ -148,7 +130,8 @@ export async function PUT(request: Request, { params }: { params: Params }) {
     revalidatePath(`/work/${oldSlug}`);
     revalidatePath(`/work/${newSlug}`);
     revalidatePath("/sitemap.xml");
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
+    revalidateTag("runtime-redirects", { expire: 0 });
 
     return NextResponse.json({ success: true, item: { ...existing, ...updatedData } });
   } catch (err: unknown) {
@@ -176,13 +159,7 @@ export async function DELETE(request: Request, { params }: { params: Params }) {
 
     if (createRedirect && (item.slug || item.id)) {
       try {
-        await db.insert(redirects).values({
-          id: `redir-${Date.now()}`,
-          source: `/work/${item.slug || item.id}`,
-          destination: redirectTarget,
-          statusCode: 301,
-          createdAt: new Date(),
-        });
+        await saveRedirect(`/work/${item.slug || item.id}`, redirectTarget);
       } catch (redirErr) {
         console.error("Failed to create redirect on delete:", redirErr);
       }
@@ -194,7 +171,8 @@ export async function DELETE(request: Request, { params }: { params: Params }) {
     revalidatePath("/work");
     revalidatePath(`/work/${item.slug || item.id}`);
     revalidatePath("/sitemap.xml");
-    revalidateTag("public-data", "max");
+    revalidateTag("public-data", { expire: 0 });
+    revalidateTag("runtime-redirects", { expire: 0 });
 
     return NextResponse.json({ success: true });
   } catch {
