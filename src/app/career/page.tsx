@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd, JobPostingJsonLd } from "@/components/shared/StructuredData";
 import CareerContent from "./career-content";
@@ -54,6 +55,8 @@ const careerFaqs = [
 
 export default async function CareerPage() {
   const positions = await getJobPositions();
+  if (positions.length === 0) notFound();
+
   const benefits = await getSiteContent<string[]>("career_benefits");
   const lastUpdated = await getLatestUpdatedAt(["jobPositions"]);
 

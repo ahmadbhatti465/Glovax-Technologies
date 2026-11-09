@@ -5,64 +5,13 @@ import { TeamMember } from "@/types";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
-const fallbackTeam: TeamMember[] = [
-  {
-    id: "1",
-    name: "Ahmad",
-    role: "Founder & CEO",
-    department: "Executive",
-    bio: "Visionary leader with 10+ years in software development and digital transformation.",
-    expertise: [],
-  },
-  {
-    id: "2",
-    name: "Iqra Kiran",
-    role: "Chief Technology Officer",
-    department: "Engineering",
-    bio: "Experienced architect specializing in scalable AI systems and cloud infrastructure.",
-    expertise: [],
-  },
-  {
-    id: "3",
-    name: "Ali Mohyudin",
-    role: "Head of AI Research",
-    department: "AI/ML",
-    bio: "PhD in Machine Learning with deep expertise in neural networks and deep learning.",
-    expertise: [],
-  },
-  {
-    id: "4",
-    name: "Moaaz Shafqat",
-    role: "Lead Developer",
-    department: "Engineering",
-    bio: "Full-stack expert passionate about building elegant, performant web applications.",
-    expertise: [],
-  },
-  {
-    id: "5",
-    name: "Hammad Shafqat",
-    role: "Head of Marketing",
-    department: "Marketing",
-    bio: "Growth strategist with a track record of scaling startups through data-driven marketing.",
-    expertise: [],
-  },
-  {
-    id: "6",
-    name: "Rubab Mehmood",
-    role: "Client Success Director",
-    department: "Client Success",
-    bio: "Dedicated to ensuring every client achieves their business goals with our solutions.",
-    expertise: [],
-  },
-];
-
 interface TeamContentProps {
   team?: TeamMember[];
   lastUpdated?: Date | null;
 }
 
 export default function TeamContent({ team: serverTeam, lastUpdated }: TeamContentProps) {
-  const team = serverTeam?.length ? serverTeam : fallbackTeam;
+  const team = serverTeam ?? [];
 
   return (
     <>

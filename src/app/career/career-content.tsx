@@ -19,94 +19,14 @@ interface CareerContentProps {
   lastUpdated?: Date | null;
 }
 
-const fallbackPositions: JobPosition[] = [
-  {
-    id: "1",
-    title: "Senior AI/ML Engineer",
-    department: "Engineering",
-    location: "Remote",
-    type: "Full-time",
-    experience: "5+ years",
-    description: "",
-    responsibilities: [],
-    requirements: [],
-  },
-  {
-    id: "2",
-    title: "Full Stack Developer",
-    department: "Engineering",
-    location: "Remote",
-    type: "Full-time",
-    experience: "3+ years",
-    description: "",
-    responsibilities: [],
-    requirements: [],
-  },
-  {
-    id: "3",
-    title: "Product Manager",
-    department: "Product",
-    location: "Remote",
-    type: "Full-time",
-    experience: "4+ years",
-    description: "",
-    responsibilities: [],
-    requirements: [],
-  },
-  {
-    id: "4",
-    title: "UX/UI Designer",
-    department: "Design",
-    location: "Remote",
-    type: "Full-time",
-    experience: "3+ years",
-    description: "",
-    responsibilities: [],
-    requirements: [],
-  },
-  {
-    id: "5",
-    title: "DevOps Engineer",
-    department: "Engineering",
-    location: "Remote",
-    type: "Full-time",
-    experience: "3+ years",
-    description: "",
-    responsibilities: [],
-    requirements: [],
-  },
-  {
-    id: "6",
-    title: "AI Research Intern",
-    department: "AI/ML",
-    location: "Remote",
-    type: "Internship",
-    experience: "0-1 years",
-    description: "",
-    responsibilities: [],
-    requirements: [],
-  },
-];
-
-const fallbackBenefits = [
-  "Competitive salary & equity",
-  "Remote-first culture",
-  "Health, dental & vision",
-  "Learning budget",
-  "Flexible PTO",
-  "Annual team retreats",
-  "Home office stipend",
-  "Parental leave",
-];
-
 export default function CareerContent({
   positions: serverPositions,
   benefits: serverBenefits,
   faqs = [],
   lastUpdated,
 }: CareerContentProps) {
-  const positions = serverPositions?.length ? serverPositions : fallbackPositions;
-  const benefits = serverBenefits?.length ? serverBenefits : fallbackBenefits;
+  const positions = serverPositions ?? [];
+  const benefits = (serverBenefits ?? []).filter((benefit) => benefit.trim());
 
   return (
     <>
@@ -134,6 +54,9 @@ export default function CareerContent({
             </p>
           )}
 
+          {benefits.length > 0 && (
+
+
           <div className="mb-20">
             <h2 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-6">
               Why work here
@@ -151,6 +74,7 @@ export default function CareerContent({
               ))}
             </div>
           </div>
+          )}
 
           <h2 className="text-sm font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-6">
             Open Positions ({positions.length})

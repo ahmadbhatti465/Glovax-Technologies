@@ -23,12 +23,14 @@ import { toast } from "sonner";
 import { services } from "@/data/services";
 import { siteConfig } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useHiddenHrefs } from "@/components/layout/SiteVisibility";
 
 type Command = {
   id: string;
   label: string;
   group: "Pages" | "Services" | "Contact";
   icon: LucideIcon;
+  href?: string;
   keywords?: string;
   run: (router: ReturnType<typeof useRouter>) => void;
 };
@@ -42,8 +44,8 @@ const commands: Command[] = [
   { id: "work", label: "Work & case studies", group: "Pages", icon: Briefcase, keywords: "portfolio projects", run: go("/work") },
   { id: "pricing", label: "Pricing", group: "Pages", icon: Tag, keywords: "cost plans", run: go("/#pricing") },
   { id: "about", label: "About", group: "Pages", icon: Users, keywords: "team company", run: go("/about") },
-  { id: "blog", label: "Blog", group: "Pages", icon: BookOpen, keywords: "articles insights", run: go("/blog") },
-  { id: "career", label: "Careers", group: "Pages", icon: FileText, keywords: "jobs hiring", run: go("/career") },
+  { id: "blog", label: "Blog", group: "Pages", icon: BookOpen, keywords: "articles insights", href: "/blog", run: go("/blog") },
+  { id: "career", label: "Careers", group: "Pages", icon: FileText, keywords: "jobs hiring", href: "/career", run: go("/career") },
   ...services.map<Command>((s) => ({
     id: `service-${s.id}`,
     label: s.title,
@@ -97,6 +99,7 @@ export function openCommandMenu() {
 
 export function CommandMenu() {
   const router = useRouter();
+  const hiddenHrefs = useHiddenHrefs();
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -144,15 +147,16 @@ export function CommandMenu() {
   }, [isOpen]);
 
   const results = useMemo(() => {
+    const available = commands.filter((cmd) => !cmd.href || !hiddenHrefs.includes(cmd.href));
     const tokens = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    if (!tokens.length) return commands;
-    return commands
+    if (!tokens.length) return available;
+    return available
       .map((cmd, order) => ({ cmd, order, score: scoreCommand(cmd, tokens) }))
       .filter((r) => r.score > 0)
       // Groups stay contiguous (headers render on group change); best matches lead within a group.
       .sort((a, b) => GROUPS.indexOf(a.cmd.group) - GROUPS.indexOf(b.cmd.group) || b.score - a.score || a.order - b.order)
       .map((r) => r.cmd);
-  }, [query]);
+  }, [query, hiddenHrefs]);
 
   useEffect(() => {
     listRef.current

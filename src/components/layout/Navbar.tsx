@@ -10,6 +10,7 @@ import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
 import { ChatWidget } from "@/components/chat/ChatWidget";
 import { CommandMenu, openCommandMenu } from "@/components/layout/CommandMenu";
 import { cn } from "@/lib/utils";
+import { useHiddenHrefs } from "@/components/layout/SiteVisibility";
 
 /** Resolve whether a nav link is currently active:
  *  page links match the pathname; hash links ("/#pricing") light up when
@@ -61,6 +62,8 @@ export function Navbar() {
     () => "Ctrl"
   );
   const pathname = usePathname();
+  const hiddenHrefs = useHiddenHrefs();
+  const visibleLinks = navLinks.filter((link) => !hiddenHrefs.includes(link.href));
 
   // Scroll state + scroll-spy for hash links (e.g. "/#pricing"), one rAF-batched
   // listener. Targets are looked up by id on every check rather than observed,
@@ -140,7 +143,7 @@ export function Navbar() {
 
               {/* Desktop Navigation */}
               <div className="hidden items-center gap-0.5 lg:flex">
-                {navLinks.map((link) => (
+                {visibleLinks.map((link) => (
                   <NavLink key={link.href} link={link} active={isLinkActive(link.href)} onNavigate={closeMobile} />
                 ))}
               </div>
@@ -239,7 +242,7 @@ export function Navbar() {
 
               <div className="flex flex-1 flex-col justify-center px-8">
                 <nav aria-label="Mobile" className="space-y-1">
-                  {navLinks.map((link, i) => {
+                  {visibleLinks.map((link, i) => {
                     const active = isLinkActive(link.href);
                     return (
                       <div

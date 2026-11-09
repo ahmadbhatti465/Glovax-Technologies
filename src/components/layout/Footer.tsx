@@ -4,6 +4,7 @@ import { siteConfig, footerLinks } from "@/lib/constants";
 import { Linkedin, Instagram, Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { NewsletterForm } from "@/components/layout/NewsletterForm";
+import { FooterLinkList } from "@/components/layout/SiteVisibility";
 
 const socials = [
   { label: "LinkedIn", href: siteConfig.social.linkedin, icon: Linkedin },
@@ -50,18 +51,7 @@ export function Footer() {
           {columns.map((col) => (
             <nav key={col.title} aria-label={col.title} className="lg:col-span-2">
               <h3 className="mb-4 text-sm font-medium text-brand-textPrimary">{col.title}</h3>
-              <ul className="space-y-3">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-brand-textSecondary transition-colors duration-200 hover:text-brand-textPrimary"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <FooterLinkList links={col.links} />
             </nav>
           ))}
 

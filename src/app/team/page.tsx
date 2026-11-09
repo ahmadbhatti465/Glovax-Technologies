@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { siteConfig, ogImage } from "@/lib/constants";
 import { BreadcrumbJsonLd, TeamJsonLd } from "@/components/shared/StructuredData";
 import TeamContent from "./team-content";
@@ -32,6 +33,8 @@ export const metadata: Metadata = {
 
 export default async function TeamPage() {
   const team = await getTeamMembers();
+  if (team.length === 0) notFound();
+
   const lastUpdated = await getLatestUpdatedAt(["teamMembers"]);
 
   return (

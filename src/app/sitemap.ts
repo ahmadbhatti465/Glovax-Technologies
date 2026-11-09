@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { blogPosts, portfolioItems, redirects } from "@/db/schema";
 import { siteConfig } from "@/lib/constants";
 import { normalizeCanonicalUrl } from "@/lib/utils";
+import { getHiddenNavHrefs } from "@/lib/data";
 
 export const revalidate = 60;
 
@@ -42,6 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     db.select({ source: redirects.source }).from(redirects),
   ]);
 
+  const hiddenPaths = await getHiddenNavHrefs();
   const redirectSources = new Set(
     redirectRows.map((row) => row.source.replace(/\/+$/, "") || "/")
   );
@@ -60,7 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog",
   ];
   const staticEntries: MetadataRoute.Sitemap = staticPaths
-    .filter((path) => !redirectSources.has(path || "/"))
+    .filter((path) => !redirectSources.has(path || "/") && !hiddenPaths.includes(path))
     .map((path) => ({
       url: `${siteConfig.url}${path}`,
       changeFrequency: path === "" || path === "/blog" ? "weekly" : "monthly",

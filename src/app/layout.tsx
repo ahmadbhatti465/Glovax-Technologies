@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { getHiddenNavHrefs } from "@/lib/data";
+import { SiteVisibilityProvider } from "@/components/layout/SiteVisibility";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig, ogImage } from "@/lib/constants";
@@ -102,7 +104,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -117,7 +119,9 @@ export default function RootLayout({
         </a>
         <ScrollProgress />
         <StructuredData />
-        {children}
+        <SiteVisibilityProvider hiddenHrefs={await getHiddenNavHrefs()}>
+          {children}
+        </SiteVisibilityProvider>
         <BackToTop />
         <Toaster
           position="bottom-right"
