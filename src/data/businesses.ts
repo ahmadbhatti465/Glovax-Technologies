@@ -40,7 +40,7 @@ export const businesses: Business[] = [
     city: "Islamabad",
     country: "Pakistan",
     shortDescription:
-      "Natural herbal skincare brand rooted in 60 years of mountain herbalism heritage, selling plant-based products online.",
+      "Natural herbal skincare brand selling plant-based products online.",
     description:
       "PurestStem is a natural herbal skincare brand built on generations of mountain herbalism. We crafted a conversion-focused, brand-led e-commerce experience — curated product catalog, trust-building customer testimonials, a content blog for SEO growth, and a cohesive botanical identity across every screen.",
     rating: 4.9,
@@ -65,9 +65,9 @@ export const businesses: Business[] = [
     city: "Lahore",
     country: "Pakistan",
     shortDescription:
-      "Ministry of Hajj approved operator serving individual pilgrims and 120+ partner travel agents with Hajj & Umrah bookings.",
+      "Travel operator serving individual pilgrims and 120+ partner travel agents with Hajj & Umrah bookings.",
     description:
-      "Musa Travel Service is a Ministry of Hajj approved travel operator based in Lahore. We delivered a comprehensive Hajj & Umrah booking platform for both pilgrims and travel agents — complete with a dedicated B2B agent portal, transparent package listings, multi-airline integration, and a trust-driven interface reflecting 18,000+ pilgrims served.",
+      "Musa Travel Service is a travel operator based in Lahore. We delivered a comprehensive Hajj & Umrah booking platform for both pilgrims and travel agents — complete with a dedicated B2B agent portal, transparent package listings, multi-airline integration, and a trust-driven interface reflecting 18,000+ pilgrims served.",
     rating: 4.7,
     reviewCount: 189,
     address: "Hall Road, Lahore",

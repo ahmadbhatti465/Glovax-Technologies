@@ -101,7 +101,7 @@ async function seed() {
       client: "PurestStem",
       category: "E-commerce / Web Design",
       description:
-        "Designed and developed a full e-commerce website for PurestStem, a natural herbal skincare brand rooted in 60 years of mountain herbalism heritage. The platform showcases a curated line of plant-based skincare products with a conversion-focused, brand-led shopping experience.",
+        "Designed and developed a full e-commerce website for PurestStem, a natural herbal skincare brand. The platform showcases a curated line of plant-based skincare products with a conversion-focused, brand-led shopping experience.",
       link: "https://purest-stem.vercel.app/",
       results: [
         "Clean, conversion-focused product catalog with clear CTAs",
@@ -120,7 +120,7 @@ async function seed() {
       client: "Musa Travel Service",
       category: "Travel & Booking Platform",
       description:
-        "Developed a comprehensive Hajj & Umrah travel booking platform for Musa Travel Service, a Ministry of Hajj approved operator based in Lahore, Pakistan. The platform serves both individual pilgrims and 120+ partner travel agents.",
+        "Developed a comprehensive Hajj & Umrah travel booking platform for Musa Travel Service, a travel operator based in Lahore, Pakistan. The platform serves both individual pilgrims and 120+ partner travel agents.",
       link: "https://travelwithmusa.com/",
       results: [
         "Launched dedicated Agent Portal for B2B travel agent bookings and commission tracking",

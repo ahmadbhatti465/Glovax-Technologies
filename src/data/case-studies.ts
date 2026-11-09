@@ -45,7 +45,7 @@ const caseStudies: Record<string, CaseStudy> = {
     industry: "E-commerce · Skincare & Beauty",
     timeline: "5 weeks",
     challenge:
-      "PurestStem — an organic skincare brand rooted in 60 years of heritage — faced high cart abandonment and slow mobile performance (4.2s LCP on legacy platforms). They needed an ultra-fast, premium digital shopping experience capable of educating buyers and driving high-converting sales.",
+      "PurestStem — an organic skincare brand — faced high cart abandonment and slow mobile performance (4.2s LCP on legacy platforms). They needed an ultra-fast, premium digital shopping experience capable of educating buyers and driving high-converting sales.",
     solution:
       "Glovax Technologies engineered a headless e-commerce platform using Next.js Server Components and Tailwind CSS. By eliminating render-blocking scripts and optimizing asset delivery, we dropped mobile LCP to 1.1s, integrated social proof directly into the purchase flow, and implemented an SEO-optimized editorial blog.",
     process: [
