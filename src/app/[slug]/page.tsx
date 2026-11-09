@@ -59,7 +59,7 @@ export async function generateMetadata({
   const shouldFollow = page.robotsFollow;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: page.secondaryKeywords.length > 0 ? page.secondaryKeywords : undefined,
     alternates: {

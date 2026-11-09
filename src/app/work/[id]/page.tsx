@@ -72,7 +72,7 @@ export async function generateMetadata({
       : project.technologies;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords,
     alternates: { canonical: canonicalUrl },

@@ -21,6 +21,12 @@ export function isValidExternalUrl(url: string | null | undefined): url is strin
   }
 }
 
+/** Structured data needs ISO 8601 dates, but some stored dates read "July 10, 2026". */
+export function toIsoDate(date: string): string {
+  const parsed = new Date(date);
+  return Number.isNaN(parsed.getTime()) ? date : parsed.toISOString();
+}
+
 /**
  * Normalizes any canonical URL to the site's primary canonical domain (https://www.glovaxtechnologies.com).
  * Automatically replaces apex domains (e.g. https://glovaxtechnologies.com), http:// protocols,

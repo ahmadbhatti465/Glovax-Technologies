@@ -13,7 +13,7 @@ import { ArrowLeft, ArrowRight, Clock, Calendar, RefreshCw, User, Lock, ChevronL
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { FAQItem } from "@/types";
 import { toBlogTaxonomySlug } from "@/lib/blog-taxonomy";
-import { normalizeCanonicalUrl } from "@/lib/utils";
+import { normalizeCanonicalUrl, toIsoDate } from "@/lib/utils";
 import { PageBackdrop } from "@/components/shared/PageBackdrop";
 
 export const revalidate = 60;
@@ -46,7 +46,7 @@ export async function generateMetadata({
   }
 
   const url = normalizeCanonicalUrl(post.canonicalUrl, `/blog/${post.slug}`);
-  const title = (post.seoTitle || `${post.title} | ${siteConfig.name}`).slice(0, 60);
+  const title = post.seoTitle || `${post.title} | ${siteConfig.name}`;
   const description = (post.metaDescription || post.excerpt).slice(0, 160);
 
   const ogImageUrl = post.ogImage || post.featuredImage || siteConfig.ogImage;
@@ -67,8 +67,8 @@ export async function generateMetadata({
       url,
       title: post.ogTitle || title,
       description: post.ogDescription || description,
-      publishedTime: post.publishedAt,
-      modifiedTime: post.updatedAt?.toISOString() || post.publishedAt,
+      publishedTime: toIsoDate(post.publishedAt),
+      modifiedTime: post.updatedAt?.toISOString() || toIsoDate(post.publishedAt),
       authors: [post.author],
       tags: post.tags,
       images: [
@@ -341,10 +341,10 @@ export default async function BlogPostPage({
     "@type": "BlogPosting",
     headline: post.title,
     description: post.metaDescription || post.excerpt,
-    datePublished: post.publishedAt,
+    datePublished: toIsoDate(post.publishedAt),
     dateModified: post.updatedAt
       ? (post.updatedAt instanceof Date ? post.updatedAt.toISOString() : new Date(post.updatedAt).toISOString())
-      : post.publishedAt,
+      : toIsoDate(post.publishedAt),
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": url,
