@@ -4,7 +4,15 @@ import { getPortfolioItems, getPortfolioItemByIdOrSlug, getRedirect } from "@/li
 import { enrichWithCaseStudy } from "@/data/case-studies";
 import { siteConfig, ogImage as defaultOgImage } from "@/lib/constants";
 import { BreadcrumbJsonLd } from "@/components/shared/StructuredData";
-import { normalizeCanonicalUrl } from "@/lib/utils";
+import { resolveCanonicalUrl } from "@/lib/utils";
+import type { PortfolioItem } from "@/types";
+
+/** Custom canonicals may only point to another published case study. */
+async function getCanonicalUrl(project: Pick<PortfolioItem, "canonicalUrl">, slug: string) {
+  const published = await getPortfolioItems("published");
+  const livePaths = published.map((item) => `/work/${item.slug || item.id}`);
+  return resolveCanonicalUrl(project.canonicalUrl, `/work/${slug}`, livePaths);
+}
 import { isAdminPreview } from "@/lib/preview";
 import CaseStudyContent from "./case-study-content";
 
@@ -51,7 +59,7 @@ export async function generateMetadata({
 
   const project = enrichWithCaseStudy(rawItem);
   const slug = project.slug || project.id;
-  const canonicalUrl = normalizeCanonicalUrl(project.canonicalUrl, `/work/${slug}`);
+  const canonicalUrl = await getCanonicalUrl(project, slug);
   const withBrand = `${project.title} | ${siteConfig.name}`;
   const title = project.seoTitle || (withBrand.length <= 60 ? withBrand : project.title);
   const description =
@@ -134,7 +142,7 @@ export default async function CaseStudyPage({
 
   const project = enrichWithCaseStudy(rawItem);
   const slug = project.slug || project.id;
-  const pageUrl = normalizeCanonicalUrl(project.canonicalUrl, `/work/${slug}`);
+  const pageUrl = await getCanonicalUrl(project, slug);
 
   // Fetch related projects
   const allItems = await getPortfolioItems("published");

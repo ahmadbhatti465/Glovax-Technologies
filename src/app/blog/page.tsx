@@ -33,7 +33,14 @@ const blogMetadata: Metadata = {
   },
 };
 
-export const metadata: Metadata = blogMetadata;
+// An empty blog is a thin page Google reports as a soft 404, so it stays out
+// of the index (and the sitemap) until a post is published.
+export async function generateMetadata(): Promise<Metadata> {
+  const posts = await getBlogPosts("published");
+  return posts.length > 0
+    ? blogMetadata
+    : { ...blogMetadata, robots: { index: false, follow: true } };
+}
 
 export default async function BlogPage() {
   const allPosts = await getBlogPosts("published");

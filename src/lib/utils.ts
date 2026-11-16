@@ -54,3 +54,28 @@ export function normalizeCanonicalUrl(url?: string | null, fallbackPath?: string
   }
   return trimmed;
 }
+
+const withoutTrailingSlash = (url: string) => url.replace(/\/+$/, "");
+
+/**
+ * Like normalizeCanonicalUrl, but drops a custom canonical that points to a
+ * page on this site that doesn't exist. A canonical to a 404 tells Google not
+ * to index the page at all, so the page falls back to its own URL instead.
+ * `livePaths` holds the site paths a canonical may point to, e.g. "/work/foo".
+ */
+export function resolveCanonicalUrl(
+  url: string | null | undefined,
+  fallbackPath: string,
+  livePaths: Iterable<string>
+): string {
+  const fallback = normalizeCanonicalUrl(null, fallbackPath);
+  const canonical = normalizeCanonicalUrl(url, fallbackPath);
+  if (!canonical.startsWith(`${siteConfig.url}/`) && canonical !== siteConfig.url) {
+    return canonical;
+  }
+  const live = new Set(
+    [...livePaths].map((path) => withoutTrailingSlash(`${siteConfig.url}${path}`))
+  );
+  const target = withoutTrailingSlash(canonical.split(/[?#]/)[0]);
+  return target === withoutTrailingSlash(fallback) || live.has(target) ? canonical : fallback;
+}

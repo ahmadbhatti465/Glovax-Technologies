@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { db } from "@/db";
 import { blogPosts, pages, portfolioItems, redirects } from "@/db/schema";
 import { siteConfig } from "@/lib/constants";
-import { normalizeCanonicalUrl } from "@/lib/utils";
+import { normalizeCanonicalUrl, resolveCanonicalUrl } from "@/lib/utils";
 import { getBusinesses, getHiddenNavHrefs } from "@/lib/data";
 import { PUBLIC_STATIC_ROUTES } from "@/lib/public-routes";
 import { isBlogPostLive } from "@/lib/blog-publishing";
@@ -92,11 +92,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [{ url: localUrl, lastModified, changeFrequency: "monthly", priority: 0.7 }];
   });
 
+  const livePortfolioPaths = portfolios
+    .filter((project) => project.status === "published")
+    .map((project) => `/work/${project.slug || project.id}`);
   const portfolioEntries: MetadataRoute.Sitemap = portfolios.flatMap((project) => {
     const slug = project.slug || project.id;
     const path = `/work/${slug}`;
     const localUrl = `${siteConfig.url}${path}`;
-    const canonicalUrl = normalizeCanonicalUrl(project.canonicalUrl, path);
+    const canonicalUrl = resolveCanonicalUrl(project.canonicalUrl, path, livePortfolioPaths);
     const lastModified =
       toSitemapDate(project.updatedAt) ??
       toSitemapDate(project.publishedAt) ??
