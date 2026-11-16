@@ -60,8 +60,8 @@ export const footerLinks = {
   ],
   services: [
     { label: "Web Development", href: "/web-development-services" },
-    { label: "Mobile Apps", href: "/services" },
-    { label: "AI & Machine Learning", href: "/services" },
+    { label: "Mobile Apps", href: "/mobile-app-development" },
+    { label: "AI & Machine Learning", href: "/ai-solutions" },
     { label: "Cloud & DevOps", href: "/services" },
     { label: "UI/UX Design", href: "/services" },
     { label: "Digital Marketing", href: "/services" },

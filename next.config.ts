@@ -92,6 +92,12 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
+      // Google crawls font files while rendering and then lists them as
+      // pages under "Crawled - currently not indexed". Fonts never belong in search.
+      {
+        source: "/_next/static/media/:file(.*\\.(?:woff2?|ttf|otf|eot))",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
     ];
   },
 
